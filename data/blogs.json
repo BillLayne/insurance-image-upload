@@ -1,0 +1,56 @@
+[
+  {
+    "id": "blog-001",
+    "title": "Understanding Homeowners Insurance: A Complete Guide",
+    "summary": "Learn everything you need to know about homeowners insurance coverage, from basic protection to comprehensive policies that safeguard your most valuable asset.",
+    "date": "2025-01-15",
+    "tags": ["homeowners", "coverage", "guide"],
+    "imageUrl": "assets/images/homeowners-guide.jpg",
+    "linkUrl": "https://yourusername.github.io/blog/homeowners-insurance-guide"
+  },
+  {
+    "id": "blog-002",
+    "title": "5 Ways to Lower Your Auto Insurance Premium",
+    "summary": "Discover practical strategies to reduce your car insurance costs without sacrificing coverage. Save money while staying protected on the road.",
+    "date": "2025-01-10",
+    "tags": ["auto", "savings", "tips"],
+    "imageUrl": "assets/images/auto-insurance-savings.jpg",
+    "linkUrl": "https://yourusername.github.io/blog/lower-auto-insurance"
+  },
+  {
+    "id": "blog-003",
+    "title": "Life Insurance: Term vs Whole Life Explained",
+    "summary": "Navigate the differences between term and whole life insurance to make an informed decision for your family's financial security.",
+    "date": "2025-01-05",
+    "tags": ["life", "planning", "family"],
+    "imageUrl": "assets/images/life-insurance-comparison.jpg",
+    "linkUrl": "https://yourusername.github.io/blog/term-vs-whole-life"
+  },
+  {
+    "id": "blog-004",
+    "title": "Small Business Insurance Essentials",
+    "summary": "Protect your business with the right insurance coverage. Learn about general liability, property insurance, and other essential policies for entrepreneurs.",
+    "date": "2024-12-28",
+    "tags": ["business", "liability", "commercial"],
+    "imageUrl": "assets/images/business-insurance.jpg",
+    "linkUrl": "https://yourusername.github.io/blog/small-business-insurance"
+  },
+  {
+    "id": "blog-005",
+    "title": "Flood Insurance: What You Need to Know",
+    "summary": "Standard homeowners insurance doesn't cover floods. Learn why flood insurance is crucial and how to protect your home from water damage.",
+    "date": "2024-12-20",
+    "tags": ["flood", "homeowners", "protection"],
+    "imageUrl": "assets/images/flood-insurance.jpg",
+    "linkUrl": "https://yourusername.github.io/blog/flood-insurance-guide"
+  },
+  {
+    "id": "blog-006",
+    "title": "Insurance Claims: Step-by-Step Process",
+    "summary": "Filing an insurance claim doesn't have to be stressful. Follow our comprehensive guide to navigate the claims process smoothly and efficiently.",
+    "date": "2024-12-15",
+    "tags": ["claims", "guide", "process"],
+    "imageUrl": "assets/images/insurance-claims.jpg",
+    "linkUrl": "https://yourusername.github.io/blog/insurance-claims-process"
+  }
+]
