@@ -1,11 +1,51 @@
- [
-    {
-      "id": "2025-01-july4th",
-      "title": "July 4th Insurance Safety Tips",
-      "summary": "Protect your home and family during Independence Day celebrations with essential insurance tips for fireworks, BBQs, and holiday gatherings.",
-      "date": "2025-01-15",
-      "tags": ["Home Insurance", "Safety"],
-      "imageUrl": "https://i.imgur.com/tUJ0gcG.png",
-      "linkUrl": "https://billlayne.github.io/Blogs.github.io/july4th-insurance-blog.html"
-    }
-  ]
+[
+  {
+    "id": "2025-01-july4th",
+    "title": "July 4th Insurance Safety Tips",
+    "summary": "Protect your home and family during Independence Day celebrations with essential insurance tips for fireworks, BBQs, and holiday gatherings.",
+    "date": "2025-01-15",
+    "tags": ["Home Insurance", "Safety"],
+    "imageUrl": "https://i.imgur.com/tUJ0gcG.png",
+    "linkUrl": "https://billlayne.github.io/Blogs.github.io/july4th-insurance-blog.html"
+  },
+  {
+    "id": "2025-01-auto-coverage",
+    "title": "Understanding Auto Insurance Coverage Types",
+    "summary": "A comprehensive guide to liability, collision, comprehensive, and uninsured motorist coverage. Learn what each type protects and how to choose the right coverage for your needs.",
+    "date": "2025-01-10",
+    "tags": ["Auto Insurance", "Coverage Guide"],
+    "linkUrl": "#"
+  },
+  {
+    "id": "2025-01-home-inventory",
+    "title": "Creating a Home Inventory for Insurance Claims",
+    "summary": "Learn how to document your belongings properly to ensure smooth insurance claims. Tips for photographing, organizing, and storing your home inventory safely.",
+    "date": "2025-01-05",
+    "tags": ["Home Insurance", "Claims"],
+    "linkUrl": "#"
+  },
+  {
+    "id": "2024-12-flood-insurance",
+    "title": "Do You Need Flood Insurance? A Complete Guide",
+    "summary": "Understand when standard homeowners insurance isn't enough. Learn about flood zones, NFIP coverage, and private flood insurance options to protect your property.",
+    "date": "2024-12-28",
+    "tags": ["Flood Insurance", "Home Protection"],
+    "linkUrl": "#"
+  },
+  {
+    "id": "2024-12-life-insurance-basics",
+    "title": "Term vs. Whole Life Insurance: Making the Right Choice",
+    "summary": "Compare term and whole life insurance policies to determine which fits your family's needs and budget. Understand the benefits, costs, and long-term implications of each.",
+    "date": "2024-12-20",
+    "tags": ["Life Insurance", "Financial Planning"],
+    "linkUrl": "#"
+  },
+  {
+    "id": "2024-12-winter-claims",
+    "title": "Preventing Winter Weather Insurance Claims",
+    "summary": "Protect your home from ice dams, frozen pipes, and snow damage. Essential winterization tips that can save you thousands in insurance deductibles and premium increases.",
+    "date": "2024-12-15",
+    "tags": ["Home Insurance", "Winter Safety"],
+    "linkUrl": "#"
+  }
+]
