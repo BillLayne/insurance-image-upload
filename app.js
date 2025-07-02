@@ -116,10 +116,21 @@ class EtherealBlog {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      const blogData = await response.json();
+      const responseText = await response.text();
+      console.log('Raw response:', responseText);
+      
+      let blogData;
+      try {
+        blogData = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('JSON parse error:', parseError);
+        console.error('Response was:', responseText);
+        throw new Error('Failed to parse JSON response');
+      }
 
       // Validate data
       if (!Array.isArray(blogData) || blogData.length === 0) {
+        console.error('Blog data validation failed:', blogData);
         throw new Error('Invalid blog data format');
       }
 
@@ -215,10 +226,14 @@ class EtherealBlog {
     card.setAttribute('aria-label', `Read blog post: ${blog.title}`);
 
     // Create card content
+    const imageHTML = blog.imageUrl 
+      ? `<img src="${blog.imageUrl}" alt="${this.escapeHTML(blog.title)}" loading="lazy" onerror="this.parentElement.innerHTML='<span>Bill Layne Insurance</span>'">`
+      : '<span>Bill Layne Insurance</span>';
+    
     card.innerHTML = `
       <article class="blog-card-article">
         <div class="blog-card-image" role="img" aria-label="Blog post cover image">
-          <span>🛡️ Insurance Insights</span>
+          ${imageHTML}
         </div>
         <div class="blog-card-content">
           <div class="blog-card-tags" role="list" aria-label="Post tags">
