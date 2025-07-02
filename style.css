@@ -460,6 +460,43 @@ body::before {
   display: none !important;
 }
 
+/* === FIX 1: Corrected Blog Filter Styles === */
+#blog-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-3xl);
+}
+
+.filter-btn {
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-2xl);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.filter-btn:hover {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+}
+
+
 /* Blog Grid */
 /* === CHANGE 3: Better Card Separation === */
 .blog-grid {
