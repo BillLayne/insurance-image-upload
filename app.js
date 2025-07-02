@@ -96,11 +96,26 @@ class EtherealBlog {
   renderFilterControls() {
     const allTags = new Set(this.allBlogs.flatMap(blog => blog.tags));
     const filterTags = ['All', ...allTags];
-    this.filterContainer.innerHTML = filterTags.map(tag => 
-      `<button class="filter-btn ${tag === this.activeFilter ? 'active' : ''}" data-tag="${tag}">
-        ${this.escapeHTML(tag)}
-      </button>`
-    ).join('');
+    
+    // Create the filter container div
+    const filterContainerHTML = `
+      <div class="filter-container">
+        ${filterTags.map(tag => 
+          `<button class="filter-btn ${tag === this.activeFilter ? 'active' : ''}" data-tag="${tag}">
+            ${this.escapeHTML(tag)}
+          </button>`
+        ).join('')}
+      </div>
+    `;
+    
+    // Append to the existing filter title
+    const existingTitle = this.filterContainer.querySelector('.filter-title');
+    if (existingTitle) {
+      existingTitle.insertAdjacentHTML('afterend', filterContainerHTML);
+    } else {
+      this.filterContainer.innerHTML = filterContainerHTML;
+    }
+    
     this.filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => this.handleFilterClick(btn.dataset.tag));
     });
@@ -270,8 +285,10 @@ function initEnhancedAnimations() {
 
 // Touch swipe for filter navigation
 function initSwipeNavigation() {
-  const filterContainer = document.querySelector('.filter-container');
-  if (!filterContainer) return;
+  // Wait a bit for filters to be rendered
+  setTimeout(() => {
+    const filterContainer = document.querySelector('.filter-container');
+    if (!filterContainer) return;
   
   let touchStartX = 0;
   let touchEndX = 0;
@@ -295,6 +312,7 @@ function initSwipeNavigation() {
       filterContainer.scrollBy({ left: -200, behavior: 'smooth' });
     }
   }
+  }, 500); // Give time for filters to render
 }
 
 document.addEventListener('DOMContentLoaded', () => {
