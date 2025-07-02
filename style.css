@@ -291,13 +291,13 @@ body::before {
 /* Main Content */
 .main-content {
   min-height: calc(100vh - 300px);
-  padding: var(--space-3xl) 0;
+  padding-bottom: var(--space-3xl);
 }
 
 /* Introduction Section - Enhanced with animations */
 .intro-section {
   text-align: center;
-  margin-bottom: var(--space-3xl);
+  margin-bottom: var(--space-2xl);
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -468,6 +468,42 @@ body::before {
   display: none !important;
 }
 
+/* === NEW: Blog Filters === */
+.blog-filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-3xl);
+}
+
+.filter-btn {
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-2xl);
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.filter-btn:hover {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shadow-lg);
+}
+
 /* Blog Grid */
 .blog-grid {
   display: grid;
@@ -490,6 +526,8 @@ body::before {
   transform: translateY(30px) scale(0.95);
   box-shadow: var(--shadow-card);
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .blog-card::before {
@@ -511,6 +549,36 @@ body::before {
   opacity: 1;
   transform: translateY(0) scale(1);
   animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* === NEW: Featured Card Style === */
+.blog-card--featured {
+  grid-column: 1 / -1; /* Span full width on grid */
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-lg);
+}
+
+.blog-card--featured .blog-card-article {
+  flex-direction: row; /* Horizontal layout for featured card */
+}
+
+.blog-card--featured .blog-card-image {
+  width: 40%;
+  height: auto;
+}
+
+.blog-card--featured .blog-card-content {
+  width: 60%;
+}
+
+@media (max-width: 768px) {
+  .blog-card--featured .blog-card-article {
+    flex-direction: column; /* Revert to vertical on mobile */
+  }
+  .blog-card--featured .blog-card-image,
+  .blog-card--featured .blog-card-content {
+    width: 100%;
+  }
 }
 
 @keyframes cardEntrance {
@@ -547,7 +615,8 @@ body::before {
     var(--color-gradient-1) 0%, 
     var(--color-gradient-2) 50%, 
     var(--color-gradient-3) 100%);
-  background-size: 300% 300%;
+  background-size: cover;
+  background-position: center;
   animation: gradientWave 10s ease infinite;
   display: flex;
   align-items: center;
@@ -560,10 +629,16 @@ body::before {
   z-index: 1;
 }
 
-/* *** THIS IS THE NEWLY ADDED CODE *** */
 /* Hide the default text span if a background image is applied via JS */
 .blog-card-image[style*="background-image"] span {
   display: none;
+}
+
+/* === NEW: Thematic Icon Style === */
+.blog-card-image .icon {
+  width: 64px;
+  height: 64px;
+  opacity: 0.8;
 }
 
 @keyframes gradientWave {
@@ -681,11 +756,22 @@ body::before {
   transform: translateX(5px);
 }
 
-.blog-card-date {
+.blog-card-meta {
   font-size: 0.875rem;
   color: var(--color-text-light);
   margin-bottom: var(--space-md);
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.blog-card-date {
   display: block;
+}
+
+/* === NEW: Read Time Style === */
+.blog-card-read-time {
+  font-style: italic;
 }
 
 .blog-card-summary {
@@ -732,6 +818,10 @@ body::before {
     grid-template-columns: 1fr;
     gap: var(--space-lg);
   }
+
+  .blog-card--featured {
+    grid-column: 1; /* Reset featured card to 1 column on mobile */
+  }
   
   .blog-card-content {
     padding: var(--space-lg);
@@ -773,7 +863,8 @@ html {
   box-shadow: var(--shadow-glow);
 }
 
-.nav-link:focus-visible {
+.nav-link:focus-visible,
+.filter-btn:focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 2px;
 }
