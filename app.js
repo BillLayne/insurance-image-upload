@@ -320,6 +320,112 @@ function initFocusManagement() {
 }
 
 /**
+ * Initialize enhanced animations and parallax effects
+ */
+function initEnhancedAnimations() {
+  // Parallax effect for hero section
+  const header = document.querySelector('.site-header');
+  const introSection = document.querySelector('.intro-section');
+  const blogGrid = document.querySelector('.blog-grid');
+  
+  let ticking = false;
+  function updateParallax() {
+    const scrolled = window.pageYOffset;
+    const windowHeight = window.innerHeight;
+    
+    // Subtle parallax for intro section
+    if (introSection && scrolled < windowHeight) {
+      const parallaxSpeed = 0.3;
+      const opacity = Math.max(0, 1 - (scrolled / windowHeight) * 1.5);
+      introSection.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+      introSection.style.opacity = opacity;
+    }
+    
+    ticking = false;
+  }
+
+  function requestTick() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }
+
+  // Only enable parallax on desktop
+  if (window.innerWidth > 768) {
+    window.addEventListener('scroll', requestTick);
+  }
+
+  // Enhanced card hover with 3D effect
+  setTimeout(() => {
+    const cards = document.querySelectorAll('.blog-card');
+    
+    cards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const percentX = (x - centerX) / centerX;
+        const percentY = (y - centerY) / centerY;
+        
+        card.style.transform = `
+          perspective(1000px)
+          rotateY(${percentX * 3}deg)
+          rotateX(${percentY * -3}deg)
+          translateZ(10px)
+          scale(1.02)
+        `;
+        
+        // Move gradient on card image
+        const cardImage = card.querySelector('.blog-card-image');
+        if (cardImage) {
+          cardImage.style.backgroundPosition = `${50 + percentX * 10}% ${50 + percentY * 10}%`;
+        }
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        const cardImage = card.querySelector('.blog-card-image');
+        if (cardImage) {
+          cardImage.style.backgroundPosition = '';
+        }
+      });
+    });
+  }, 500);
+
+  // Intersection Observer for scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '50px 0px'
+  };
+
+  const animateOnScroll = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        
+        // Animate child elements with delay
+        const children = entry.target.querySelectorAll('.animate-child');
+        children.forEach((child, index) => {
+          setTimeout(() => {
+            child.classList.add('in-view');
+          }, index * 100);
+        });
+      }
+    });
+  }, observerOptions);
+
+  // Observe elements that should animate on scroll
+  document.querySelectorAll('.intro-section, .blog-card').forEach(el => {
+    animateOnScroll.observe(el);
+  });
+}
+
+/**
  * Initialize the application when DOM is ready
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -329,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize additional features
   initSmoothScroll();
   initFocusManagement();
+  initEnhancedAnimations();
   
   // Log successful initialization
   console.log('🛡️ Bill Layne Insurance Blog initialized successfully');
