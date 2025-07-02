@@ -2,80 +2,28 @@
 
 /**
  * Ethereal Blog - Dynamic Content Loader
- * 
- * This script handles:
- * - Loading blog post data (simulated from external JSON)
- * - Creating dynamic blog cards with smooth animations
+ * * This script handles:
+ * - Loading blog post data from an external JSON file
+ * - Creating dynamic blog cards with new features (Featured, Icons, Read Time)
+ * - Rendering interactive filter buttons
+ * - Handling filtering logic
  * - Error handling and loading states
  * - Scroll-based animations
  * - Accessibility enhancements
  */
 
-// Sample blog data (in production, this would be fetched from data/blogs.json)
-const SAMPLE_BLOG_DATA = [
-  {
-    "id": "2024070101",
-    "title": "The Art of Ethereal Design: Creating Digital Serenity",
-    "summary": "Explore the delicate balance between minimalism and visual impact, discovering how whitespace and subtle elements create powerful user experiences that resonate with modern audiences.",
-    "date": "July 1, 2025",
-    "tags": ["Design", "UI/UX", "Minimalism"],
-    "imageUrl": "assets/images/ethereal-design.webp",
-    "linkUrl": "https://your-github-username.github.io/blog-repo/ethereal-design"
-  },
-  {
-    "id": "2024063001",
-    "title": "Mastering Micro-Interactions in Modern Web Development",
-    "summary": "Deep dive into the subtle animations and feedback mechanisms that make websites feel alive and responsive, with practical examples using vanilla JavaScript and CSS.",
-    "date": "June 30, 2025",
-    "tags": ["JavaScript", "Animation", "WebDev"],
-    "imageUrl": "assets/images/micro-interactions.webp",
-    "linkUrl": "https://your-github-username.github.io/blog-repo/micro-interactions"
-  },
-  {
-    "id": "2024062901",
-    "title": "Typography That Speaks: The Psychology of Font Pairings",
-    "summary": "Understanding how serif and sans-serif combinations create emotional resonance and hierarchy in digital spaces, with curated examples from Google Fonts.",
-    "date": "June 29, 2025",
-    "tags": ["Typography", "Design", "Psychology"],
-    "imageUrl": "assets/images/typography-psychology.webp",
-    "linkUrl": "https://your-github-username.github.io/blog-repo/typography-psychology"
-  },
-  {
-    "id": "2024062801",
-    "title": "Color in the Digital Age: Muted Palettes for 2025",
-    "summary": "Discover why desaturated, sophisticated color schemes are dominating modern design, and learn to create palettes that reduce eye strain while maintaining visual interest.",
-    "date": "June 28, 2025",
-    "tags": ["Color Theory", "Trends", "Design"],
-    "imageUrl": "assets/images/muted-colors.webp",
-    "linkUrl": "https://your-github-username.github.io/blog-repo/muted-colors"
-  },
-  {
-    "id": "2024062701",
-    "title": "Static Sites, Dynamic Content: The JAMstack Revolution",
-    "summary": "Learn how to build lightning-fast static sites that feel dynamic, using modern APIs and progressive enhancement techniques for optimal performance.",
-    "date": "June 27, 2025",
-    "tags": ["JAMstack", "Performance", "Architecture"],
-    "imageUrl": "assets/images/jamstack-revolution.webp",
-    "linkUrl": "https://your-github-username.github.io/blog-repo/jamstack-revolution"
-  }
-];
-
-/**
- * Application State Management
- */
 class EtherealBlog {
   constructor() {
     this.blogContainer = null;
     this.loadingState = null;
     this.errorState = null;
+    this.filterContainer = null;
+    this.allBlogs = [];
+    this.activeFilter = 'All';
     this.init();
   }
 
-  /**
-   * Initialize the application
-   */
   init() {
-    // Wait for DOM to be fully loaded
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.setup());
     } else {
@@ -83,380 +31,188 @@ class EtherealBlog {
     }
   }
 
-  /**
-   * Setup DOM references and start loading
-   */
   setup() {
     this.blogContainer = document.getElementById('blog-grid');
     this.loadingState = document.getElementById('loading-state');
     this.errorState = document.getElementById('error-state');
+    this.filterContainer = document.getElementById('blog-filters');
 
-    if (!this.blogContainer) {
-      console.error('Blog container not found');
+    if (!this.blogContainer || !this.filterContainer) {
+      console.error('Required DOM elements not found (blog-grid or blog-filters).');
       return;
     }
     
-    // Load blog posts
     this.loadBlogs();
   }
 
-  /**
-   * Simulate loading blog data from external JSON file
-   * In production, this would use: fetch('data/blogs.json')
-   */
   async loadBlogs() {
     try {
-      // Show loading state
       this.showLoadingState();
-
-      // Fetch blog data from JSON file
       const response = await fetch('data/blogs.json');
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const blogData = await response.json();
-
-      // Validate data
-      if (!Array.isArray(blogData) || blogData.length === 0) {
-        throw new Error('Invalid blog data format');
-      }
-
-      // Hide loading state and render blogs
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      this.allBlogs = await response.json();
+      if (!Array.isArray(this.allBlogs)) throw new Error('Invalid blog data format');
       this.hideLoadingState();
-      this.renderBlogs(blogData);
-
+      this.renderFilterControls();
+      this.renderBlogs(this.allBlogs);
     } catch (error) {
       console.error('Failed to load blogs:', error);
       this.showErrorState();
     }
   }
 
-  /**
-   * Create delay for loading simulation
-   */
-  delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  /**
-   * Show loading state
-   */
   showLoadingState() {
-    if (this.loadingState) {
-      this.loadingState.classList.remove('hidden');
-    }
-    if (this.errorState) {
-      this.errorState.classList.add('hidden');
-    }
+    if (this.loadingState) this.loadingState.classList.remove('hidden');
+    if (this.errorState) this.errorState.classList.add('hidden');
   }
 
-  /**
-   * Hide loading state
-   */
   hideLoadingState() {
-    if (this.loadingState) {
-      this.loadingState.classList.add('hidden');
-    }
+    if (this.loadingState) this.loadingState.classList.add('hidden');
   }
 
-  /**
-   * Show error state
-   */
   showErrorState() {
     this.hideLoadingState();
-    if (this.errorState) {
-      this.errorState.classList.remove('hidden');
-    }
+    if (this.errorState) this.errorState.classList.remove('hidden');
   }
 
-  /**
-   * Render blog posts to the DOM
-   */
-  renderBlogs(blogData) {
-    if (!this.blogContainer) return;
-
-    // Clear any existing content
-    this.blogContainer.innerHTML = '';
-
-    // Create blog cards
-    const fragment = document.createDocumentFragment();
-    
-    blogData.forEach((blog, index) => {
-      const blogCard = this.createBlogCard(blog, index);
-      fragment.appendChild(blogCard);
+  renderFilterControls() {
+    const allTags = new Set(this.allBlogs.flatMap(blog => blog.tags));
+    const filterTags = ['All', ...allTags];
+    this.filterContainer.innerHTML = filterTags.map(tag => 
+      `<button class="filter-btn ${tag === this.activeFilter ? 'active' : ''}" data-tag="${tag}">
+        ${this.escapeHTML(tag)}
+      </button>`
+    ).join('');
+    this.filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.handleFilterClick(btn.dataset.tag));
     });
-
-    // Add all cards to the container
-    this.blogContainer.appendChild(fragment);
-
-    // Add staggered fade-in effect
-    setTimeout(() => {
-      const cards = this.blogContainer.querySelectorAll('.blog-card');
-      cards.forEach((card, index) => {
-        setTimeout(() => {
-          card.classList.add('visible');
-        }, index * 150);
-      });
-    }, 100);
   }
 
-  /**
-   * Create individual blog card element
-   */
-  createBlogCard(blog, index) {
-    // Create main card element
+  handleFilterClick(tag) {
+    if (this.activeFilter === tag) return;
+    this.activeFilter = tag;
+    this.filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tag === this.activeFilter);
+    });
+    const filteredBlogs = tag === 'All'
+      ? this.allBlogs
+      : this.allBlogs.filter(blog => blog.tags.includes(tag));
+    this.renderBlogs(filteredBlogs);
+  }
+
+  renderBlogs(blogData) {
+    this.blogContainer.innerHTML = '';
+    if (blogData.length === 0) {
+      this.blogContainer.innerHTML = `<p class="error-state" style="opacity: 1;">No articles found for this category.</p>`;
+      return;
+    }
+    const fragment = document.createDocumentFragment();
+    blogData.forEach(blog => fragment.appendChild(this.createBlogCard(blog)));
+    this.blogContainer.appendChild(fragment);
+    setTimeout(() => {
+      this.blogContainer.querySelectorAll('.blog-card').forEach((card, index) => {
+        setTimeout(() => card.classList.add('visible'), index * 100);
+      });
+    }, 50);
+  }
+
+  createBlogCard(blog) {
     const card = document.createElement('a');
     card.className = 'blog-card';
     card.href = blog.linkUrl;
     card.target = '_blank';
     card.rel = 'noopener noreferrer';
     card.setAttribute('aria-label', `Read blog post: ${blog.title}`);
+    if (blog.featured) card.classList.add('blog-card--featured');
 
-    // Create card content
+    const tagsHTML = blog.tags.map(tag => `<span class="blog-tag">${this.escapeHTML(tag)}</span>`).join('');
+    const readTimeHTML = blog.readTime ? `<span class="blog-card-read-time">${blog.readTime}</span>` : '';
+
     card.innerHTML = `
       <article class="blog-card-article">
-        <div class="blog-card-image" role="img" aria-label="Blog post cover image">
-          <span>🛡️ Insurance Insights</span>
-        </div>
+        <div class="blog-card-image" role="img" aria-label="${blog.title}"></div>
         <div class="blog-card-content">
-          <div class="blog-card-tags" role="list" aria-label="Post tags">
-            ${this.createTagsHTML(blog.tags)}
-          </div>
+          <div class="blog-card-tags">${tagsHTML}</div>
           <h3 class="blog-card-title">${this.escapeHTML(blog.title)}</h3>
-          <time class="blog-card-date" datetime="${this.formatDatetime(blog.date)}">${blog.date}</time>
+          <div class="blog-card-meta">
+            <time class="blog-card-date" datetime="${this.formatDatetime(blog.date)}">${blog.date}</time>
+            ${readTimeHTML}
+          </div>
           <p class="blog-card-summary">${this.escapeHTML(blog.summary)}</p>
         </div>
-      </article>
-    `;
+      </article>`;
 
-    // Add keyboard navigation support
-    card.addEventListener('keydown', this.handleCardKeydown.bind(this));
-
+    const imageDiv = card.querySelector('.blog-card-image');
+    if (blog.imageUrl) {
+      imageDiv.style.backgroundImage = `url(${blog.imageUrl})`;
+    } else {
+      imageDiv.innerHTML = this.getIconForTag(blog.tags[0] || 'default');
+    }
+    
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
     return card;
   }
-
-  /**
-   * Create tags HTML
-   */
-  createTagsHTML(tags) {
-    return tags.map(tag => 
-      `<span class="blog-tag" role="listitem">${this.escapeHTML(tag)}</span>`
-    ).join('');
+  
+  getIconForTag(tag) {
+    // Placeholder icons - replace with actual SVG paths
+    const iconMap = {
+      'Home Insurance': '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>',
+      'Auto Insurance': '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>',
+      'Life Insurance': '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>',
+      'Safety': '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>',
+      'default': '<svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z"></path></svg>'
+    };
+    const safeTag = Object.keys(iconMap).find(key => tag.toLowerCase().includes(key.toLowerCase().split(' ')[0])) || 'default';
+    return iconMap[safeTag];
   }
 
-  /**
-   * Format date for datetime attribute
-   */
   formatDatetime(dateString) {
     try {
-      const date = new Date(dateString);
-      return date.toISOString().split('T')[0];
+      return new Date(dateString).toISOString().split('T')[0];
     } catch {
       return dateString;
     }
   }
 
-  /**
-   * Escape HTML to prevent XSS
-   */
   escapeHTML(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
-
-  /**
-   * Handle keyboard navigation for cards
-   */
-  handleCardKeydown(event) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      event.currentTarget.click();
-    }
-  }
 }
 
-/**
- * Additional utility functions for enhanced UX
- */
-
-/**
- * Add smooth scrolling for any internal links
- */
-function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
-  });
-}
-
-/**
- * Add focus management for better accessibility
- */
-function initFocusManagement() {
-  // Skip to content link (if added to HTML)
-  const skipLink = document.querySelector('.skip-link');
-  if (skipLink) {
-    skipLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      const main = document.querySelector('main');
-      if (main) {
-        main.setAttribute('tabindex', '-1');
-        main.focus();
-        main.addEventListener('blur', () => main.removeAttribute('tabindex'), { once: true });
-      }
-    });
-  }
-}
-
-/**
- * Initialize enhanced animations and parallax effects
- */
 function initEnhancedAnimations() {
-  // Parallax effect for hero section
-  const header = document.querySelector('.site-header');
-  const introSection = document.querySelector('.intro-section');
-  const blogGrid = document.querySelector('.blog-grid');
-  
-  let ticking = false;
-  function updateParallax() {
-    const scrolled = window.pageYOffset;
-    const windowHeight = window.innerHeight;
-    
-    // Subtle parallax for intro section
-    if (introSection && scrolled < windowHeight) {
-      const parallaxSpeed = 0.3;
-      const opacity = Math.max(0, 1 - (scrolled / windowHeight) * 1.5);
-      introSection.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
-      introSection.style.opacity = opacity;
-    }
-    
-    ticking = false;
-  }
-
-  function requestTick() {
-    if (!ticking) {
-      window.requestAnimationFrame(updateParallax);
-      ticking = true;
-    }
-  }
-
-  // Only enable parallax on desktop
-  if (window.innerWidth > 768) {
-    window.addEventListener('scroll', requestTick);
-  }
-
-  // Enhanced card hover with 3D effect
-  setTimeout(() => {
-    const cards = document.querySelectorAll('.blog-card');
-    
-    cards.forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const percentX = (x - centerX) / centerX;
-        const percentY = (y - centerY) / centerY;
-        
-        card.style.transform = `
-          perspective(1000px)
-          rotateY(${percentX * 3}deg)
-          rotateX(${percentY * -3}deg)
-          translateZ(10px)
-          scale(1.02)
-        `;
-        
-        // Move gradient on card image
-        const cardImage = card.querySelector('.blog-card-image');
-        if (cardImage) {
-          cardImage.style.backgroundPosition = `${50 + percentX * 10}% ${50 + percentY * 10}%`;
-        }
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
-        const cardImage = card.querySelector('.blog-card-image');
-        if (cardImage) {
-          cardImage.style.backgroundPosition = '';
-        }
-      });
+  const cards = document.querySelectorAll('.blog-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const percentX = (x - centerX) / centerX;
+      const percentY = (y - centerY) / centerY;
+      card.style.transform = `perspective(1000px) rotateY(${percentX * 3}deg) rotateX(${percentY * -3}deg) translateZ(10px) scale(1.02)`;
     });
-  }, 500);
-
-  // Intersection Observer for scroll animations
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '50px 0px'
-  };
-
-  const animateOnScroll = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        
-        // Animate child elements with delay
-        const children = entry.target.querySelectorAll('.animate-child');
-        children.forEach((child, index) => {
-          setTimeout(() => {
-            child.classList.add('in-view');
-          }, index * 100);
-        });
-      }
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
     });
-  }, observerOptions);
-
-  // Observe elements that should animate on scroll
-  document.querySelectorAll('.intro-section, .blog-card').forEach(el => {
-    animateOnScroll.observe(el);
   });
 }
 
-/**
- * Initialize the application when DOM is ready
- */
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize main blog functionality
   new EtherealBlog();
-  
-  // Initialize additional features
-  initSmoothScroll();
-  initFocusManagement();
-  initEnhancedAnimations();
-  
-  // Log successful initialization
-  console.log('🛡️ Bill Layne Insurance Blog initialized successfully');
+  // We call this here so it can re-apply animations to newly filtered cards if needed.
+  const observer = new MutationObserver((mutations) => {
+    if (mutations.some(m => m.addedNodes.length > 0)) {
+      initEnhancedAnimations();
+    }
+  });
+  observer.observe(document.getElementById('blog-grid'), { childList: true });
 });
-
-/**
- * Handle any uncaught errors gracefully
- */
-window.addEventListener('error', (event) => {
-  console.error('Ethereal Blog Error:', event.error);
-  
-  // Could show a user-friendly error message here
-  const errorContainer = document.getElementById('error-state');
-  if (errorContainer) {
-    errorContainer.classList.remove('hidden');
-  }
-});
-
-/**
- * Export for potential testing or external access
- */
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { EtherealBlog };
-}
