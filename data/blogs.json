@@ -1,12 +1,10 @@
- [
-    {
+{
       "id": "2025-01-july4th",
       "title": "July 4th Insurance Safety Tips",
       "summary": "Protect your home and family during Independence Day celebrations with essential insurance tips
   for fireworks, BBQs, and holiday gatherings.",
       "date": "2025-01-15",
-      "tags": ["Home Insurance", "Safety", "Holiday"],
-      "linkUrl": "https://billlayne.github.io/Blogs.github.io/july4th-insurance-blog.html",
-      "imageUrl": ""
-    }
-  ]
+      "tags": ["Home Insurance", "Safety"],
+      "imageUrl": "assets/images/july4th-safety.jpg",
+      "linkUrl": "https://billlayne.github.io/Blogs.github.io/july4th-insurance-blog.html"
+  }
