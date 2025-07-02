@@ -1,9 +1,13 @@
+Of course. Here is the complete, updated code for your `app.js` file. You can copy and paste this entire block to replace the old version.
+
+The only change is within the `createBlogCard` function to correctly display your images.
+
+```javascript
 'use strict';
 
 /**
  * Ethereal Blog - Dynamic Content Loader
- * 
- * This script handles:
+ * * This script handles:
  * - Loading blog post data (simulated from external JSON)
  * - Creating dynamic blog cards with smooth animations
  * - Error handling and loading states
@@ -230,6 +234,24 @@ class EtherealBlog {
         </div>
       </article>
     `;
+
+    // *** THIS IS THE UPDATED CODE ***
+    // Check if an imageUrl is provided in the JSON data
+    if (blog.imageUrl) {
+      const imageDiv = card.querySelector('.blog-card-image');
+      if (imageDiv) {
+        // Apply the image as a background
+        imageDiv.style.backgroundImage = `url(${blog.imageUrl})`;
+        imageDiv.style.backgroundSize = 'cover';
+        imageDiv.style.backgroundPosition = 'center';
+        
+        // Hide the default text span when an image is present
+        const textSpan = imageDiv.querySelector('span');
+        if (textSpan) {
+            textSpan.style.display = 'none';
+        }
+      }
+    }
 
     // Add keyboard navigation support
     card.addEventListener('keydown', this.handleCardKeydown.bind(this));
@@ -460,3 +482,4 @@ window.addEventListener('error', (event) => {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { EtherealBlog };
 }
+```
