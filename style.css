@@ -189,22 +189,14 @@ body::before {
   text-align: center;
 }
 
+/* === CHANGE 1: Make Header Title Visible === */
 .site-title {
   font-family: var(--font-serif);
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--color-primary);
+  color: var(--color-primary); /* Changed from gradient text to solid color for visibility */
   margin-bottom: var(--space-xs);
   letter-spacing: -0.025em;
-  background: linear-gradient(135deg, 
-    var(--color-primary) 0%, 
-    var(--color-gradient-1) 50%, 
-    var(--color-primary-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
-  animation: gradientShift 3s ease-in-out infinite;
   position: relative;
   display: inline-block;
 }
@@ -291,13 +283,13 @@ body::before {
 /* Main Content */
 .main-content {
   min-height: calc(100vh - 300px);
-  padding-bottom: var(--space-3xl);
+  padding: var(--space-3xl) 0;
 }
 
 /* Introduction Section - Enhanced with animations */
 .intro-section {
   text-align: center;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-3xl);
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -468,47 +460,12 @@ body::before {
   display: none !important;
 }
 
-/* === NEW: Blog Filters === */
-.blog-filters {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: var(--space-md);
-  margin-bottom: var(--space-3xl);
-}
-
-.filter-btn {
-  background-color: var(--color-surface);
-  color: var(--color-text-secondary);
-  border: 1px solid var(--color-border);
-  padding: var(--space-sm) var(--space-lg);
-  border-radius: var(--radius-2xl);
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: var(--transition-base);
-}
-
-.filter-btn:hover {
-  background-color: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.filter-btn.active {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-  color: white;
-  border-color: transparent;
-  box-shadow: var(--shadow-lg);
-}
-
 /* Blog Grid */
+/* === CHANGE 3: Better Card Separation === */
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: var(--space-xl);
+  gap: var(--space-2xl); /* Increased gap for more breathing room */
   margin-bottom: var(--space-3xl);
 }
 
@@ -524,10 +481,8 @@ body::before {
   display: block;
   opacity: 0;
   transform: translateY(30px) scale(0.95);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-lg); /* Increased shadow for better "outline" */
   position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
 .blog-card::before {
@@ -549,36 +504,6 @@ body::before {
   opacity: 1;
   transform: translateY(0) scale(1);
   animation: cardEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* === NEW: Featured Card Style === */
-.blog-card--featured {
-  grid-column: 1 / -1; /* Span full width on grid */
-  border-color: var(--color-primary-light);
-  box-shadow: var(--shadow-lg);
-}
-
-.blog-card--featured .blog-card-article {
-  flex-direction: row; /* Horizontal layout for featured card */
-}
-
-.blog-card--featured .blog-card-image {
-  width: 40%;
-  height: auto;
-}
-
-.blog-card--featured .blog-card-content {
-  width: 60%;
-}
-
-@media (max-width: 768px) {
-  .blog-card--featured .blog-card-article {
-    flex-direction: column; /* Revert to vertical on mobile */
-  }
-  .blog-card--featured .blog-card-image,
-  .blog-card--featured .blog-card-content {
-    width: 100%;
-  }
 }
 
 @keyframes cardEntrance {
@@ -615,8 +540,7 @@ body::before {
     var(--color-gradient-1) 0%, 
     var(--color-gradient-2) 50%, 
     var(--color-gradient-3) 100%);
-  background-size: cover;
-  background-position: center;
+  background-size: 300% 300%;
   animation: gradientWave 10s ease infinite;
   display: flex;
   align-items: center;
@@ -632,13 +556,6 @@ body::before {
 /* Hide the default text span if a background image is applied via JS */
 .blog-card-image[style*="background-image"] span {
   display: none;
-}
-
-/* === NEW: Thematic Icon Style === */
-.blog-card-image .icon {
-  width: 64px;
-  height: 64px;
-  opacity: 0.8;
 }
 
 @keyframes gradientWave {
@@ -703,9 +620,10 @@ body::before {
   z-index: 2;
 }
 
+/* === CHANGE 2: Make Tags Visible === */
 .blog-tag {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-  color: white;
+  background: rgba(var(--color-primary-rgb), 0.1); /* Light primary background */
+  color: var(--color-primary); /* Dark primary text color */
   padding: 0.25rem 0.75rem;
   border-radius: var(--radius-2xl);
   font-size: 0.75rem;
@@ -756,22 +674,11 @@ body::before {
   transform: translateX(5px);
 }
 
-.blog-card-meta {
+.blog-card-date {
   font-size: 0.875rem;
   color: var(--color-text-light);
   margin-bottom: var(--space-md);
-  display: flex;
-  gap: var(--space-md);
-  align-items: center;
-}
-
-.blog-card-date {
   display: block;
-}
-
-/* === NEW: Read Time Style === */
-.blog-card-read-time {
-  font-style: italic;
 }
 
 .blog-card-summary {
@@ -818,10 +725,6 @@ body::before {
     grid-template-columns: 1fr;
     gap: var(--space-lg);
   }
-
-  .blog-card--featured {
-    grid-column: 1; /* Reset featured card to 1 column on mobile */
-  }
   
   .blog-card-content {
     padding: var(--space-lg);
@@ -863,8 +766,7 @@ html {
   box-shadow: var(--shadow-glow);
 }
 
-.nav-link:focus-visible,
-.filter-btn:focus-visible {
+.nav-link:focus-visible {
   outline: 3px solid var(--color-primary);
   outline-offset: 2px;
 }
