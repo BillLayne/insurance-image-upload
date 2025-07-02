@@ -18,8 +18,11 @@ class EtherealBlog {
     this.loadingState = null;
     this.errorState = null;
     this.filterContainer = null;
+    this.searchInput = null;
     this.allBlogs = [];
+    this.filteredBlogs = [];
     this.activeFilter = 'All';
+    this.searchTerm = '';
     this.init();
   }
 
@@ -36,13 +39,28 @@ class EtherealBlog {
     this.loadingState = document.getElementById('loading-state');
     this.errorState = document.getElementById('error-state');
     this.filterContainer = document.getElementById('blog-filters');
+    this.searchInput = document.getElementById('searchInput');
 
     if (!this.blogContainer || !this.filterContainer) {
       console.error('Required DOM elements not found (blog-grid or blog-filters).');
       return;
     }
     
+    this.setupSearch();
     this.loadBlogs();
+  }
+
+  setupSearch() {
+    if (!this.searchInput) return;
+    
+    let searchTimeout;
+    this.searchInput.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        this.searchTerm = e.target.value.toLowerCase().trim();
+        this.applyFilters();
+      }, 300);
+    });
   }
 
   async loadBlogs() {
@@ -54,7 +72,7 @@ class EtherealBlog {
       if (!Array.isArray(this.allBlogs)) throw new Error('Invalid blog data format');
       this.hideLoadingState();
       this.renderFilterControls();
-      this.renderBlogs(this.allBlogs);
+      this.applyFilters(); // Use applyFilters instead of renderBlogs
     } catch (error) {
       console.error('Failed to load blogs:', error);
       this.showErrorState();
@@ -94,10 +112,27 @@ class EtherealBlog {
     this.filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tag === this.activeFilter);
     });
-    const filteredBlogs = tag === 'All'
-      ? this.allBlogs
-      : this.allBlogs.filter(blog => blog.tags.includes(tag));
-    this.renderBlogs(filteredBlogs);
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    let filtered = this.allBlogs;
+    
+    // Apply tag filter
+    if (this.activeFilter !== 'All') {
+      filtered = filtered.filter(blog => blog.tags.includes(this.activeFilter));
+    }
+    
+    // Apply search filter
+    if (this.searchTerm) {
+      filtered = filtered.filter(blog => {
+        const searchableText = `${blog.title} ${blog.summary} ${blog.tags.join(' ')}`.toLowerCase();
+        return searchableText.includes(this.searchTerm);
+      });
+    }
+    
+    this.filteredBlogs = filtered;
+    this.renderBlogs(this.filteredBlogs);
   }
 
   renderBlogs(blogData) {
@@ -126,17 +161,18 @@ class EtherealBlog {
     if (blog.featured) card.classList.add('blog-card--featured');
 
     const tagsHTML = blog.tags.map(tag => `<span class="blog-tag">${this.escapeHTML(tag)}</span>`).join('');
-    const readTimeHTML = blog.readTime ? `<span class="blog-card-read-time">${blog.readTime}</span>` : '';
+    const readTime = this.calculateReadTime(blog.summary);
+    const formattedDate = this.formatDate(blog.date);
 
     card.innerHTML = `
       <article class="blog-card-article">
-        <div class="blog-card-image" role="img" aria-label="${blog.title}"></div>
+        <div class="blog-card-image lazy-loading" role="img" aria-label="${blog.title}"></div>
         <div class="blog-card-content">
           <div class="blog-card-tags">${tagsHTML}</div>
           <h3 class="blog-card-title">${this.escapeHTML(blog.title)}</h3>
-          <div class="blog-card-meta">
-            <time class="blog-card-date" datetime="${this.formatDatetime(blog.date)}">${blog.date}</time>
-            ${readTimeHTML}
+          <div class="blog-meta">
+            <span class="blog-date">${formattedDate}</span>
+            <span class="reading-time">${readTime} min read</span>
           </div>
           <p class="blog-card-summary">${this.escapeHTML(blog.summary)}</p>
         </div>
@@ -144,9 +180,17 @@ class EtherealBlog {
 
     const imageDiv = card.querySelector('.blog-card-image');
     if (blog.imageUrl) {
-      imageDiv.style.backgroundImage = `url(${blog.imageUrl})`;
+      // Implement lazy loading
+      const img = new Image();
+      img.onload = () => {
+        imageDiv.style.backgroundImage = `url(${blog.imageUrl})`;
+        imageDiv.classList.remove('lazy-loading');
+        imageDiv.classList.add('loaded');
+      };
+      img.src = blog.imageUrl;
     } else {
       imageDiv.innerHTML = this.getIconForTag(blog.tags[0] || 'default');
+      imageDiv.classList.remove('lazy-loading');
     }
     
     card.addEventListener('keydown', e => {
@@ -156,6 +200,24 @@ class EtherealBlog {
       }
     });
     return card;
+  }
+
+  calculateReadTime(text) {
+    // Average reading speed: 200-250 words per minute
+    const wordsPerMinute = 225;
+    const words = text.trim().split(/\s+/).length;
+    const readTime = Math.ceil(words / wordsPerMinute);
+    return Math.max(1, readTime); // Minimum 1 minute
+  }
+
+  formatDate(dateString) {
+    try {
+      const date = new Date(dateString);
+      const options = { month: 'short', day: 'numeric', year: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    } catch {
+      return dateString;
+    }
   }
   
   getIconForTag(tag) {
@@ -206,13 +268,47 @@ function initEnhancedAnimations() {
   });
 }
 
+// Touch swipe for filter navigation
+function initSwipeNavigation() {
+  const filterContainer = document.querySelector('.filter-container');
+  if (!filterContainer) return;
+  
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  filterContainer.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  filterContainer.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, { passive: true });
+
+  function handleSwipe() {
+    if (touchEndX < touchStartX - 50) {
+      // Swipe left - scroll filters right
+      filterContainer.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+    if (touchEndX > touchStartX + 50) {
+      // Swipe right - scroll filters left
+      filterContainer.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   new EtherealBlog();
+  initSwipeNavigation();
+  
   // We call this here so it can re-apply animations to newly filtered cards if needed.
   const observer = new MutationObserver((mutations) => {
     if (mutations.some(m => m.addedNodes.length > 0)) {
       initEnhancedAnimations();
     }
   });
-  observer.observe(document.getElementById('blog-grid'), { childList: true });
+  const blogGrid = document.getElementById('blog-grid');
+  if (blogGrid) {
+    observer.observe(blogGrid, { childList: true });
+  }
 });
