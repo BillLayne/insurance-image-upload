@@ -1,8 +1,3 @@
-Of course. Here is the complete, updated code for your `app.js` file. You can copy and paste this entire block to replace the old version.
-
-The only change is within the `createBlogCard` function to correctly display your images.
-
-```javascript
 'use strict';
 
 /**
@@ -235,7 +230,7 @@ class EtherealBlog {
       </article>
     `;
 
-    // *** THIS IS THE UPDATED CODE ***
+    // *** This is the corrected code block ***
     // Check if an imageUrl is provided in the JSON data
     if (blog.imageUrl) {
       const imageDiv = card.querySelector('.blog-card-image');
@@ -482,4 +477,3 @@ window.addEventListener('error', (event) => {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { EtherealBlog };
 }
-```
