@@ -1,3 +1,8 @@
+Of course. Here is the complete, updated CSS code for your `style.css` file. You can copy this entire block and paste it to replace the previous version.
+
+The only change is the addition of a new rule to hide the default text when a blog card has a background image.
+
+```css
 /* Bill Layne Insurance - Modern Styles */
 
 :root {
@@ -560,6 +565,12 @@ body::before {
   z-index: 1;
 }
 
+/* *** THIS IS THE NEWLY ADDED CODE *** */
+/* Hide the default text span if a background image is applied via JS */
+.blog-card-image[style*="background-image"] span {
+  display: none;
+}
+
 @keyframes gradientWave {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
@@ -789,3 +800,4 @@ html {
     break-inside: avoid;
   }
 }
+```
