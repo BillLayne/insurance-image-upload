@@ -6,16 +6,13 @@
     <title>Bill Layne Insurance - Expert Insurance Insights & Tips</title>
     <meta name="description" content="Stay informed with expert insurance advice, industry updates, and practical tips from Bill Layne Insurance">
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header Section -->
     <header class="site-header">
         <div class="container">
             <div class="header-content">
@@ -39,10 +36,8 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Introduction Section -->
             <section class="intro-section">
                 <h2 class="intro-title">Insurance Insights & Expert Advice</h2>
                 <p class="intro-description">
@@ -51,25 +46,23 @@
                 </p>
             </section>
 
-            <!-- Loading State -->
+            <section id="blog-filters" class="blog-filters" aria-label="Blog post filters">
+                </section>
+
             <div id="loading-state" class="loading-state">
                 <div class="loading-spinner"></div>
                 <p>Loading articles...</p>
             </div>
 
-            <!-- Error State -->
             <div id="error-state" class="error-state hidden">
                 <p>Unable to load blog posts. Please try again later.</p>
             </div>
 
-            <!-- Blog Grid -->
-            <section id="blog-grid" class="blog-grid" aria-label="Blog posts">
-                <!-- Blog cards will be dynamically inserted here by JavaScript -->
-            </section>
+            <section id="blog-grid" class="blog-grid" aria-live="polite">
+                </section>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
             <div class="footer-content">
@@ -83,7 +76,6 @@
         </div>
     </footer>
 
-    <!-- JavaScript -->
     <script src="app.js" defer></script>
 </body>
 </html>
