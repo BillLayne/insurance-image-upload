@@ -1,8 +1,3 @@
-Of course. Here is the complete, updated CSS code for your `style.css` file. You can copy this entire block and paste it to replace the previous version.
-
-The only change is the addition of a new rule to hide the default text when a blog card has a background image.
-
-```css
 /* Bill Layne Insurance - Modern Styles */
 
 :root {
@@ -800,4 +795,3 @@ html {
     break-inside: avoid;
   }
 }
-```
