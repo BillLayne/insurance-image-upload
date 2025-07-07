@@ -92,5 +92,14 @@
     "date": "2024-12-15",
     "tags": ["Home Insurance", "Winter Safety"],
     "linkUrl": "#"
+  },
+  {
+    "id": "2025-07-comp-collision",
+    "title": "Breaking Down Comprehensive and Collision Coverage: An NC Driver's Guide",
+    "summary": "Learn the key differences between comprehensive and collision coverage, when you need each, and how NC drivers can save hundreds on auto insurance.",
+    "date": "2025-07-07",
+    "tags": ["Auto Insurance", "North Carolina", "Coverage Guide"],
+    "imageUrl": "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1200&h=630&fit=crop",
+    "linkUrl": "https://billlayne.github.io/Comprehensive-VS-Collision/"
   }
 ]
