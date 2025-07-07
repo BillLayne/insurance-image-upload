@@ -212,6 +212,13 @@ body::before {
   position: relative;
   display: inline-block;
   line-height: 1;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Header link hover effect */
+.header-content a:hover .site-title {
+  color: var(--color-primary-light);
+  transform: translateY(-2px);
 }
 
 .site-title::after {
