@@ -978,3 +978,92 @@ html {
   pointer-events: none;
   z-index: 1;
 }
+
+/* Share Functionality Styles */
+.blog-card-actions {
+  margin-top: var(--space-md);
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.share-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs) var(--space-sm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.share-btn:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary-light);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.share-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.share-menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: var(--space-xs);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-xs);
+  min-width: 150px;
+  z-index: 10;
+}
+
+.share-menu button {
+  display: block;
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.share-menu button:hover {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+/* Toast Notification */
+.toast-notification {
+  position: fixed;
+  bottom: var(--space-xl);
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--color-text);
+  color: var(--color-background);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  font-size: var(--font-size-sm);
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+EOF < /dev/null

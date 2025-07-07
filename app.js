@@ -198,6 +198,19 @@ class EtherealBlog {
             <span class="reading-time">${readTime} min read</span>
           </div>
           <p class="blog-card-summary">${this.escapeHTML(blog.summary)}</p>
+          <div class="blog-card-actions">
+            <button class="share-btn" onclick="event.preventDefault(); event.stopPropagation(); window.etherealBlog.toggleShareMenu(this, '${encodeURIComponent(blog.linkUrl)}', '${encodeURIComponent(blog.title)}')" aria-label="Share blog post">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a3 3 0 10-5.432 2.684m5.432-2.684a3 3 0 00-5.432-2.684m0 5.368a3 3 0 105.432-2.684M6.316 10.658a3 3 0 10-5.432 2.684"/>
+              </svg>
+            </button>
+            <div class="share-menu" style="display: none;">
+              <button onclick="event.preventDefault(); event.stopPropagation(); window.etherealBlog.copyLink('${encodeURIComponent(blog.linkUrl)}')">Copy Link</button>
+              <button onclick="event.preventDefault(); event.stopPropagation(); window.etherealBlog.shareToFacebook('${encodeURIComponent(blog.linkUrl)}')">Facebook</button>
+              <button onclick="event.preventDefault(); event.stopPropagation(); window.etherealBlog.shareToTwitter('${encodeURIComponent(blog.linkUrl)}', '${encodeURIComponent(blog.title)}')">X (Twitter)</button>
+              <button onclick="event.preventDefault(); event.stopPropagation(); window.etherealBlog.shareToLinkedIn('${encodeURIComponent(blog.linkUrl)}')">LinkedIn</button>
+            </div>
+          </div>
         </div>
       </article>`;
 
@@ -270,6 +283,75 @@ class EtherealBlog {
     div.textContent = text;
     return div.innerHTML;
   }
+
+  toggleShareMenu(button, encodedUrl, encodedTitle) {
+    const shareMenu = button.nextElementSibling;
+    const allMenus = document.querySelectorAll('.share-menu');
+    
+    // Close all other share menus
+    allMenus.forEach(menu => {
+      if (menu !== shareMenu) {
+        menu.style.display = 'none';
+      }
+    });
+    
+    // Toggle current menu
+    shareMenu.style.display = shareMenu.style.display === 'none' ? 'block' : 'none';
+    
+    // Close menu when clicking outside
+    if (shareMenu.style.display === 'block') {
+      setTimeout(() => {
+        document.addEventListener('click', function closeMenu(e) {
+          if (!button.contains(e.target) && !shareMenu.contains(e.target)) {
+            shareMenu.style.display = 'none';
+            document.removeEventListener('click', closeMenu);
+          }
+        });
+      }, 0);
+    }
+  }
+
+  copyLink(encodedUrl) {
+    const url = decodeURIComponent(encodedUrl);
+    navigator.clipboard.writeText(url).then(() => {
+      this.showToast('Link copied to clipboard!');
+    }).catch(() => {
+      this.showToast('Failed to copy link');
+    });
+  }
+
+  shareToFacebook(encodedUrl) {
+    const url = decodeURIComponent(encodedUrl);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+  }
+
+  shareToTwitter(encodedUrl, encodedTitle) {
+    const url = decodeURIComponent(encodedUrl);
+    const title = decodeURIComponent(encodedTitle);
+    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, '_blank', 'width=600,height=400');
+  }
+
+  shareToLinkedIn(encodedUrl) {
+    const url = decodeURIComponent(encodedUrl);
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+  }
+
+  showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Force reflow
+    toast.offsetHeight;
+    
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
+  }
 }
 
 function initEnhancedAnimations() {
@@ -324,7 +406,7 @@ function initSwipeNavigation() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  new EtherealBlog();
+  window.etherealBlog = new EtherealBlog();
   initSwipeNavigation();
   
   // We call this here so it can re-apply animations to newly filtered cards if needed.
