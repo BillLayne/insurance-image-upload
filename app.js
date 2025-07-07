@@ -70,6 +70,14 @@ class EtherealBlog {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       this.allBlogs = await response.json();
       if (!Array.isArray(this.allBlogs)) throw new Error('Invalid blog data format');
+      
+      // Sort blogs by date (newest first)
+      this.allBlogs.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA; // Descending order (newest first)
+      });
+      
       this.hideLoadingState();
       this.renderFilterControls();
       this.applyFilters(); // Use applyFilters instead of renderBlogs
