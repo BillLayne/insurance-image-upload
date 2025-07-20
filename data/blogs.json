@@ -1,5 +1,14 @@
 [
   {
+    "id": "2025-07-surry-county-events",
+    "title": "Hike, Paddle, Sip: The Ultimate Outdoor Weekend in Surry County",
+    "summary": "Discover the perfect outdoor weekend in Surry County, NC. This guide details the best hiking, paddling on the Yadkin River, and winery tours.",
+    "date": "2025-07-20",
+    "tags": ["Surry County", "Outdoor Activities", "Travel", "North Carolina"],
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/general/Serene%20Riverside%20Retreat.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/Surry-County-Events/"
+  },
+  {
     "id": "2025-07-no-insurance-no-license",
     "title": "No Insurance, No License? North Carolina's Surprising DMV Rule",
     "summary": "Learn why North Carolina requires liability car insurance before getting a driver's license, including details about the DL-123 form and consequences of insurance lapses.",
