@@ -1,5 +1,17 @@
 [
   {
+    "id": "bill-layne-elkin",
+    "title": "Why Choose Bill Layne Insurance in Elkin",
+    "summary": "Discover why local, independent insurance matters. Learn how Bill Layne Insurance provides personalized service, community commitment, and trusted protection for Elkin NC families.",
+    "date": "2025-01-08",
+    "category": "Local Insurance",
+    "tags": ["Elkin NC", "Local Insurance", "Independent Agency", "Community"],
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/Family%20Stroll%20in%20Elkin.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/Bill-Layne-Elkin/",
+    "readTime": "5 min read",
+    "featured": true
+  },
+  {
     "id": "7-ways-save-home-insurance-elkin",
     "title": "7 Ways to Save on Home Insurance in Elkin, NC",
     "summary": "Discover proven strategies to reduce your home insurance premiums in Elkin, NC while maintaining excellent coverage protection.",
