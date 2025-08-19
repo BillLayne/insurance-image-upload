@@ -1,4 +1,31 @@
-<!DOCTYPE html>
+        /* F-Pattern Content Layout */
+        section.py-20 {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            background-color: #f8fafc;
+        }
+        
+        /* Blog Grid Container */
+        #blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            #blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2.5rem;
+            }
+        }
+        
+        /* Blog Card Article Wrapper */
+        article.blog-card {
+            height: 100%;
+            min-height: 420px;
+            max-height: 480px;
+        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -181,6 +208,10 @@
             transition: all 0.3s ease;
             border: 1px solid rgba(0, 0, 0, 0.05);
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
         }
         
         .blog-card:hover {
@@ -188,20 +219,39 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
         
+        .blog-card-image-wrapper {
+            width: 100%;
+            height: 200px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
         .blog-card-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: block;
         }
         
         img.blog-card-image {
             display: block;
             background: #f3f4f6;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .blog-card-content {
             padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            position: relative;
+            z-index: 1;
+            min-height: 0;
         }
         
         .blog-card-category {
@@ -213,6 +263,7 @@
             font-size: 12px;
             font-weight: 600;
             margin-bottom: 12px;
+            max-width: fit-content;
         }
         
         .blog-card-title {
@@ -221,6 +272,11 @@
             color: #1f2937;
             margin-bottom: 12px;
             line-height: 1.3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
         
         .blog-card-excerpt {
@@ -228,6 +284,11 @@
             font-size: 15px;
             line-height: 1.6;
             margin-bottom: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
         
         .blog-card-meta {
@@ -516,7 +577,7 @@
                 <div class="flex items-center">
                     <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Logo" class="h-12 w-auto mr-3">
                     <div>
-                        <h1 class="text-xl font-bold text-blue-800">Bill Layne Insurance</h1>
+                        <a href="https://billlayneinsurance.com/" class="text-xl font-bold text-blue-800 hover:text-blue-600 transition-colors">Bill Layne Insurance</a>
                         <p class="text-xs text-gray-600 hidden sm:block">Insurance Blog & Expert Insights</p>
                     </div>
                 </div>
@@ -567,8 +628,11 @@
             <a href="https://billlayne.github.io/Resources/" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
                 <i class="fas fa-book mr-3 w-5"></i>Resources
             </a>
-            <a href="https://billlayneinsurance.com/blog.html" class="block py-3 px-4 text-blue-600 bg-blue-50 font-medium rounded-lg">
+            <a href="https://billlayne.github.io/ethereal-blog-landing/" class="block py-3 px-4 text-blue-600 bg-blue-50 font-medium rounded-lg">
                 <i class="fas fa-blog mr-3 w-5"></i>Blog
+            </a>
+            <a href="https://billlayneinsurance.com/areas-we-serve.html" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
+                <i class="fas fa-th-large mr-3 w-5"></i>Services
             </a>
             <a href="https://billlayneinsurance.com/contact-us.html" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
                 <i class="fas fa-envelope mr-3 w-5"></i>Contact Us
@@ -841,7 +905,7 @@
                     <h4 class="font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="https://billlayneinsurance.com/" class="hover:text-white">Home</a></li>
-                        <li><a href="https://billlayne.github.io/ethereal-blog-landing/" class="hover:text-white">Blog</a></li>
+                        <li><a href="https://billlayneinsurance.com/blog.html" class="hover:text-white">Blog</a></li>
                         <li><a href="https://billlayne.github.io/Resources/" class="hover:text-white">Resources</a></li>
                         <li><a href="https://billlayneinsurance.com/contact-us.html" class="hover:text-white">Contact</a></li>
                     </ul>
@@ -974,19 +1038,21 @@
             
             blogGrid.innerHTML = postsToShow.map(post => {
                 // Handle both image URL and local image path
-                const imageUrl = post.image || post.thumbnail || 'https://via.placeholder.com/400x200';
-                const postLink = post.link || post.url || `posts/${post.id}.html`;
+                const imageUrl = post.image || post.imageUrl || post.thumbnail || 'https://via.placeholder.com/400x200';
+                const postLink = post.link || post.linkUrl || post.url || `posts/${post.id}.html`;
                 
                 return `
                 <article class="blog-card" onclick="window.location.href='${postLink}'">
-                    ${post.image ? 
-                        `<img src="${imageUrl}" alt="${post.title}" class="blog-card-image" onerror="this.style.display='none'">` :
-                        `<div class="blog-card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>`
-                    }
+                    <div class="blog-card-image-wrapper">
+                        ${post.image || post.imageUrl ? 
+                            `<img src="${imageUrl}" alt="${post.title}" class="blog-card-image" onerror="this.style.display='none'">` :
+                            `<div class="blog-card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>`
+                        }
+                    </div>
                     <div class="blog-card-content">
                         <span class="blog-card-category">${getCategoryLabel(post.category)}</span>
                         <h3 class="blog-card-title">${post.title}</h3>
-                        <p class="blog-card-excerpt">${post.excerpt || post.description}</p>
+                        <p class="blog-card-excerpt">${post.excerpt || post.summary || post.description || ''}</p>
                         <div class="blog-card-meta">
                             <span>${post.date || post.publishedDate}</span>
                             <span><i class="fas fa-clock mr-1"></i>${post.readTime || '5 min'}</span>
