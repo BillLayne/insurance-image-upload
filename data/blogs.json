@@ -1,5 +1,18 @@
 [
   {
+    "id": "nc-auto-rate-increase-2025",
+    "title": "2025 NC Auto Insurance Rate Increases: What You Need to Know",
+    "summary": "North Carolina drivers face significant auto insurance rate increases in 2025. Learn why rates are rising, how much you can expect to pay, and strategies to minimize the impact on your premium.",
+    "author": "Bill Layne",
+    "date": "2025-01-22",
+    "category": "Auto Insurance",
+    "tags": ["Auto Insurance", "North Carolina", "Rate Increases", "2025", "Insurance News"],
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/2025%20NC%20Rate%20Increase%20Hero.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/NC-Auto-Rate-Increase-2025/",
+    "featured": true,
+    "readTime": "7 min read"
+  },
+  {
     "id": "nc-teen-driver-timeline",
     "title": "NC Teen Driver Timeline: Steps to Getting Your License",
     "author": "Bill Layne",
@@ -11,7 +24,7 @@
     "tags": ["Teen Drivers", "North Carolina", "Driver's License", "Insurance Tips", "Young Drivers"],
     "category": "Teen Drivers",
     "readTime": "8 min read",
-    "featured": true
+    "featured": false
   },
   {
     "id": "back-to-school-surry-2025",
