@@ -346,7 +346,7 @@
         
         .search-input {
             width: 100%;
-            padding: 20px 60px 20px 24px;
+            padding: 20px 70px 20px 24px;
             font-size: 18px;
             border: 2px solid #e5e7eb;
             border-radius: 60px;
@@ -410,7 +410,7 @@
             }
             
             .search-input {
-                padding: 24px 70px 24px 32px;
+                padding: 24px 80px 24px 32px;
                 font-size: 20px;
             }
             
@@ -753,30 +753,125 @@
         });
         
         // Enhanced Search Functionality
-        const searchInput = document.getElementById('searchInput');
-        
-        // Focus search on "/" key press
-        document.addEventListener('keydown', function(e) {
-            if (e.key === '/' && document.activeElement !== searchInput) {
-                e.preventDefault();
-                searchInput.focus();
-                searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            
+            // Function to filter blog posts
+            function filterBlogPosts() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const blogGrid = document.getElementById('blog-grid');
+                const blogPosts = blogGrid ? blogGrid.querySelectorAll('.blog-card') : [];
+                
+                let visibleCount = 0;
+                
+                blogPosts.forEach(post => {
+                    // Get searchable content from the blog card
+                    const title = post.querySelector('.blog-title, h2, h3')?.textContent?.toLowerCase() || '';
+                    const description = post.querySelector('.blog-description, .blog-excerpt, p')?.textContent?.toLowerCase() || '';
+                    const category = post.querySelector('.blog-category, .category-tag')?.textContent?.toLowerCase() || '';
+                    const tags = post.dataset.tags?.toLowerCase() || '';
+                    
+                    // Combine all searchable content
+                    const searchableContent = `${title} ${description} ${category} ${tags}`;
+                    
+                    // Check if search term is found
+                    if (searchTerm === '' || searchableContent.includes(searchTerm)) {
+                        post.style.display = '';
+                        post.style.opacity = '1';
+                        post.style.transform = 'scale(1)';
+                        visibleCount++;
+                    } else {
+                        post.style.display = 'none';
+                        post.style.opacity = '0';
+                        post.style.transform = 'scale(0.95)';
+                    }
+                });
+                
+                // Show "no results" message if needed
+                let noResultsMsg = document.getElementById('no-results-message');
+                if (visibleCount === 0 && searchTerm !== '') {
+                    if (!noResultsMsg) {
+                        noResultsMsg = document.createElement('div');
+                        noResultsMsg.id = 'no-results-message';
+                        noResultsMsg.style.cssText = 'text-align: center; padding: 3rem; color: #6b7280; font-size: 1.125rem;';
+                        noResultsMsg.innerHTML = `
+                            <i class="fas fa-search" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem; display: block;"></i>
+                            <p style="font-weight: 600; margin-bottom: 0.5rem;">No articles found for "${searchTerm}"</p>
+                            <p style="font-size: 1rem;">Try searching for different keywords or browse all articles below</p>
+                        `;
+                        blogGrid.appendChild(noResultsMsg);
+                    }
+                } else if (noResultsMsg) {
+                    noResultsMsg.remove();
+                }
+                
+                // Update filter counts if they exist
+                const filterButtons = document.querySelectorAll('.filter-btn, [data-category]');
+                filterButtons.forEach(btn => {
+                    const category = btn.dataset.category;
+                    if (category) {
+                        const categoryPosts = blogGrid.querySelectorAll(`.blog-card[data-category="${category}"]:not([style*="display: none"])`);
+                        const countElement = btn.querySelector('.filter-count');
+                        if (countElement) {
+                            countElement.textContent = `(${categoryPosts.length})`;
+                        }
+                    }
+                });
+            }
+            
+            // Add search event listeners
+            if (searchInput) {
+                // Real-time search as user types
+                searchInput.addEventListener('input', filterBlogPosts);
+                
+                // Search on Enter key
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        filterBlogPosts();
+                    }
+                });
+                
+                // Focus search on "/" key press
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === '/' && document.activeElement !== searchInput) {
+                        e.preventDefault();
+                        searchInput.focus();
+                        searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+                
+                // Clear search on Escape
+                searchInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        this.value = '';
+                        this.blur();
+                        filterBlogPosts();
+                    }
+                });
+                
+                // Add tooltip for keyboard shortcut
+                searchInput.setAttribute('title', 'Press "/" to focus search, "Escape" to clear');
+            }
+            
+            // Watch for dynamically loaded content (when app.js loads blogs)
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes.length > 0) {
+                        // Re-run filter if new blog posts are added
+                        if (searchInput && searchInput.value) {
+                            setTimeout(filterBlogPosts, 100);
+                        }
+                    }
+                });
+            });
+            
+            // Start observing the blog grid for changes
+            const blogGrid = document.getElementById('blog-grid');
+            if (blogGrid) {
+                observer.observe(blogGrid, { childList: true, subtree: true });
             }
         });
-        
-        // Clear search on Escape
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                this.value = '';
-                this.blur();
-                // Trigger the search event to reset results
-                const event = new Event('input', { bubbles: true });
-                this.dispatchEvent(event);
-            }
-        });
-        
-        // Add tooltip for keyboard shortcut
-        searchInput.setAttribute('title', 'Press "/" to focus search');
     </script>
     
     <!-- Keep existing blog app.js -->
