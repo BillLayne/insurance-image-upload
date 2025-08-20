@@ -1,424 +1,154 @@
-        /* F-Pattern Content Layout */
-        section.py-20 {
-            padding-top: 5rem;
-            padding-bottom: 5rem;
-            background-color: #f8fafc;
-        }
-        
-        /* Blog Grid Container */
-        #blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        @media (min-width: 768px) {
-            #blog-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 2.5rem;
-            }
-        }
-        
-        /* Blog Card Article Wrapper */
-        article.blog-card {
-            height: 100%;
-            min-height: 420px;
-            max-height: 480px;
-        }<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insurance Blog & Expert Insights - Bill Layne Insurance Agency</title>
-    <meta name="description" content="Expert insurance advice, industry updates, and money-saving tips for North Carolina residents. Get informed about auto, home, and business insurance.">
+    <title>Bill Layne Insurance - Expert Insurance Insights & Tips</title>
+    <meta name="description" content="Stay informed with expert insurance advice, industry updates, and practical tips from Bill Layne Insurance">
     
-    <!-- SEO Meta Tags -->
-    <link rel="canonical" href="https://billlayneinsurance.com/blog.html">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Insurance Blog & Expert Insights - Bill Layne Insurance Agency">
-    <meta property="og:description" content="Stay informed with expert insurance advice, coverage tips, and industry updates from North Carolina's trusted insurance agency.">
-    <meta property="og:url" content="https://billlayneinsurance.com/blog.html">
-    
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS for header consistency -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            important: true,
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'sans': ['Inter', 'system-ui', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    
+    <link rel="stylesheet" href="style.css">
     
     <style>
-        /* F-Pattern Optimized Styles - Matching Resources Page */
-        :root {
-            --primary-blue: #005FAA;
-            --primary-blue-dark: #004080;
-            --accent-green: #10b981;
-            --text-gray: #374151;
-            --text-light: #6b7280;
-            --bg-light: #f8fafc;
+        /* Simple header styles - matches your working home insurance page */
+
+        /* Header scroll effect */
+        .header-scrolled {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
         }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: var(--text-gray);
+
+        /* Default header background */
+        #main-header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        
-        /* F-Pattern Header - Matching Other Pages */
-        .f-header {
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 50;
-            transition: all 0.3s ease;
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
         }
-        
-        .f-header.scrolled {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* F-Pattern Hero */
-        .f-hero {
-            background: linear-gradient(135deg, #004080 0%, #005FAA 50%, #0077CC 100%);
-            position: relative;
-            overflow: hidden;
-            padding-top: 180px;
-        }
-        
-        @media (min-width: 768px) {
-            .f-hero {
-                padding-top: 120px;
-            }
-        }
-        
-        .f-hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
-        }
-        
-        /* Blog Category Icons */
-        .category-icons {
-            display: flex;
-            justify-content: center;
-            gap: 1.25rem;
-            margin: 1.5rem 0 2rem 0;
-            padding: 0;
-        }
-        
-        .category-icon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.3rem;
+
+        /* Dropdown menu styles */
+        .dropdown-menu {
             opacity: 0;
-            animation: fadeInUp 0.6s ease forwards;
-            cursor: pointer;
-            text-decoration: none !important;
-        }
-        
-        .category-icon:nth-child(1) { animation-delay: 0.1s; }
-        .category-icon:nth-child(2) { animation-delay: 0.2s; }
-        .category-icon:nth-child(3) { animation-delay: 0.3s; }
-        
-        .category-icon-circle {
-            font-size: 1.75rem;
-            color: white;
-            background: rgba(255, 255, 255, 0.15);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            visibility: hidden;
+            transform: translateY(-10px);
             transition: all 0.3s ease;
         }
-        
-        .category-icon:hover .category-icon-circle {
-            transform: scale(1.15);
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
-        
-        .category-icon span {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #cbd5e1;
-            white-space: nowrap;
-            text-align: center;
-            line-height: 0.9;
-        }
-        
-        @media (min-width: 768px) {
-            .category-icons {
-                gap: 3.75rem;
-                margin: 2rem 0 2.5rem 0;
-            }
-            
-            .category-icon-circle {
-                width: 90px;
-                height: 90px;
-                font-size: 2.75rem;
-            }
-            
-            .category-icon span {
-                font-size: 1rem;
-            }
-        }
-        
-        /* F-Pattern Left Sidebar */
-        .f-sidebar {
-            position: sticky;
-            top: 100px;
-            height: fit-content;
-        }
-        
-        /* Blog Cards */
-        .blog-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            position: relative;
-        }
-        
-        .blog-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .blog-card-image-wrapper {
-            width: 100%;
-            height: 200px;
-            flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .blog-card-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: block;
-        }
-        
-        img.blog-card-image {
-            display: block;
-            background: #f3f4f6;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .blog-card-content {
-            padding: 24px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: white;
-            position: relative;
-            z-index: 1;
-            min-height: 0;
-        }
-        
-        .blog-card-category {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #e0f2fe;
-            color: #0369a1;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            max-width: fit-content;
-        }
-        
-        .blog-card-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1f2937;
-            margin-bottom: 12px;
-            line-height: 1.3;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        
-        .blog-card-excerpt {
-            color: #6b7280;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 16px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-        
-        .blog-card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            color: #9ca3af;
-        }
-        
-        /* Modern Gradient Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
-            color: white;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0, 95, 170, 0.3);
+
+        /* ===== UNIFIED MOBILE MENU STYLES ===== */
+        .mobile-menu-toggle {
+            display: flex !important;
+            background: none;
             border: none;
             cursor: pointer;
+            padding: 10px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            -webkit-tap-highlight-color: transparent;
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 95, 170, 0.4);
-            background: linear-gradient(135deg, var(--primary-blue-dark) 0%, #003366 100%);
-        }
-        
-        .btn-secondary {
-            background: white;
-            color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
-            padding: 14px 28px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #333333;
+            margin: 3px 0;
             transition: all 0.3s ease;
-            text-align: center;
+            border-radius: 2px;
         }
-        
-        .btn-secondary:hover {
-            background: var(--primary-blue);
-            color: white;
-            transform: translateY(-1px);
+
+        /* Hamburger Animation */
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+            background-color: #0066ff;
         }
-        
-        /* Trust Badge */
-        .trust-badge {
-            background: white;
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
         }
-        
-        .trust-badge:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+            background-color: #0066ff;
         }
-        
-        /* Search Bar */
-        .search-container {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto 32px;
+
+        /* Enhanced Button Styles */
+        .btn-primary-enhanced {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+            color: #ffffff !important;
+            padding: 14px 28px !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
+            text-decoration: none !important;
+            display: inline-block !important;
         }
-        
-        .search-input {
-            width: 100%;
-            padding: 16px 48px 16px 20px;
-            border: 2px solid #e5e7eb;
-            border-radius: 50px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
+
+        .btn-primary-enhanced:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4) !important;
         }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(0, 95, 170, 0.1);
-        }
-        
-        .search-icon {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-        }
-        
-        /* Universal Menu - Matching Other Pages */
-        .navigation-menu {
+
+        /* Mobile Menu Container - Slides from right */
+        .navbar-menu {
             position: fixed;
             top: 0;
             right: -100%;
             width: 100%;
-            max-width: 350px;
             height: 100vh;
-            background: white;
-            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            box-shadow: -4px 0 30px rgba(0, 0, 0, 0.15);
             transition: right 0.3s ease;
             z-index: 1000;
-            padding: 20px;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
-        .navigation-menu.active {
-            right: 0;
+        @media (min-width: 481px) {
+            .navbar-menu {
+                width: 320px;
+                right: -320px;
+            }
         }
         
         @media (min-width: 768px) {
-            .navigation-menu {
-                max-width: 400px;
-                padding: 30px;
+            .navbar-menu {
+                width: 360px;
+                right: -360px;
             }
         }
-        
-        @media (min-width: 1024px) {
-            .navigation-menu {
-                max-width: 450px;
-                padding: 40px;
-            }
+
+        .navbar-menu.active {
+            right: 0;
         }
-        
-        .menu-overlay {
+
+        /* Menu Overlay */
+        .navbar-menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -430,817 +160,305 @@
             transition: all 0.3s ease;
             z-index: 999;
         }
-        
-        .menu-overlay.active {
+
+        .navbar-menu.active + .navbar-menu-overlay {
             opacity: 1;
             visibility: visible;
         }
-        
-        /* Hamburger Animation */
-        .hamburger {
-            background: transparent;
+
+        /* Menu Content */
+        .navbar-menu-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            z-index: 1001;
+            overflow-y: auto;
+        }
+
+        /* Close Button */
+        .navbar-menu-close {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
             border: none;
             cursor: pointer;
             padding: 8px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: var(--text-gray);
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-        
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-        
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
-        
-        /* Loading State */
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e5e7eb;
-            border-top-color: var(--primary-blue);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
-        
-        /* Trust Indicators Grid */
-        .trust-indicators-grid {
-            font-size: 0.75rem;
-        }
-        
-        .trust-indicator-row {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
-            color: #cbd5e1;
-        }
-        
-        @media (min-width: 768px) {
-            .trust-indicators-grid {
-                display: flex;
-                justify-content: center;
-                gap: 2rem;
-                font-size: 1rem;
-            }
-            
-            .trust-indicator-row {
-                margin-bottom: 0;
-                gap: 0;
-            }
-        }
-        
-        /* Filter Buttons */
-        .filter-btn {
-            padding: 8px 20px;
-            border-radius: 20px;
-            background: #f3f4f6;
-            color: #4b5563;
-            border: none;
-            font-weight: 500;
-            font-size: 14px;
-            cursor: pointer;
             transition: all 0.3s ease;
+            z-index: 1002;
         }
-        
-        .filter-btn:hover {
-            background: #e5e7eb;
-            transform: translateY(-1px);
+
+        .navbar-menu-close:hover {
+            transform: rotate(90deg);
         }
-        
-        .filter-btn.active {
-            background: var(--primary-blue);
-            color: white;
+
+        .navbar-menu-close svg {
+            width: 24px;
+            height: 24px;
+            stroke: #333333;
         }
-        
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .f-sidebar {
-                position: static;
-            }
-            
-            .btn-primary, .btn-secondary {
-                padding: 12px 20px;
-                font-size: 15px;
-            }
+
+        /* Navigation Links */
+        .navbar-menu-nav {
+            padding: 80px 30px 30px;
+            flex: 1;
+        }
+
+        .navbar-menu-nav .nav-link {
+            display: block;
+            padding: 18px 0;
+            color: #333333;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-menu-nav .nav-link:hover {
+            color: #0066ff;
+            padding-left: 10px;
+        }
+
+        .navbar-menu-nav .nav-link:hover::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: #0066ff;
+        }
+
+        /* CTA Section */
+        .navbar-menu-cta {
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .navbar-menu-cta .phone-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .navbar-menu-cta .phone-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .navbar-menu-cta .phone-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .navbar-menu-cta .btn--primary {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #0066ff, #0052cc);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .navbar-menu-cta .btn--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+        }
+
+        /* Body scroll lock */
+        body.menu-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
         }
     </style>
 </head>
-
-<body class="bg-gray-50">
-    <!-- Menu Overlay -->
-    <div id="menu-overlay" class="menu-overlay"></div>
-    
-    <!-- Header - F-Pattern Top Bar (Matching All Other Pages) -->
-    <header id="main-header" class="f-header">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<body>
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white shadow-sm unified-header" style="background-color: rgba(255, 255, 255, 0.98) !important; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Logo" class="h-12 w-auto mr-3">
-                    <div>
-                        <a href="https://billlayneinsurance.com/" class="text-xl font-bold text-blue-800 hover:text-blue-600 transition-colors">Bill Layne Insurance</a>
-                        <p class="text-xs text-gray-600 hidden sm:block">Insurance Blog & Expert Insights</p>
-                    </div>
+                <!-- Logo (Left) -->
+                <div class="flex-shrink-0">
+                    <a href="https://billlayneinsurance.com/" class="text-2xl font-bold text-amber-800">Bill Layne Insurance</a>
                 </div>
-                
-                <!-- Right Side: Phone, CTA, and Menu Button -->
-                <div class="flex items-center space-x-4">
-                    <!-- Desktop CTA -->
-                    <div class="hidden md:flex items-center space-x-4">
-                        <a href="tel:3368351993" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors">
-                            <i class="fas fa-phone mr-2"></i>(336) 835-1993
-                        </a>
-                        <a href="https://billlayneinsurance.com/auto-quote.html" class="btn-primary text-sm px-6 py-3">Get Free Quote</a>
-                    </div>
-                    
-                    <!-- Universal Menu Button -->
-                    <button id="menu-toggle-btn" class="hamburger">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
+
+                <!-- Spacer for center alignment -->
+                <div class="flex-1"></div>
+
+                <!-- Desktop Only: Phone & CTA (Right) -->
+                <div class="desktop-cta hidden md:flex items-center space-x-4 flex-shrink-0">
+                    <a href="tel:3368351993" class="text-gray-700 font-semibold hover:text-blue-600 transition-colors" style="color: #374151 !important; opacity: 1 !important;">(336) 835-1993</a>
+                    <a href="https://billlayneinsurance.com/auto-quote.html" class="btn-primary-enhanced transition-all">Get a Quote</a>
                 </div>
+
+                <!-- Unified Menu Button (Shows on all screen sizes) -->
+                <button id="mobileMenuToggle" class="mobile-menu-toggle" aria-label="Open menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </header>
-    
-    <!-- Universal Menu (Matching All Landing Pages) -->
-    <div id="navigation-menu" class="navigation-menu">
-        <div class="flex justify-between items-center mb-8">
-            <h3 class="text-xl lg:text-2xl font-bold text-gray-800">Navigation</h3>
-            <button id="close-menu" class="text-gray-500 hover:text-gray-700 p-2">
-                <i class="fas fa-times text-xl"></i>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="navbar-menu">
+        <div class="navbar-menu-content">
+            <button class="navbar-menu-close" aria-label="Close menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-        </div>
-        
-        <nav class="space-y-4">
-            <a href="https://billlayneinsurance.com/" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
-                <i class="fas fa-home mr-3 w-5"></i>Home
-            </a>
-            <a href="https://billlayne.github.io/Auto-Insurance-Center/" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
-                <i class="fas fa-car mr-3 w-5"></i>Auto Insurance
-            </a>
-            <a href="https://billlayne.github.io/NC-Home-Insurance.github.io/" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
-                <i class="fas fa-home mr-3 w-5"></i>Home Insurance
-            </a>
-            <a href="https://billlayne.github.io/NC-Insurance-Claims-Center.github.io/" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
-                <i class="fas fa-file-alt mr-3 w-5"></i>Claims Center
-            </a>
-            <a href="https://billlayne.github.io/Resources/" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
-                <i class="fas fa-book mr-3 w-5"></i>Resources
-            </a>
-            <a href="https://billlayne.github.io/ethereal-blog-landing/" class="block py-3 px-4 text-blue-600 bg-blue-50 font-medium rounded-lg">
-                <i class="fas fa-blog mr-3 w-5"></i>Blog
-            </a>
-            <a href="https://billlayneinsurance.com/areas-we-serve.html" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
-                <i class="fas fa-th-large mr-3 w-5"></i>Services
-            </a>
-            <a href="https://billlayneinsurance.com/contact-us.html" class="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-blue-50 font-medium rounded-lg transition-all">
-                <i class="fas fa-envelope mr-3 w-5"></i>Contact Us
-            </a>
-        </nav>
-        
-        <!-- Town Landing Pages Section -->
-        <div class="mt-6 pt-6 border-t border-gray-200">
-            <h4 class="text-sm font-semibold text-gray-600 mb-3">Local Services</h4>
-            <div class="space-y-2">
-                <a href="https://billlayne.github.io/Elkin-Landing/" class="block py-2 px-4 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
-                    <i class="fas fa-map-pin mr-2 text-xs"></i>Elkin
+            <nav class="navbar-menu-nav">
+                <a href="https://billlayneinsurance.com/" class="nav-link">Home</a>
+                <a href="https://billlayneinsurance.com/areas-we-serve.html" class="nav-link">Services</a>
+                <a href="https://billlayne.github.io/Auto-Insurance-Center/" class="nav-link">Auto Insurance</a>
+                <a href="https://billlayne.github.io/NC-Home-Insurance.github.io/" class="nav-link">Home Insurance</a>
+                <a href="https://billlayne.github.io/NC-Insurance-Claims-Center.github.io/" class="nav-link">Claims</a>
+                <a href="https://billlayne.github.io/Resources/" class="nav-link">Resources</a>
+                <a href="https://billlayneinsurance.com/blog.html" class="nav-link">Blog</a>
+                <a href="https://billlayneinsurance.com/contact-us.html" class="nav-link">Contact</a>
+                <a href="tel:3368351993" class="nav-link">Call 336-835-1993</a>
+            </nav>
+            <div class="navbar-menu-cta">
+                <a href="tel:3368351993" class="phone-cta">
+                    <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path></svg>
+                    <span>Call 336-835-1993</span>
                 </a>
-                <a href="https://billlayne.github.io/Mount-Airy-Landing/" class="block py-2 px-4 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
-                    <i class="fas fa-map-pin mr-2 text-xs"></i>Mount Airy
-                </a>
-                <a href="https://billlayne.github.io/Wilkesboro-Landing/" class="block py-2 px-4 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
-                    <i class="fas fa-map-pin mr-2 text-xs"></i>Wilkesboro
-                </a>
-                <a href="https://billlayne.github.io/Yadkinville-Landing/" class="block py-2 px-4 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
-                    <i class="fas fa-map-pin mr-2 text-xs"></i>Yadkinville
-                </a>
-                <a href="https://billlayne.github.io/Jonesville-Landing/" class="block py-2 px-4 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-all">
-                    <i class="fas fa-map-pin mr-2 text-xs"></i>Jonesville
-                </a>
-            </div>
-        </div>
-        
-        <!-- CTAs -->
-        <div class="mt-8 space-y-4">
-            <a href="tel:3368351993" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors">
-                <i class="fas fa-phone mr-2"></i>Call (336) 835-1993
-            </a>
-            <a href="https://billlayneinsurance.com/auto-quote.html" class="block w-full text-center btn-primary">
-                <i class="fas fa-calculator mr-2"></i>Get Free Quote
-            </a>
-        </div>
-        
-        <!-- Desktop-only additional info -->
-        <div class="hidden lg:block mt-8 pt-6 border-t border-gray-200">
-            <div class="text-center">
-                <p class="text-sm text-gray-600 mb-2">
-                    <i class="fas fa-map-marker-alt mr-2"></i>
-                    1283 N Bridge St, Elkin, NC 28621
-                </p>
-                <p class="text-sm text-gray-600 mb-2">
-                    <i class="fas fa-envelope mr-2"></i>
-                    Save@BillLayneInsurance.com
-                </p>
-                <p class="text-sm text-gray-600">
-                    <i class="fas fa-clock mr-2"></i>
-                    Mon-Fri: 9AM-5PM
-                </p>
+                <a href="https://billlayneinsurance.com/auto-quote.html" class="btn--primary">Get a Free Quote</a>
             </div>
         </div>
     </div>
+    <div class="navbar-menu-overlay"></div>
 
-    <main>
-        <!-- Hero Section - F-Pattern Second Horizontal Bar -->
-        <section class="f-hero pb-8 sm:pb-20 lg:pb-32 text-white relative">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                <div class="animate-fade-in-up">
-                    <!-- Headline -->
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.1] sm:leading-tight mb-4">
-                        Insurance Insights & Expert Advice<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200">
-                            Stay Informed. Save Money.
-                        </span>
-                    </h1>
-                    
-                    <!-- Category Icons Section -->
-                    <div class="category-icons">
-                        <div class="category-icon" data-category="auto">
-                            <div class="category-icon-circle">
-                                <i class="fas fa-car"></i>
-                            </div>
-                            <span>Auto Insurance</span>
-                        </div>
-                        <div class="category-icon" data-category="home">
-                            <div class="category-icon-circle">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <span>Home Insurance</span>
-                        </div>
-                        <div class="category-icon" data-category="tips">
-                            <div class="category-icon-circle">
-                                <i class="fas fa-lightbulb"></i>
-                            </div>
-                            <span>Money-Saving Tips</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Description -->
-                    <p class="text-base sm:text-xl lg:text-2xl text-blue-100 mb-6 leading-snug sm:leading-relaxed max-w-4xl mx-auto">
-                        Expert guidance, industry updates, and practical tips to help protect what matters most to North Carolina families.
-                    </p>
-                    
-                    <!-- Search Bar -->
-                    <div class="search-container max-w-2xl mx-auto mb-6">
-                        <input type="search" class="search-input" id="searchInput" 
-                               placeholder="Search blog posts..." 
-                               aria-label="Search blog posts">
-                        <span class="search-icon">
-                            <i class="fas fa-search"></i>
-                        </span>
-                    </div>
-                    
-                    <!-- Trust Indicators -->
-                    <div class="trust-indicators-grid text-blue-200">
-                        <div class="trust-indicator-row">
-                            <div class="flex items-center justify-center">
-                                <i class="fas fa-star text-yellow-400 mr-1 text-sm"></i>
-                                <span class="font-semibold">4.8★ Google Reviews</span>
-                            </div>
-                            <div class="flex items-center justify-center">
-                                <i class="fas fa-shield-alt text-green-400 mr-1 text-sm"></i>
-                                <span>NC Licensed #1740293</span>
-                            </div>
-                        </div>
-                        <div class="trust-indicator-row">
-                            <div class="flex items-center justify-center">
-                                <i class="fas fa-users text-blue-300 mr-1 text-sm"></i>
-                                <span>Serving NC Since 2004</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- F-Pattern Content Layout -->
-        <section class="py-20 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-12 gap-12">
-                    <!-- Left Sidebar - F-Pattern Vertical Emphasis -->
-                    <div class="lg:col-span-4">
-                        <div class="f-sidebar space-y-8">
-                            <!-- Popular Topics -->
-                            <div class="trust-badge">
-                                <h4 class="font-bold text-gray-800 mb-4 text-xl">Popular Topics</h4>
-                                <div class="space-y-3">
-                                    <button class="filter-btn w-full text-left" data-category="all">
-                                        <i class="fas fa-newspaper mr-2"></i>All Articles
-                                    </button>
-                                    <button class="filter-btn w-full text-left" data-category="auto">
-                                        <i class="fas fa-car mr-2"></i>Auto Insurance
-                                    </button>
-                                    <button class="filter-btn w-full text-left" data-category="home">
-                                        <i class="fas fa-home mr-2"></i>Home Insurance
-                                    </button>
-                                    <button class="filter-btn w-full text-left" data-category="tips">
-                                        <i class="fas fa-piggy-bank mr-2"></i>Money-Saving Tips
-                                    </button>
-                                    <button class="filter-btn w-full text-left" data-category="claims">
-                                        <i class="fas fa-clipboard-list mr-2"></i>Claims Guide
-                                    </button>
-                                    <button class="filter-btn w-full text-left" data-category="nc-laws">
-                                        <i class="fas fa-gavel mr-2"></i>NC Insurance Laws
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Recent Posts -->
-                            <div class="trust-badge">
-                                <h4 class="font-bold text-gray-800 mb-3 flex items-center">
-                                    <i class="fas fa-clock text-blue-500 mr-2"></i>
-                                    Recent Posts
-                                </h4>
-                                <ul class="text-sm text-gray-600 space-y-2" id="recent-posts">
-                                    <!-- Will be populated by JavaScript -->
-                                </ul>
-                            </div>
-                            
-                            <!-- Newsletter Signup -->
-                            <div class="trust-badge bg-gradient-to-br from-blue-50 to-indigo-50">
-                                <h4 class="font-bold text-gray-800 mb-4">
-                                    <i class="fas fa-envelope mr-2"></i>Stay Updated
-                                </h4>
-                                <p class="text-sm text-gray-600 mb-4">Get insurance tips and savings delivered to your inbox.</p>
-                                <input type="email" placeholder="Your email" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-3">
-                                <button class="btn-primary w-full text-center">Subscribe</button>
-                            </div>
-                            
-                            <!-- Get Help Widget -->
-                            <div class="trust-badge">
-                                <h4 class="font-bold text-gray-800 mb-4">Need Personalized Help?</h4>
-                                <p class="text-sm text-gray-600 mb-4">Our licensed agents can help you understand your coverage options.</p>
-                                <a href="tel:3368351993" class="btn-primary w-full block mb-3 text-center">
-                                    <i class="fas fa-phone mr-2"></i>Call (336) 835-1993
-                                </a>
-                                <a href="https://billlayneinsurance.com/auto-quote.html" class="btn-secondary w-full block text-center">
-                                    Get Free Quote
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Main Content - F-Pattern Right Side -->
-                    <div class="lg:col-span-8">
-                        <!-- Loading State -->
-                        <div id="loading-state" class="text-center py-12">
-                            <div class="loading-spinner mb-4"></div>
-                            <p class="text-gray-600">Loading articles...</p>
-                        </div>
-
-                        <!-- Error State -->
-                        <div id="error-state" class="hidden text-center py-12">
-                            <i class="fas fa-exclamation-circle text-4xl text-red-500 mb-4"></i>
-                            <p class="text-gray-600">Unable to load blog posts. Please try again later.</p>
-                        </div>
-
-                        <!-- Blog Grid -->
-                        <div id="blog-grid" class="grid md:grid-cols-2 gap-6" aria-live="polite">
-                            <!-- Blog cards will be dynamically inserted here -->
-                        </div>
-
-                        <!-- Load More Button -->
-                        <div class="text-center mt-12">
-                            <button id="load-more" class="btn-secondary hidden">
-                                <i class="fas fa-plus mr-2"></i>Load More Articles
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Newsletter CTA Section -->
-        <section class="py-20 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-3xl lg:text-4xl font-bold mb-4">
-                    Don't Miss Our Latest Insurance Tips
-                </h2>
-                <p class="text-xl text-blue-100 mb-8">
-                    Subscribe to get expert advice and money-saving strategies delivered monthly
+    <main class="main-content pt-20">
+        <div class="container">
+            <section class="intro-section">
+                <h2 class="intro-title">Insurance Insights & Expert Advice</h2>
+                <p class="intro-description">
+                    Stay informed with the latest insurance news, coverage tips, and expert guidance 
+                    to help protect what matters most to you and your family.
                 </p>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-xl mx-auto">
-                    <input type="email" placeholder="Enter your email" class="flex-1 px-6 py-4 rounded-full text-gray-800">
-                    <button class="bg-white text-blue-600 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors">
-                        Subscribe Now
-                    </button>
-                </div>
-                
-                <p class="mt-4 text-blue-200 text-sm">
-                    <i class="fas fa-lock mr-2"></i>We respect your privacy. Unsubscribe at any time.
-                </p>
+            </section>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="search" class="search-input" id="searchInput" 
+                       placeholder="Search blog posts..." 
+                       aria-label="Search blog posts">
+                <span class="search-icon">🔍</span>
             </div>
-        </section>
+
+            <div id="loading-state" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading articles...</p>
+            </div>
+
+            <div id="error-state" class="error-state hidden">
+                <p>Unable to load blog posts. Please try again later.</p>
+            </div>
+
+            <section id="blog-grid" class="blog-grid" aria-live="polite">
+            </section>
+
+            <!-- Filters moved to bottom -->
+            <section id="blog-filters" class="blog-filters" aria-label="Blog post filters">
+                <h3 class="filter-title">Filter by Category</h3>
+            </section>
+        </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center mb-4">
-                        <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance" class="h-10 w-auto mr-3">
-                        <h3 class="text-xl font-bold">Bill Layne Insurance</h3>
-                    </div>
-                    <p class="text-gray-400 mb-4">Your trusted insurance partner in North Carolina since 2004.</p>
-                    <div class="flex space-x-4">
-                        <a href="https://www.facebook.com/dollarbillagency/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.google.com/maps/place/Bill+Layne+Insurance+Agency" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white"><i class="fab fa-google"></i></a>
-                        <a href="https://www.yelp.com/biz/bill-layne-insurance-agency-elkin" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white"><i class="fab fa-yelp"></i></a>
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="https://billlayneinsurance.com/" class="hover:text-white">Home</a></li>
-                        <li><a href="https://billlayneinsurance.com/blog.html" class="hover:text-white">Blog</a></li>
-                        <li><a href="https://billlayne.github.io/Resources/" class="hover:text-white">Resources</a></li>
-                        <li><a href="https://billlayneinsurance.com/contact-us.html" class="hover:text-white">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Insurance</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="https://billlayne.github.io/Auto-Insurance-Center/" class="hover:text-white">Auto Insurance</a></li>
-                        <li><a href="https://billlayne.github.io/NC-Home-Insurance.github.io/" class="hover:text-white">Home Insurance</a></li>
-                        <li><a href="https://billlayne.github.io/NC-Insurance-Claims-Center.github.io/" class="hover:text-white">Claims Center</a></li>
-                        <li><a href="https://billlayneinsurance.com/areas-we-serve.html" class="hover:text-white">All Services</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Contact Info</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><i class="fas fa-phone mr-2"></i>(336) 835-1993</li>
-                        <li><i class="fas fa-envelope mr-2"></i>Save@BillLayneInsurance.com</li>
-                        <li><i class="fas fa-map-marker-alt mr-2"></i>1283 N Bridge St<br>Elkin, NC 28621</li>
-                        <li><i class="fas fa-clock mr-2"></i>Mon-Fri: 9AM-5PM</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2025 Bill Layne Insurance Agency. All rights reserved. | NC License #1740293</p>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">
+                    &copy; 2025 Bill Layne Insurance. All rights reserved.
+                </p>
+                <p class="footer-note">
+                    Protecting families and businesses with comprehensive insurance solutions.
+                </p>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript -->
-    <script src="app.js?v=3" defer></script>
     <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('main-header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Universal menu functionality
-        const menuToggleBtn = document.getElementById('menu-toggle-btn');
-        const navigationMenu = document.getElementById('navigation-menu');
-        const menuOverlay = document.getElementById('menu-overlay');
-        const closeMenuBtn = document.getElementById('close-menu');
-
-        function toggleMenu() {
-            menuToggleBtn.classList.toggle('active');
-            navigationMenu.classList.toggle('active');
-            menuOverlay.classList.toggle('active');
-            document.body.style.overflow = navigationMenu.classList.contains('active') ? 'hidden' : '';
-        }
-
-        function closeMenu() {
-            menuToggleBtn.classList.remove('active');
-            navigationMenu.classList.remove('active');
-            menuOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        menuToggleBtn.addEventListener('click', toggleMenu);
-        closeMenuBtn.addEventListener('click', closeMenu);
-        menuOverlay.addEventListener('click', closeMenu);
-
-        // Close menu when clicking on internal navigation links
-        const menuNavLinks = navigationMenu.querySelectorAll('a');
-        menuNavLinks.forEach(link => {
-            link.addEventListener('click', closeMenu);
-        });
-
-        // Blog functionality
-        let allPosts = [];
-        let filteredPosts = [];
-        let currentCategory = 'all';
-        let displayedPosts = 8;
-
-        // Your actual blog posts data
-        // UPDATE THIS SECTION with your actual blog posts
-        // Each post should have: id, title, excerpt, category, date, readTime, image, link
-        const blogPosts = [
-            {
-                id: "nc-auto-insurance-2025",
-                title: "Understanding NC Auto Insurance Requirements in 2025",
-                excerpt: "Learn about the latest changes to North Carolina's auto insurance laws and minimum coverage requirements.",
-                category: "auto",
-                date: "January 15, 2025",
-                readTime: "5 min",
-                image: "https://billlayneinsurance.com/images/auto-insurance-nc.jpg",
-                link: "posts/nc-auto-insurance-2025.html"
-            },
-            // Add your actual blog posts here
-            // Format:
-            // {
-            //     id: "unique-post-id",
-            //     title: "Your Blog Post Title",
-            //     excerpt: "Brief description of the post content...",
-            //     category: "auto|home|tips|claims|nc-laws",
-            //     date: "Month DD, YYYY",
-            //     readTime: "X min",
-            //     image: "path/to/image.jpg",
-            //     link: "path/to/blog-post.html"
-            // }
-        ];
-
-        // Initialize blog
-        function initBlog() {
-            // Try to load from your app.js first, fallback to local data
-            if (typeof window.blogData !== 'undefined') {
-                allPosts = window.blogData;
-            } else {
-                allPosts = blogPosts;
-            }
-            filteredPosts = allPosts;
-            renderPosts();
-            renderRecentPosts();
-            setupFilters();
-            setupSearch();
-            hideLoading();
-        }
-
-        // Render blog posts
-        function renderPosts() {
-            const blogGrid = document.getElementById('blog-grid');
-            const postsToShow = filteredPosts.slice(0, displayedPosts);
-            
-            blogGrid.innerHTML = postsToShow.map(post => {
-                // Handle both image URL and local image path
-                const imageUrl = post.image || post.imageUrl || post.thumbnail || 'https://via.placeholder.com/400x200';
-                const postLink = post.link || post.linkUrl || post.url || `posts/${post.id}.html`;
-                
-                return `
-                <article class="blog-card" onclick="window.location.href='${postLink}'">
-                    <div class="blog-card-image-wrapper">
-                        ${post.image || post.imageUrl ? 
-                            `<img src="${imageUrl}" alt="${post.title}" class="blog-card-image" onerror="this.style.display='none'">` :
-                            `<div class="blog-card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>`
-                        }
-                    </div>
-                    <div class="blog-card-content">
-                        <span class="blog-card-category">${getCategoryLabel(post.category)}</span>
-                        <h3 class="blog-card-title">${post.title}</h3>
-                        <p class="blog-card-excerpt">${post.excerpt || post.summary || post.description || ''}</p>
-                        <div class="blog-card-meta">
-                            <span>${post.date || post.publishedDate}</span>
-                            <span><i class="fas fa-clock mr-1"></i>${post.readTime || '5 min'}</span>
-                        </div>
-                    </div>
-                </article>
-            `}).join('');
-
-            // Show/hide load more button
-            const loadMoreBtn = document.getElementById('load-more');
-            if (filteredPosts.length > displayedPosts) {
-                loadMoreBtn.classList.remove('hidden');
-            } else {
-                loadMoreBtn.classList.add('hidden');
-            }
-        }
-
-        // Render recent posts in sidebar
-        function renderRecentPosts() {
-            const recentPostsList = document.getElementById('recent-posts');
-            const recentPosts = allPosts.slice(0, 5);
-            
-            recentPostsList.innerHTML = recentPosts.map(post => {
-                const postLink = post.link || post.url || `posts/${post.id}.html`;
-                return `
-                <li>
-                    <a href="${postLink}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                        ${post.title}
-                    </a>
-                </li>
-            `}).join('');
-        }
-
-        // Setup filter buttons
-        function setupFilters() {
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            const categoryIcons = document.querySelectorAll('.category-icon');
-            
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    currentCategory = this.dataset.category;
-                    filterPosts();
-                    
-                    // Update active state
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            categoryIcons.forEach(icon => {
-                icon.addEventListener('click', function() {
-                    currentCategory = this.dataset.category;
-                    filterPosts();
-                    
-                    // Update filter buttons
-                    filterBtns.forEach(btn => {
-                        if (btn.dataset.category === currentCategory) {
-                            btn.classList.add('active');
-                        } else {
-                            btn.classList.remove('active');
-                        }
-                    });
-                });
-            });
-        }
-
-        // Filter posts by category
-        function filterPosts() {
-            if (currentCategory === 'all') {
-                filteredPosts = allPosts;
-            } else {
-                filteredPosts = allPosts.filter(post => post.category === currentCategory);
-            }
-            displayedPosts = 8;
-            renderPosts();
-        }
-
-        // Setup search
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            
-            searchInput.addEventListener('input', function(e) {
-                const searchTerm = e.target.value.toLowerCase();
-                
-                if (searchTerm === '') {
-                    filteredPosts = currentCategory === 'all' ? allPosts : allPosts.filter(post => post.category === currentCategory);
-                } else {
-                    filteredPosts = allPosts.filter(post => 
-                        post.title.toLowerCase().includes(searchTerm) || 
-                        post.excerpt.toLowerCase().includes(searchTerm)
-                    );
-                }
-                
-                displayedPosts = 8;
-                renderPosts();
-            });
-        }
-
-        // Load more posts
-        document.getElementById('load-more')?.addEventListener('click', function() {
-            displayedPosts += 4;
-            renderPosts();
-        });
-
-        // Get category label
-        function getCategoryLabel(category) {
-            const labels = {
-                'auto': 'Auto Insurance',
-                'home': 'Home Insurance',
-                'tips': 'Money-Saving Tips',
-                'claims': 'Claims Guide',
-                'nc-laws': 'NC Laws'
-            };
-            return labels[category] || category;
-        }
-
-        // Hide loading state
-        function hideLoading() {
-            document.getElementById('loading-state').style.display = 'none';
-        }
-
-        // Initialize on page load
+        // Simple Mobile Menu JavaScript (matches your working home insurance page)
         document.addEventListener('DOMContentLoaded', function() {
-            // Wait for app.js to load if it exists
-            if (typeof window.blogData !== 'undefined' || typeof loadBlogPosts === 'function') {
-                // Use your existing blog loading function
-                if (typeof loadBlogPosts === 'function') {
-                    loadBlogPosts().then(posts => {
-                        allPosts = posts;
-                        filteredPosts = allPosts;
-                        renderPosts();
-                        renderRecentPosts();
-                        setupFilters();
-                        setupSearch();
-                        hideLoading();
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            // Simple toggle - exactly like your working page
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                
+                // Optional: Close menu when clicking on links
+                const mobileNavLinks = mobileMenu.querySelectorAll('a');
+                mobileNavLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
                     });
-                } else {
-                    initBlog();
-                }
-            } else {
-                // Use built-in data
-                initBlog();
+                });
+                
+                // Optional: Close menu on window resize (if screen gets larger)
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth >= 768) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
             }
         });
+    </script>
+    
+    <script>
+        // Unified Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.querySelector('.navbar-menu-close');
+        const mobileMenuOverlay = document.querySelector('.navbar-menu-overlay');
 
-        // Animate elements on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in-up');
-                }
+        if (mobileMenuButton && mobileMenu && mobileMenuClose && mobileMenuOverlay) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+                mobileMenuOverlay.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+                mobileMenuButton.classList.toggle('active');
             });
-        }, observerOptions);
 
-        // Observe all cards and badges
-        document.querySelectorAll('.blog-card, .trust-badge').forEach(el => {
-            observer.observe(el);
-        });
-    </script>
+            const closeMenu = () => {
+                mobileMenu.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                mobileMenuButton.classList.remove('active');
+            }
 
-    <!-- Schema Markup -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Blog",
-      "name": "Bill Layne Insurance Blog",
-      "url": "https://billlayneinsurance.com/blog.html",
-      "description": "Insurance insights, expert advice, and money-saving tips for North Carolina residents",
-      "publisher": {
-        "@type": "InsuranceAgency",
-        "name": "Bill Layne Insurance Agency",
-        "telephone": "+13368351993",
-        "email": "Save@BillLayneInsurance.com",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "1283 N Bridge St",
-          "addressLocality": "Elkin",
-          "addressRegion": "NC",
-          "postalCode": "28621",
-          "addressCountry": "US"
+            mobileMenuClose.addEventListener('click', closeMenu);
+            mobileMenuOverlay.addEventListener('click', closeMenu);
         }
-      }
-    }
     </script>
+    
+    <script src="app.js?v=3" defer></script>
 </body>
 </html>
