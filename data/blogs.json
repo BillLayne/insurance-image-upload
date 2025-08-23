@@ -1,5 +1,18 @@
 [
   {
+    "id": "moses-cone-memorial-park",
+    "title": "The Denim King's Mountain Kingdom: Moses Cone Memorial Park",
+    "summary": "Discover the fascinating story of how a textile magnate built a 3,500-acre mountain estate that became one of North Carolina's most beloved public parks, featuring 25 miles of scenic carriage trails.",
+    "author": "Bill Layne",
+    "date": "2025-01-24",
+    "category": "General",
+    "tags": ["Blue Ridge Parkway", "North Carolina History", "Hiking Trails", "Historic Estates", "Moses Cone"],
+    "imageUrl": "https://pplx-res.cloudinary.com/image/upload/v1755967387/pplx_project_search_images/b789834faa1fe7132fa5b3dd5aec437177f40928.png",
+    "linkUrl": "https://billlayne.github.io/Moses-Cone-Memorial-Park/",
+    "featured": false,
+    "readTime": "8 min read"
+  },
+  {
     "id": "2025-auto-savings-guide",
     "title": "Unlock Savings: Your Ultimate NC Auto Insurance Guide for 2025",
     "summary": "Major changes are coming to NC auto insurance in July 2025. This interactive guide explains the new laws, shows what drives your premium, and provides expert tips to help you save money.",
