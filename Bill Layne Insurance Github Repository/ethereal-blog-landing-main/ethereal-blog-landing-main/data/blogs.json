@@ -1,0 +1,86 @@
+[
+  {
+    "id": "nc-ticket-calculator-2025",
+    "title": "NC Traffic Ticket Insurance Calculator 2025: See Your True Costs",
+    "summary": "Calculate the real cost of NC traffic tickets on your insurance rates. Our interactive tool shows how violations impact your premium for up to 5 years, helping you understand the true financial consequences of moving violations.",
+    "author": "Bill Layne",
+    "date": "2025-01-24",
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/Insurance%20Calculator%20Blog%20image.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/NC-Ticket-Calculator-2025/",
+    "readMoreUrl": "https://billlayne.github.io/NC-Ticket-Calculator-2025/",
+    "tags": ["NC Traffic Tickets", "Insurance Calculator", "SDIP Points", "Auto Insurance Rates", "Moving Violations", "2025 Insurance"],
+    "category": "Auto Insurance",
+    "readTime": "5 min read",
+    "featured": true
+  },
+  {
+    "id": "nc-insurance-discount-guide-2025",
+    "title": "NC Insurance Discount Guide 2025: Save Big on Auto & Home Coverage",
+    "summary": "Discover all available discounts for NC auto and home insurance in 2025. From defensive driving to home security systems, learn how to stack savings and reduce premiums by up to 40%.",
+    "author": "Bill Layne",
+    "date": "2025-01-20",
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/Insurance%20Discount%20Guide%20Blog%20Image.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/NC-Insurance-Discount-Guide-2025/",
+    "readMoreUrl": "https://billlayne.github.io/NC-Insurance-Discount-Guide-2025/",
+    "tags": ["Insurance Discounts", "Auto Insurance", "Home Insurance", "North Carolina", "Money Saving", "2025 Insurance"],
+    "category": "Insurance Tips",
+    "readTime": "10 min read",
+    "featured": true
+  },
+  {
+    "id": "nc-teen-driver-timeline",
+    "title": "NC Teen Driver Timeline: Steps to Getting Your License",
+    "author": "Bill Layne",
+    "date": "2025-01-12",
+    "summary": "Complete guide to North Carolina's graduated driver licensing program, from learner's permit at 15 to full unrestricted license at 18.",
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/Young%20Student%20Driving%20CAr.png?raw=true",
+    "readMoreUrl": "https://billlayne.github.io/NC-Teen-Driver-Timeline/",
+    "linkUrl": "https://billlayne.github.io/NC-Teen-Driver-Timeline/",
+    "tags": ["Teen Drivers", "North Carolina", "Driver's License", "Insurance Tips", "Young Drivers"],
+    "category": "Teen Drivers",
+    "readTime": "8 min read",
+    "featured": true
+  },
+  {
+    "id": "back-to-school-surry-2025",
+    "title": "Back to School Safety - Surry County 2025",
+    "summary": "Essential safety tips and insurance considerations for Surry County families as students return to school, including teen driver safety and home security while kids are away.",
+    "date": "2025-08-07",
+    "category": "Community Safety",
+    "tags": ["Surry County", "Back to School", "Teen Drivers", "Auto Insurance", "Home Security", "North Carolina"],
+    "imageUrl": "https://raw.githubusercontent.com/BillLayne/bill-layne-images/refs/heads/main/Blog%20Images/hero%20kids%20back%20to%20school.webp",
+    "linkUrl": "https://billlayne.github.io/Back-To-School-Surry-County-2025/",
+    "readTime": "7 min read",
+    "featured": false
+  },
+  {
+    "id": "bill-layne-elkin",
+    "title": "Why Choose Bill Layne Insurance in Elkin",
+    "summary": "Discover why local, independent insurance matters. Learn how Bill Layne Insurance provides personalized service, community commitment, and trusted protection for Elkin NC families.",
+    "date": "2025-01-08",
+    "category": "Local Insurance",
+    "tags": ["Elkin NC", "Local Insurance", "Independent Agency", "Community"],
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/Family%20Stroll%20in%20Elkin.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/Bill-Layne-Elkin/",
+    "readTime": "5 min read",
+    "featured": false
+  },
+  {
+    "id": "7-ways-save-home-insurance-elkin",
+    "title": "7 Ways to Save on Home Insurance in Elkin, NC",
+    "summary": "Discover proven strategies to reduce your home insurance premiums in Elkin, NC while maintaining excellent coverage protection.",
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/Modern%20Farmhouse%20at%20Golden.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/7-Must-Know/",
+    "date": "2025-08-06",
+    "tags": ["Home Insurance", "North Carolina", "Money Saving Tips", "Elkin NC"]
+  },
+  {
+    "id": "acv-roof-claims",
+    "title": "ACV Roof Claims: What You Need to Know",
+    "summary": "Understanding actual cash value settlements for roof damage claims and how depreciation affects your insurance payout.",
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/Blog%20Images/Roof%20Hailstorm%20Hero.png?raw=true",
+    "linkUrl": "https://billlayne.github.io/ACV-Roof-Settlement/",
+    "date": "2025-08-05",
+    "tags": ["Home Insurance", "Roof Claims", "North Carolina", "Insurance Claims"]
+  }
+]
