@@ -1,5 +1,20 @@
 [
   {
+    "id": "nc-lottery-winners",
+    "title": "What NC Lottery Winners Must Know About Insurance & Taxes",
+    "url": "https://billlayne.github.io/NC-Lottery-Winners/",
+    "linkUrl": "https://billlayne.github.io/NC-Lottery-Winners/",
+    "readMoreUrl": "https://billlayne.github.io/NC-Lottery-Winners/",
+    "imageUrl": "https://github.com/BillLayne/bill-layne-images/blob/main/North%20Carolina%20Lotter%20Winner.png?raw=true",
+    "summary": "Essential insurance and financial protection strategies for North Carolina lottery winners to safeguard their newfound wealth.",
+    "tags": ["Life Insurance", "Umbrella Insurance", "North Carolina", "Financial Planning", "Asset Protection"],
+    "author": "Bill Layne",
+    "date": "2025-08-26",
+    "category": "Financial Planning",
+    "readTime": "8 min read",
+    "featured": true
+  },
+  {
     "id": "nc-insurance-discount-guide-2025",
     "title": "NC Insurance Discount Guide 2025: Save on Home & Auto Coverage",
     "summary": "Discover every available discount for NC home and auto insurance in 2025. Interactive calculators, carrier comparisons, and expert tips help you maximize savings while maintaining proper coverage protection.",
@@ -439,3 +454,4 @@
     "linkUrl": "https://billlayne.github.io/Boat-Tips-7/boat_insurance_tips.html"
   }
 ]
+ 
