@@ -1,5 +1,18 @@
 [
   {
+    "id": "faithfest-2025",
+    "title": "FaithFest 2025: Your Ultimate Guide to This Weekend's Christian Music Festival in Wilkesboro",
+    "summary": "Experience FaithFest 2025 in Wilkesboro, NC, this weekend with top Christian artists and family fun! Join us Sept 12-13 for Zach Williams, Phil Wickham, Greg Laurie and more.",
+    "author": "Bill Layne",
+    "date": "2025-09-11",
+    "category": "Community Life",
+    "tags": ["FaithFest2025", "Wilkesboro NC", "Christian Music", "NC Festivals", "Zach Williams", "Phil Wickham", "Greg Laurie"],
+    "imageUrl": "https://raw.githubusercontent.com/BillLayne/bill-layne-images/047a9563db44778e94305dcc2b800690f7bf2a01/Blog%20Images/hero%20backgroun.546Z.png",
+    "linkUrl": "https://billlayne.github.io/faithfest2025/",
+    "featured": true,
+    "readTime": "6 min read"
+  },
+  {
     "id": "nc-lottery-winners",
     "title": "What NC Lottery Winners Must Know About Insurance & Taxes",
     "url": "https://billlayne.github.io/NC-Lottery-Winners/",
