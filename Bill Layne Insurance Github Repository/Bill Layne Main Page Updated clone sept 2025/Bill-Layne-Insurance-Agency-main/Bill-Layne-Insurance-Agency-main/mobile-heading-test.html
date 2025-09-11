@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Heading Test - Bill Layne Insurance</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .hero-content {
+            text-align: center;
+            color: white;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* First part of heading */
+        .heading-line-1 {
+            display: inline;
+            color: white;
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Second part of heading */
+        .heading-line-2 {
+            display: block;
+            color: white;
+            margin-top: 5px;
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Debug styling to ensure visibility */
+        .debug-border {
+            border: 2px solid red;
+            padding: 10px;
+            margin: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            /* Ensure both parts are visible on mobile */
+            .heading-line-1,
+            .heading-line-2 {
+                visibility: visible !important;
+                opacity: 1 !important;
+                color: white !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-content">
+        <h1>
+            <span class="heading-line-1">Better Insurance for</span>
+            <span class="heading-line-2">North Carolina</span>
+        </h1>
+        
+        <!-- Debug version with border -->
+        <div class="debug-border">
+            <h1>
+                <span class="heading-line-1">Better Insurance for</span>
+                <span class="heading-line-2">North Carolina</span>
+            </h1>
+        </div>
+        
+        <p>If you can see both "Better Insurance for" AND "North Carolina" above, the fix is working!</p>
+    </div>
+</body>
+</html>
