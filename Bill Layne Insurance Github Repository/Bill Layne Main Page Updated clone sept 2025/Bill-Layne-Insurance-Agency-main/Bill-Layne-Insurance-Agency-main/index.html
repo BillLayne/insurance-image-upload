@@ -3,6 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Prevent FOUC - Initialize immediately -->
+    <script>
+        // Add fonts-ready class as soon as fonts are loaded
+        document.documentElement.className = 'fonts-loading';
+        
+        // Quick font check
+        if ('fonts' in document) {
+            document.fonts.ready.then(() => {
+                document.documentElement.classList.remove('fonts-loading');
+                document.documentElement.classList.add('fonts-ready');
+            });
+        } else {
+            // Fallback for older browsers
+            window.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => {
+                    document.documentElement.classList.remove('fonts-loading');
+                    document.documentElement.classList.add('fonts-ready');
+                }, 100);
+            });
+        }
+    </script>
     <title>Bill Layne Insurance Agency - Auto & Home Insurance in Elkin, NC</title>
     <meta name="description" content="Save money on auto, home & business insurance in Elkin, NC. Independent agency with 20+ years serving North Carolina. Get your free quote today - (336) 835-1993.">
 
@@ -23,14 +45,15 @@
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
     <link rel="dns-prefetch" href="https://static.cloudflareinsights.com">
     
-    <!-- Optimized Google Fonts - Only load used weights (600,700,900) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Optimized Google Fonts with preload -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&display=swap" as="style">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&display=swap" rel="stylesheet">
     
-    <!-- Defer Tailwind CSS for better mobile performance -->
+    <!-- Preload critical font files -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Tailwind CSS - Load immediately for critical styles -->
     <script>
-        // Load Tailwind after critical content
         tailwind = {config: {
             important: true,
             theme: {
@@ -42,15 +65,33 @@
             }
         }};
     </script>
-    <script src="https://cdn.tailwindcss.com" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Font Awesome - Preload for faster icon loading -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Load Font Awesome with async -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
-    
-    <!-- Critical inline CSS for immediate render -->
+    <!-- Complete Integrated Styles -->
     <style>
-        /* Critical CSS for instant rendering before Tailwind loads */
+        /* Hide body until fonts load to prevent FOUC */
+        html.fonts-loading body {
+            visibility: hidden;
+            opacity: 0;
+        }
+        
+        html.fonts-ready body {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.15s ease-in;
+        }
+        
+        /* Fallback for no JavaScript */
+        html:not(.fonts-loading):not(.fonts-ready) body {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Critical CSS for instant rendering */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
@@ -60,17 +101,7 @@
             background: #f9fafb;
         }
         
-        /* Prevent layout shift and ensure smooth initial load */
-        body {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        body.loaded {
-            opacity: 1;
-        }
-        
-        /* Critical header styles for immediate render */
+        /* Header Styles */
         .f-header {
             background: white;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -86,7 +117,7 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
-        /* Prevent CLS for navigation menu */
+        /* Navigation Menu */
         .navigation-menu {
             position: fixed;
             top: 0;
@@ -105,10 +136,48 @@
             right: 0;
         }
         
-        /* NEW HERO STYLES V4 */
+        /* Hamburger Menu */
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #374151;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        .hamburger.active span:nth-child(1) { 
+            transform: rotate(-45deg) translate(-5px, 6px); 
+        }
+        
+        .hamburger.active span:nth-child(2) { 
+            opacity: 0; 
+        }
+        
+        .hamburger.active span:nth-child(3) { 
+            transform: rotate(45deg) translate(-5px, -6px); 
+        }
+        
+        .menu-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: 999; 
+        }
+        
+        .menu-overlay.active { 
+            display: block; 
+        }
+        
+        /* Hero Section */
         .hero-updated {
             position: relative;
-            padding-top: 140px; /* Space for fixed header */
+            padding-top: 140px;
             padding-bottom: 60px;
             padding-left: 20px;
             padding-right: 20px;
@@ -264,81 +333,7 @@
             margin-top: 1.5rem;
         }
 
-        .savings-amount {
-            color: #fcd34d;
-            font-size: 2.5em;
-            font-weight: 900;
-            display: inline-block;
-            margin: 0 0.5rem;
-            vertical-align: middle;
-            line-height: 1;
-        }
-
-        /* MOBILE OPTIMIZATIONS V4 */
-        @media (max-width: 768px) {
-            .hero-updated {
-                background-image: url('https://github.com/BillLayne/bill-layne-images/blob/main/logos/hero-mobile.jpg?raw=true');
-                padding-top: 120px;
-                padding-bottom: 40px;
-                min-height: 0;
-            }
-
-            .hero-content-updated h1 {
-                font-size: 2rem;
-            }
-
-            .hero-content-updated .tagline {
-                font-size: 1.1rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .quote-container {
-                padding: 1rem;
-            }
-            
-            .button-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .trust-badges-container {
-                gap: 1rem;
-            }
-
-            .trust-badge {
-                font-size: 0.8rem;
-            }
-
-            .savings-text {
-                font-size: 1.25rem;
-            }
-        }
-
-        @media (min-width: 768px) {
-             .hero-content-updated h1 {
-                font-size: 3rem;
-            }
-        }
-        @media (min-width: 1024px) {
-             .hero-content-updated h1 {
-                font-size: 3.5rem;
-            }
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-        
-        /* Ensure equal height for carrier logo containers */
-        .carrier-logo-container {
-            min-height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* Enhanced Multi-Effect Savings Display */
+        /* Savings Display Animation */
         .savings-wrapper {
             position: relative;
             display: inline-flex;
@@ -353,7 +348,6 @@
             backdrop-filter: blur(10px);
             border: 2px solid transparent;
             background-clip: padding-box;
-            position: relative;
             overflow: visible;
             animation: wrapper-breathe 4s ease-in-out infinite;
         }
@@ -398,7 +392,6 @@
         }
         
         .savings-amount {
-            /* Bright yellow color for better readability */
             color: #fde047;
             font-size: 2.2em;
             font-weight: 900;
@@ -440,6 +433,91 @@
             color: white;
             font-size: 1em;
             opacity: 0.95;
+        }
+        
+        /* Coverage Analyzer Section Styles */
+        .analyzer-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analyzer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0A61C9 0%, #10b981 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .analyzer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(10, 97, 201, 0.15);
+        }
+
+        .analyzer-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .analyzer-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .analyzer-icon i {
+            font-size: 2.5rem;
+        }
+
+        .analyzer-card h3 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .analyzer-card p {
+            text-align: center;
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .analyzer-card .btn {
+            width: 100%;
+            text-align: center;
+            display: block;
+        }
+        
+        /* Carrier Logo Container */
+        .carrier-logo-container {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Service Cards */
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
         
         /* Animations */
@@ -532,7 +610,6 @@
             }
         }
         
-        /* Emphasis animation for initial load */
         @keyframes emphasis-pop {
             0% {
                 transform: scale(0.8);
@@ -551,8 +628,44 @@
             animation: emphasis-pop 0.6s ease-out !important;
         }
         
-        /* Mobile optimizations for better performance and display */
+        /* Mobile Optimizations */
         @media (max-width: 768px) {
+            .hero-updated {
+                background-image: url('https://github.com/BillLayne/bill-layne-images/blob/main/logos/hero-mobile.jpg?raw=true');
+                padding-top: 120px;
+                padding-bottom: 40px;
+                min-height: 0;
+            }
+
+            .hero-content-updated h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content-updated .tagline {
+                font-size: 1.1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .quote-container {
+                padding: 1rem;
+            }
+            
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-badges-container {
+                gap: 1rem;
+            }
+
+            .trust-badge {
+                font-size: 0.8rem;
+            }
+
+            .savings-text {
+                font-size: 1.25rem;
+            }
+            
             .savings-wrapper {
                 padding: 0.25em 0.6em;
                 margin: 0 0.3em;
@@ -560,7 +673,6 @@
             
             .savings-amount {
                 font-size: 1.8em;
-                /* Simplified animations on mobile */
                 animation: 
                     number-pulse 3s ease-in-out infinite,
                     glow-intensity 4s ease-in-out infinite;
@@ -578,62 +690,57 @@
             }
             
             .savings-wrapper::after {
-                /* Reduce glow effect on mobile */
                 inset: -10px;
                 filter: blur(8px);
             }
             
-            /* Disable complex animations on mobile */
             @keyframes slight-rotate {
                 0%, 100% {
                     transform: none;
                 }
             }
+            
+            .carrier-logo-container {
+                min-height: 60px;
+            }
+        }
+
+        @media (min-width: 768px) {
+             .hero-content-updated h1 {
+                font-size: 3rem;
+            }
+            
+            .carrier-logo-container {
+                min-height: 100px;
+            }
         }
         
-        /* Respect user's reduced motion preference */
+        @media (min-width: 1024px) {
+             .hero-content-updated h1 {
+                font-size: 3.5rem;
+            }
+        }
+        
+        /* Reduced Motion Support */
         @media (prefers-reduced-motion: reduce) {
             .savings-amount {
                 animation: none;
             }
         }
         
-        /* Alternative Option 2: Highlighted Background (commented out)
-        .savings-amount {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            color: #b91c1c;
-            padding: 0.1em 0.4em;
-            border-radius: 8px;
-            font-weight: 900;
-            font-size: 1.3em;
-            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
-            display: inline-block;
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
-        */
-        
-        /* Alternative Option 3: Bold with Underline (commented out)
-        .savings-amount {
-            color: #dc2626;
-            font-weight: 900;
-            font-size: 1.4em;
-            text-decoration: underline;
-            text-decoration-color: #fbbf24;
-            text-decoration-thickness: 3px;
-            text-underline-offset: 0.1em;
-        }
-        */
-        
-        @media (min-width: 768px) {
-            .carrier-logo-container {
-                min-height: 100px;
-            }
-        }
-        
     </style>
 </head>
 
 <body class="bg-gray-50">
-    <script> document.body.classList.add('loaded'); </script>
+    <script>
+        // Quick visibility check - body is now visible via the html.fonts-ready rule
+        // No additional script needed here as it's handled in the head
+    </script>
     
     <div id="menu-overlay" class="menu-overlay"></div>
     
@@ -756,7 +863,7 @@
             </div>
         </section>
 
-        <!-- Carriers Section -->
+        <!-- Carriers Section - FIXED LINKS -->
         <section class="py-16 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-10">
@@ -765,32 +872,40 @@
                     </h2>
                 </div>
                 <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-2 md:gap-4 items-center">
-                     <a href="https://billlayneinsurance.com/carriers/nationwide-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    <a href="carriers/nationwide.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/Nationwide%20Logo%20(1).webp" alt="Nationwide" class="w-full h-auto object-contain max-h-[40px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/progressive-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    
+                    <a href="carriers/progressive.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/Progressive%20Logo.webp" alt="Progressive" class="w-full h-auto object-contain max-h-[55px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/national-general-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    
+                    <a href="carriers/national-general.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/National%20General%20Insurance%20Logo.webp" alt="National General" class="w-full h-auto object-contain max-h-[40px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/travelers-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    
+                    <a href="carriers/travelers.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/Travelers%20Logo.webp" alt="Travelers" class="w-full h-auto object-contain max-h-[55px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/alamance-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    
+                    <a href="carriers/alamance.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/Alamance%20Logo.webp" alt="Alamance" class="w-full h-auto object-contain max-h-[40px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/nc-grange-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    
+                    <a href="carriers/nc-grange.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/NC%20Grange%20Logo.webp" alt="NC Grange" class="w-full h-auto object-contain max-h-[65px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/foremost-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    
+                    <a href="carriers/foremost.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/Foremost.webp" alt="Foremost" class="w-full h-auto object-contain max-h-[55px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/hagerty-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                    
+                    <a href="carriers/hagerty.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
                         <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/Hagerty.webp" alt="Hagerty" class="w-full h-auto object-contain max-h-[55px] md:max-h-[60px]">
                     </a>
-                    <a href="https://billlayneinsurance.com/carriers/dairyland-north-carolina" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
-                        <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/a437c280622aead08e47badac0dab0052e4ed63d/logos/Dairyland%20Logo%20Best.webp" alt="Dairyland" class="w-full h-auto object-contain max-h-[55px] md:max-h-[60px]">
+                    
+                    <a href="carriers/dairyland.html" class="carrier-logo-container bg-white rounded-lg p-2 md:p-3 shadow-sm hover:shadow-md transition-all hover:scale-105 block">
+                        <img src="https://raw.githubusercontent.com/BillLayne/bill-layne-images/main/logos/Dairyland%20Logo%20Best.webp" alt="Dairyland" class="w-full h-auto object-contain max-h-[55px] md:max-h-[60px]">
                     </a>
                 </div>
             </div>
@@ -846,7 +961,7 @@
                 </p>
                 
                 <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Auto Insurance Card with Image -->
+                    <!-- Auto Insurance Card -->
                     <div class="service-card bg-white rounded-xl shadow-lg p-6">
                         <div class="flex items-start">
                             <div class="flex-shrink-0 mr-4 w-24 h-24">
@@ -865,7 +980,7 @@
                         </div>
                     </div>
                     
-                    <!-- Home Insurance Card with Image -->
+                    <!-- Home Insurance Card -->
                     <div class="service-card bg-white rounded-xl shadow-lg p-6">
                         <div class="flex items-start">
                             <div class="flex-shrink-0 mr-4 w-24 h-24">
@@ -884,7 +999,7 @@
                         </div>
                     </div>
                     
-                    <!-- Business Insurance Card with Image -->
+                    <!-- Business Insurance Card -->
                     <div class="service-card bg-white rounded-xl shadow-lg p-6">
                         <div class="flex items-start">
                             <div class="flex-shrink-0 mr-4 w-24 h-24">
@@ -903,7 +1018,7 @@
                         </div>
                     </div>
                     
-                    <!-- Specialty Coverage Card with Image -->
+                    <!-- Specialty Coverage Card -->
                     <div class="service-card bg-white rounded-xl shadow-lg p-6">
                         <div class="flex items-start">
                             <div class="flex-shrink-0 mr-4 w-24 h-24">
@@ -925,7 +1040,7 @@
             </div>
         </section>
 
-        <!-- Interactive Coverage Analyzer Section -->
+        <!-- Interactive Coverage Analyzer Section - FIXED WITH PROPER STYLING -->
         <section id="coverage-analyzer" class="py-20 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
@@ -934,35 +1049,38 @@
                 </div>
                 
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-2xl transition-all">
-                        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-car text-blue-600 text-3xl"></i>
+                    <!-- Auto Coverage Analyzer -->
+                    <div class="analyzer-card">
+                        <div class="analyzer-icon" style="background: linear-gradient(135deg, #dbeafe, #93c5fd);">
+                            <i class="fas fa-car" style="color: #1e40af;"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Auto Coverage Analyzer</h3>
-                        <p class="text-gray-600 mb-6">Find out if you're paying too much or have coverage gaps</p>
-                        <a href="auto-coverage-checkup.html" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors inline-block">
+                        <h3 class="text-2xl font-bold text-gray-800">Auto Coverage Analyzer</h3>
+                        <p class="text-gray-600">Find out if you're paying too much or have coverage gaps</p>
+                        <a href="auto-coverage-checkup.html" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors btn">
                             Start Analysis →
                         </a>
                     </div>
                     
-                    <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-2xl transition-all">
-                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-home text-green-600 text-3xl"></i>
+                    <!-- Home Insurance Evaluator -->
+                    <div class="analyzer-card">
+                        <div class="analyzer-icon" style="background: linear-gradient(135deg, #d1fae5, #86efac);">
+                            <i class="fas fa-home" style="color: #059669;"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Home Insurance Evaluator</h3>
-                        <p class="text-gray-600 mb-6">Ensure your home is properly protected at the right price</p>
-                        <a href="home-insurance-evaluator.html" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors inline-block">
+                        <h3 class="text-2xl font-bold text-gray-800">Home Insurance Evaluator</h3>
+                        <p class="text-gray-600">Ensure your home is properly protected at the right price</p>
+                        <a href="home-insurance-evaluator.html" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors btn">
                             Evaluate Coverage →
                         </a>
                     </div>
                     
-                    <div class="bg-white rounded-xl shadow-lg p-8 text-center hover:shadow-2xl transition-all">
-                        <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <i class="fas fa-umbrella text-purple-600 text-3xl"></i>
+                    <!-- Umbrella Policy Calculator -->
+                    <div class="analyzer-card">
+                        <div class="analyzer-icon" style="background: linear-gradient(135deg, #ede9fe, #c4b5fd);">
+                            <i class="fas fa-umbrella" style="color: #7c3aed;"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Umbrella Policy Calculator</h3>
-                        <p class="text-gray-600 mb-6">Discover if you need extra liability protection</p>
-                        <a href="umbrella-policy-calculator.html" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-700 transition-colors inline-block">
+                        <h3 class="text-2xl font-bold text-gray-800">Umbrella Policy Calculator</h3>
+                        <p class="text-gray-600">Discover if you need extra liability protection</p>
+                        <a href="umbrella-policy-calculator.html" class="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-700 transition-colors btn">
                             Calculate Needs →
                         </a>
                     </div>
@@ -970,7 +1088,7 @@
             </div>
         </section>
 
-        <!-- Interactive Learning Center Section -->
+        <!-- Interactive Learning Center Section - FIXED WITH ONCLICK HANDLERS -->
         <section id="learning-center" class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
@@ -979,7 +1097,7 @@
                 </div>
                 
                 <div class="grid md:grid-cols-2 gap-8">
-                    <div class="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-8 border border-blue-100">
+                    <div class="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-8 border border-blue-100 hover:shadow-2xl transition-all">
                         <div class="flex items-center mb-6">
                             <span class="text-4xl mr-4">🧠</span>
                             <h3 class="text-2xl font-bold text-gray-800">Insurance IQ Quiz</h3>
@@ -999,12 +1117,12 @@
                                 <span class="text-gray-700">Personalized score and recommendations</span>
                             </li>
                         </ul>
-                        <a href="insurance-quiz.html" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors w-full block text-center">
+                        <button onclick="AnalyzerSystem.startIQQuiz()" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition-colors w-full block text-center cursor-pointer">
                             Take the Quiz →
-                        </a>
+                        </button>
                     </div>
                     
-                    <div class="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-8 border border-green-100">
+                    <div class="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-8 border border-green-100 hover:shadow-2xl transition-all">
                         <div class="flex items-center mb-6">
                             <span class="text-4xl mr-4">📊</span>
                             <h3 class="text-2xl font-bold text-gray-800">Personal Risk Assessment</h3>
@@ -1024,9 +1142,9 @@
                                 <span class="text-gray-700">Personalized risk profile</span>
                             </li>
                         </ul>
-                        <a href="insurance-quiz.html" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors w-full block text-center">
+                        <button onclick="AnalyzerSystem.startRiskAssessment()" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors w-full block text-center cursor-pointer">
                             Start Assessment →
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1226,156 +1344,140 @@
                 </div>
             </div>
         </footer>
+    </main>
 
-        <!-- Load app.js and other scripts -->
-        <script>
-            // JS for menu toggle, header scroll, etc.
-            document.addEventListener('DOMContentLoaded', function() {
-                const menuToggleBtn = document.getElementById('menu-toggle-btn');
-                const navigationMenu = document.getElementById('navigation-menu');
-                const closeMenuBtn = document.getElementById('close-menu');
+    <!-- JavaScript -->
+    <script>
+        // Navigation menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const navigationMenu = document.getElementById('navigation-menu');
+            const closeMenuBtn = document.getElementById('close-menu');
+            const menuOverlay = document.getElementById('menu-overlay');
 
-                if (menuToggleBtn) {
-                    menuToggleBtn.addEventListener('click', function() {
-                        navigationMenu.classList.toggle('active');
-                    });
-                }
-                if(closeMenuBtn) {
-                     closeMenuBtn.addEventListener('click', function() {
-                        navigationMenu.classList.remove('active');
-                    });
-                }
-
-                window.addEventListener('scroll', function() {
-                    const header = document.getElementById('main-header');
-                    if (window.scrollY > 50) {
-                        header.classList.add('scrolled');
-                    } else {
-                        header.classList.remove('scrolled');
-                    }
+            if (menuToggleBtn) {
+                menuToggleBtn.addEventListener('click', function() {
+                    navigationMenu.classList.toggle('active');
+                    menuOverlay.classList.toggle('active');
+                    this.classList.toggle('active');
                 });
-                 const style = document.createElement('style');
-                style.textContent = `
-                    .hamburger span {
-                        display: block;
-                        width: 25px;
-                        height: 3px;
-                        background: #374151;
-                        margin: 3px 0;
-                        transition: 0.3s;
-                        border-radius: 2px;
-                    }
-                    .hamburger.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
-                    .hamburger.active span:nth-child(2) { opacity: 0; }
-                    .hamburger.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -6px); }
-                    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; }
-                    .menu-overlay.active { display: block; }
-                `;
-                document.head.appendChild(style);
-            });
-        </script>
-    
-        <!-- Schema Markup for SEO -->
-        <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "InsuranceAgency",
-          "name": "Bill Layne Insurance Agency",
-          "image": "https://www.billlayneinsurance.com/images/bill-layne-insurance-logo.png",
-          "@id": "https://www.billlayneinsurance.com",
-          "url": "https://www.billlayneinsurance.com",
-          "telephone": "+13368351993",
-          "email": "Save@BillLayneInsurance.com",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "1283 N Bridge St",
-            "addressLocality": "Elkin",
-            "addressRegion": "NC",
-            "postalCode": "28621",
-            "addressCountry": "US"
-          },
-          "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 36.2443,
-            "longitude": -80.8487
-          },
-          "openingHoursSpecification": [
-            {
-              "@type": "OpeningHoursSpecification",
-              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-              "opens": "09:00",
-              "closes": "17:00"
             }
-          ],
-          "sameAs": [
-            "https://www.facebook.com/BillLayneInsurance",
-            "https://www.google.com/maps/place/Bill+Layne+Insurance+Agency"
-          ],
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "bestRating": "5",
-            "worstRating": "1",
-            "ratingCount": "127"
-          }
-        }
-        </script>
-        
-        <!-- Enhanced Savings Amount Animation -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Animate the savings number when it comes into view
-                const savingsAmount = document.querySelector('.savings-amount');
-                if (savingsAmount) {
-                    const targetValue = parseInt(savingsAmount.dataset.value);
-                    let hasAnimated = false;
+            
+            if(closeMenuBtn) {
+                closeMenuBtn.addEventListener('click', function() {
+                    navigationMenu.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                    menuToggleBtn.classList.remove('active');
+                });
+            }
+            
+            if(menuOverlay) {
+                menuOverlay.addEventListener('click', function() {
+                    navigationMenu.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                    menuToggleBtn.classList.remove('active');
+                });
+            }
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.getElementById('main-header');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Animate savings amount
+            const savingsAmount = document.querySelector('.savings-amount');
+            if (savingsAmount) {
+                const targetValue = parseInt(savingsAmount.dataset.value);
+                let hasAnimated = false;
+                
+                function animateValue(element, start, end, duration) {
+                    const range = end - start;
+                    const increment = range / (duration / 16);
+                    let current = start;
                     
-                    function animateValue(element, start, end, duration) {
-                        const range = end - start;
-                        const increment = range / (duration / 16);
-                        let current = start;
-                        
-                        const timer = setInterval(() => {
-                            current += increment;
-                            if (current >= end) {
-                                current = end;
-                                clearInterval(timer);
-                            }
-                            element.textContent = Math.floor(current).toLocaleString();
-                        }, 16);
-                    }
-                    
-                    // Use Intersection Observer for scroll-triggered animation
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting && !hasAnimated) {
-                                hasAnimated = true;
-                                animateValue(savingsAmount, 0, targetValue, 1500);
-                                
-                                // Add extra emphasis animation
-                                savingsAmount.classList.add('emphasis-pop');
-                                setTimeout(() => {
-                                    savingsAmount.classList.remove('emphasis-pop');
-                                }, 600);
-                            }
-                        });
-                    }, { threshold: 0.5 });
-                    
-                    observer.observe(savingsAmount);
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= end) {
+                            current = end;
+                            clearInterval(timer);
+                        }
+                        element.textContent = Math.floor(current).toLocaleString();
+                    }, 16);
                 }
                 
-                // Add hover effect to savings wrapper
-                const savingsWrapper = document.querySelector('.savings-wrapper');
-                if (savingsWrapper) {
-                    savingsWrapper.addEventListener('mouseenter', function() {
-                        this.style.transform = 'scale(1.05)';
+                // Use Intersection Observer for scroll-triggered animation
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !hasAnimated) {
+                            hasAnimated = true;
+                            animateValue(savingsAmount, 0, targetValue, 1500);
+                            
+                            // Add extra emphasis animation
+                            savingsAmount.classList.add('emphasis-pop');
+                            setTimeout(() => {
+                                savingsAmount.classList.remove('emphasis-pop');
+                            }, 600);
+                        }
                     });
-                    savingsWrapper.addEventListener('mouseleave', function() {
-                        this.style.transform = '';
-                    });
-                }
-            });
-        </script>
-    </body>
+                }, { threshold: 0.5 });
+                
+                observer.observe(savingsAmount);
+            }
+        });
+    </script>
+    
+    <!-- Load app.js for analyzer functionality -->
+    <script src="app.js"></script>
+    
+    <!-- Schema Markup for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "InsuranceAgency",
+      "name": "Bill Layne Insurance Agency",
+      "image": "https://www.billlayneinsurance.com/images/bill-layne-insurance-logo.png",
+      "@id": "https://www.billlayneinsurance.com",
+      "url": "https://www.billlayneinsurance.com",
+      "telephone": "+13368351993",
+      "email": "Save@BillLayneInsurance.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1283 N Bridge St",
+        "addressLocality": "Elkin",
+        "addressRegion": "NC",
+        "postalCode": "28621",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 36.2443,
+        "longitude": -80.8487
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "17:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/BillLayneInsurance",
+        "https://www.google.com/maps/place/Bill+Layne+Insurance+Agency"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "bestRating": "5",
+        "worstRating": "1",
+        "ratingCount": "127"
+      }
+    }
+    </script>
+</body>
 </html>
-
