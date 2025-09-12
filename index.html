@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Quick Photo Upload - Bill Layne Insurance</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .header h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            opacity: 0.95;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .type-selector {
+            display: flex;
+            padding: 20px;
+            gap: 10px;
+            background: #f8f9fa;
+        }
+        
+        .type-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .type-btn.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .type-btn .icon {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+        
+        .type-btn .label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .form-container {
+            padding: 20px;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            -webkit-appearance: none;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        
+        select {
+            background: white url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") right 12px center no-repeat;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .image-upload-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f8f4ff;
+        }
+        
+        .upload-area.dragover {
+            background: #f0e6ff;
+            border-color: #764ba2;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .upload-subtext {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .camera-btn, .gallery-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px 5px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .camera-btn:active, .gallery-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: #f0f0f0;
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,0,0,0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .preview-item .image-number {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        .counter {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        
+        .purpose-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .purpose-option {
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .purpose-option.active {
+            border-color: #667eea;
+            background: #f8f4ff;
+            color: #667eea;
+        }
+        
+        /* Mobile specific optimizations */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .image-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .purpose-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* iPhone notch support */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-top: max(0px, env(safe-area-inset-top));
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading state */
+        .loading {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h2 style="font-size: 20px; margin-bottom: 10px; font-weight: 500; opacity: 0.95;">Bill Layne Insurance</h2>
+            <h1>Quick Photo Upload</h1>
+            <p>Fast & Easy Insurance Documentation</p>
+        </div>
+        
+        <!-- Type Selection -->
+        <div class="type-selector">
+            <div class="type-btn active" data-type="HOME">
+                <div class="icon">🏠</div>
+                <div class="label">Home</div>
+            </div>
+            <div class="type-btn" data-type="VEHICLE">
+                <div class="icon">🚗</div>
+                <div class="label">Vehicle</div>
+            </div>
+        </div>
+        
+        <!-- Form -->
+        <form id="imageForm" class="form-container">
+            <!-- Messages -->
+            <div id="successMessage" class="message success"></div>
+            <div id="errorMessage" class="message error"></div>
+            <div id="infoMessage" class="message info"></div>
+            
+            <!-- Purpose Selection -->
+            <div class="form-section">
+                <h3 class="section-title">📋 What's this for?</h3>
+                <div class="purpose-grid">
+                    <div class="purpose-option active" data-purpose="quote">
+                        Quote Request
+                    </div>
+                    <div class="purpose-option" data-purpose="add">
+                        Add Coverage
+                    </div>
+                    <div class="purpose-option" data-purpose="claim">
+                        Claim
+                    </div>
+                    <div class="purpose-option" data-purpose="review">
+                        Policy Review
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="form-section">
+                <h3 class="section-title">👤 Your Information</h3>
+                
+                <div class="form-group">
+                    <label for="customerName">Full Name <span class="required">*</span></label>
+                    <input type="text" id="customerName" name="customerName" required autocomplete="name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="(336) 555-1234">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address (Optional)</label>
+                    <input type="email" id="email" name="email" autocomplete="email" placeholder="your@email.com">
+                </div>
+            </div>
+            
+            <!-- Property/Vehicle Information -->
+            <div class="form-section" id="propertySection">
+                <h3 class="section-title">🏠 Property Address</h3>
+                
+                <div class="form-group">
+                    <label for="address">Street Address</label>
+                    <input type="text" id="address" name="address" autocomplete="street-address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" autocomplete="address-level2">
+                </div>
+                
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <select id="state" name="state" autocomplete="address-level1">
+                        <option value="">Select State</option>
+                        <option value="NC" selected>North Carolina</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="VA">Virginia</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="GA">Georgia</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="zip">ZIP Code</label>
+                    <input type="text" id="zip" name="zip" autocomplete="postal-code" pattern="[0-9]{5}" maxlength="5">
+                </div>
+            </div>
+            
+            <div class="form-section" id="vehicleSection" style="display: none;">
+                <h3 class="section-title">🚗 Vehicle Information</h3>
+                
+                <div class="form-group">
+                    <label for="vehicleInfo">Vehicle Details</label>
+                    <input type="text" id="vehicleInfo" name="vehicleInfo" placeholder="2024 Toyota Camry (or VIN#)">
+                </div>
+            </div>
+            
+            <!-- Insurance Information -->
+            <div class="form-section">
+                <h3 class="section-title">📝 Insurance Details (Optional)</h3>
+                
+                <div class="form-group">
+                    <label for="currentCarrier">Current Insurance Carrier</label>
+                    <input type="text" id="currentCarrier" name="currentCarrier" placeholder="e.g., State Farm, Progressive">
+                </div>
+                
+                <div class="form-group">
+                    <label for="policyNumber">Policy Number (if applicable)</label>
+                    <input type="text" id="policyNumber" name="policyNumber" placeholder="Optional">
+                </div>
+            </div>
+            
+            <!-- Image Upload -->
+            <div class="form-section">
+                <h3 class="section-title">
+                    📸 Upload Photos
+                    <span class="counter" id="imageCounter">0</span>
+                </h3>
+                
+                <div class="image-upload-section">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">Tap to Add Photos</div>
+                        <div class="upload-subtext">or drag and drop</div>
+                        
+                        <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+                        <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="environment">
+                        
+                        <div>
+                            <button type="button" class="camera-btn" id="cameraBtn">
+                                📷 Take Photo
+                            </button>
+                            <button type="button" class="gallery-btn" id="galleryBtn">
+                                🖼️ Choose from Gallery
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Additional Notes (Optional)</label>
+                    <textarea id="notes" name="notes" placeholder="Any specific details about your property/vehicle or special requests..."></textarea>
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span id="btnText">Submit Photos</span>
+                <div class="spinner" id="spinner"></div>
+            </button>
+        </form>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <strong>Bill Layne Insurance Agency</strong><br>
+            1283 N Bridge St, Elkin NC 28621<br>
+            <a href="tel:3368351993">336-835-1993</a> | 
+            <a href="mailto:Save@BillLayneInsurance.com">Save@BillLayneInsurance.com</a><br>
+            <a href="https://www.BillLayneInsurance.com">www.BillLayneInsurance.com</a>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration - YOUR ACTUAL SCRIPT URL IS HERE!
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgRcVZgCDznG5bBTLpAxun6enA4OP4k6HQhYHYeyq4nkFNKxBkFg3QVQr5n9p9olAlag/exec';
+        const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+        const MAX_IMAGES = 20;
+        
+        // State
+        let selectedType = 'HOME';
+        let selectedPurpose = 'quote';
+        let uploadedImages = [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadFromURL();
+            updateImageCounter();
+        });
+        
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Type selection
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedType = this.dataset.type;
+                    toggleSections();
+                });
+            });
+            
+            // Purpose selection
+            document.querySelectorAll('.purpose-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.purpose-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedPurpose = this.dataset.purpose;
+                });
+            });
+            
+            // Upload area click
+            document.getElementById('uploadArea').addEventListener('click', function(e) {
+                if (e.target.closest('.camera-btn') || e.target.closest('.gallery-btn')) {
+                    return;
+                }
+                document.getElementById('fileInput').click();
+            });
+            
+            // Camera button
+            document.getElementById('cameraBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('cameraInput').click();
+            });
+            
+            // Gallery button
+            document.getElementById('galleryBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('fileInput').click();
+            });
+            
+            // File inputs
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+            document.getElementById('cameraInput').addEventListener('change', handleFileSelect);
+            
+            // Drag and drop
+            const uploadArea = document.getElementById('uploadArea');
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+            
+            // Form submission
+            document.getElementById('imageForm').addEventListener('submit', handleSubmit);
+            
+            // Phone formatting
+            document.getElementById('phone').addEventListener('input', formatPhone);
+            
+            // ZIP code formatting
+            document.getElementById('zip').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
+            });
+        }
+        
+        // Toggle sections based on type
+        function toggleSections() {
+            if (selectedType === 'HOME') {
+                document.getElementById('propertySection').style.display = 'block';
+                document.getElementById('vehicleSection').style.display = 'none';
+            } else {
+                document.getElementById('propertySection').style.display = 'none';
+                document.getElementById('vehicleSection').style.display = 'block';
+            }
+        }
+        
+        // Handle file selection
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            processFiles(files);
+            e.target.value = ''; // Reset input
+        }
+        
+        // Handle drag over
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+        
+        // Handle drag leave
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragover');
+        }
+        
+        // Handle drop
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = Array.from(e.dataTransfer.files);
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            processFiles(imageFiles);
+        }
+        
+        // Process files
+        function processFiles(files) {
+            const remainingSlots = MAX_IMAGES - uploadedImages.length;
+            
+            if (remainingSlots <= 0) {
+                showMessage('Maximum 20 images allowed', 'error');
+                return;
+            }
+            
+            const filesToProcess = files.slice(0, remainingSlots);
+            
+            filesToProcess.forEach(file => {
+                if (file.size > MAX_FILE_SIZE) {
+                    showMessage(`${file.name} is too large. Maximum size is 10MB`, 'error');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages.push({
+                        data: e.target.result,
+                        type: file.type,
+                        name: file.name
+                    });
+                    displayImages();
+                    updateImageCounter();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Display images
+        function displayImages() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            uploadedImages.forEach((image, index) => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                item.innerHTML = `
+                    <img src="${image.data}" alt="Image ${index + 1}">
+                    <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
+                    <span class="image-number">#${index + 1}</span>
+                `;
+                preview.appendChild(item);
+            });
+        }
+        
+        // Remove image
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            displayImages();
+            updateImageCounter();
+        }
+        
+        // Update image counter
+        function updateImageCounter() {
+            document.getElementById('imageCounter').textContent = uploadedImages.length;
+        }
+        
+        // Handle form submission
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            // Validate
+            if (uploadedImages.length === 0) {
+                showMessage('Please upload at least one photo', 'error');
+                return;
+            }
+            
+            // Get form data
+            const formData = new FormData(e.target);
+            const data = {
+                type: selectedType,
+                purpose: selectedPurpose,
+                customerName: formData.get('customerName'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                address: formData.get('address'),
+                city: formData.get('city'),
+                state: formData.get('state'),
+                zip: formData.get('zip'),
+                vehicleInfo: formData.get('vehicleInfo'),
+                currentCarrier: formData.get('currentCarrier'),
+                policyNumber: formData.get('policyNumber'),
+                notes: formData.get('notes'),
+                images: uploadedImages,
+                submittedAt: new Date().toISOString()
+            };
+            
+            // Show loading
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            spinner.style.display = 'block';
+            document.getElementById('imageForm').classList.add('loading');
+            
+            try {
+                // Submit to Google Apps Script
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // Show success
+                showSuccess();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Upload failed. Please try again or call us at 336-835-1993', 'error');
+                
+                // Reset button
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                spinner.style.display = 'none';
+                document.getElementById('imageForm').classList.remove('loading');
+            }
+        }
+        
+        // Show success message
+        function showSuccess() {
+            // Hide form
+            document.getElementById('imageForm').style.display = 'none';
+            
+            // Show success message
+            const container = document.querySelector('.form-container');
+            const customerName = document.getElementById('customerName').value;
+            const email = document.getElementById('email').value;
+            
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px 20px;">
+                    <div style="font-size: 72px; margin-bottom: 20px;">✅</div>
+                    <h2 style="color: #28a745; margin-bottom: 15px;">Photos Uploaded Successfully!</h2>
+                    <p style="font-size: 16px; color: #666; margin-bottom: 10px;">
+                        Thank you for submitting your ${selectedType === 'HOME' ? 'home' : 'vehicle'} photos.
+                    </p>
+                    <p style="font-size: 16px; color: #666; margin-bottom: 30px;">
+                        We'll review them and contact you shortly with your 
+                        ${selectedPurpose === 'quote' ? 'quote' : selectedPurpose === 'add' ? 'coverage options' : 'next steps'}.
+                    </p>
+                    <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 30px;">
+                        <p style="font-size: 14px; color: #333; margin-bottom: 10px;">
+                            <strong>What happens next?</strong>
+                        </p>
+                        <ol style="text-align: left; margin: 0; padding-left: 20px; color: #666;">
+                            <li style="margin: 5px 0;">We'll review your photos within 1-2 hours</li>
+                            <li style="margin: 5px 0;">Our team will prepare your ${selectedPurpose === 'quote' ? 'personalized quote' : 'information'}</li>
+                            <li style="margin: 5px 0;">You'll hear from us via ${email ? 'email or phone' : 'phone'}</li>
+                        </ol>
+                    </div>
+                    <div style="background: #e8f4f8; border-radius: 10px; padding: 20px;">
+                        <p style="font-size: 14px; color: #1e3c72; margin-bottom: 15px;">
+                            <strong>Need immediate assistance?</strong>
+                        </p>
+                        <a href="tel:3368351993" style="display: inline-block; background: #1e3c72; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                            📞 Call 336-835-1993
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Show message
+        function showMessage(text, type) {
+            const messageEl = type === 'success' ? document.getElementById('successMessage') :
+                             type === 'error' ? document.getElementById('errorMessage') :
+                             document.getElementById('infoMessage');
+            
+            messageEl.textContent = text;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Format phone number
+        function formatPhone() {
+            const input = document.getElementById('phone');
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = `(${value}`;
+                } else if (value.length <= 6) {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                } else {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                }
+            }
+            
+            input.value = value;
+        }
+        
+        // Load data from URL parameters
+        function loadFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Pre-fill form fields
+            const fields = ['customerName', 'email', 'phone', 'address', 'city', 'state', 'zip', 'currentCarrier', 'policyNumber', 'vehicleInfo'];
+            fields.forEach(field => {
+                const value = params.get(field);
+                if (value) {
+                    const element = document.getElementById(field);
+                    if (element) {
+                        element.value = decodeURIComponent(value);
+                    }
+                }
+            });
+            
+            // Set type if provided
+            const type = params.get('type');
+            if (type) {
+                selectedType = type.toUpperCase();
+                document.querySelectorAll('.type-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.type === selectedType);
+                });
+                toggleSections();
+            }
+            
+            // Set purpose if provided
+            const purpose = params.get('purpose');
+            if (purpose) {
+                selectedPurpose = purpose;
+                document.querySelectorAll('.purpose-option').forEach(option => {
+                    option.classList.toggle('active', option.dataset.purpose === selectedPurpose);
+                });
+            }
+            
+            // Show info if pre-filled
+            if (params.toString()) {
+                showMessage('Form has been pre-filled with your information', 'info');
+            }
+        }
+    </script>
+</body>
+</html>
