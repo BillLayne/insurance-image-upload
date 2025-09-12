@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Collection Link Generator - Bill Layne Insurance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .notice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+        }
+        
+        .notice strong {
+            color: #856404;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        
+        .type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .type-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .type-btn.active {
+            border-color: #667eea;
+            background: #f8f4ff;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .result-section.show {
+            display: block;
+        }
+        
+        .generated-link {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            border: 2px solid #e1e8ed;
+        }
+        
+        .copy-btn, .test-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn {
+            background: #28a745;
+            color: white;
+        }
+        
+        .test-btn {
+            background: #007bff;
+            color: white;
+        }
+        
+        .template-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-size: 14px;
+            border: 2px solid #e1e8ed;
+            line-height: 1.6;
+        }
+        
+        .qr-code {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .qr-code img {
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+        
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔗 Image Collection Link Generator</h1>
+            <p>Create pre-filled links for customers to upload photos</p>
+        </div>
+        
+        <div class="notice">
+            <strong>⚠️ ACTION REQUIRED:</strong> Update line 315 in this file with your GitHub username!
+            <br>Change: <code>YOUR-GITHUB-USERNAME</code> to your actual GitHub username
+        </div>
+        
+        <div class="form-container">
+            <h3 style="color: #1e3c72; margin-bottom: 20px;">Customer Information</h3>
+            
+            <!-- Type Selection -->
+            <label>Type of Request:</label>
+            <div class="type-selector">
+                <div class="type-btn active" data-type="HOME">
+                    🏠 Home
+                </div>
+                <div class="type-btn" data-type="VEHICLE">
+                    🚗 Vehicle
+                </div>
+            </div>
+            
+            <!-- Purpose Selection -->
+            <div class="form-group">
+                <label for="purpose">Purpose:</label>
+                <select id="purpose">
+                    <option value="quote">Quote Request</option>
+                    <option value="add">Add Coverage</option>
+                    <option value="claim">Claim Documentation</option>
+                    <option value="review">Policy Review</option>
+                </select>
+            </div>
+            
+            <!-- Customer Info -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="customerName">Customer Name:</label>
+                    <input type="text" id="customerName" placeholder="John Smith">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" placeholder="(336) 555-1234">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email (Optional):</label>
+                <input type="email" id="email" placeholder="customer@email.com">
+            </div>
+            
+            <!-- Property Address -->
+            <div id="propertyFields">
+                <h4 style="color: #2a5298; margin: 20px 0 15px;">Property Address</h4>
+                
+                <div class="form-group">
+                    <label for="address">Street Address:</label>
+                    <input type="text" id="address" placeholder="123 Main Street">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" placeholder="Elkin">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="state">State:</label>
+                        <select id="state">
+                            <option value="">Select State</option>
+                            <option value="NC" selected>North Carolina</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="VA">Virginia</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="GA">Georgia</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="zip">ZIP Code:</label>
+                    <input type="text" id="zip" placeholder="28621" maxlength="5">
+                </div>
+            </div>
+            
+            <!-- Vehicle Info -->
+            <div id="vehicleFields" style="display: none;">
+                <h4 style="color: #2a5298; margin: 20px 0 15px;">Vehicle Information</h4>
+                
+                <div class="form-group">
+                    <label for="vehicleInfo">Vehicle Details:</label>
+                    <input type="text" id="vehicleInfo" placeholder="2024 Toyota Camry or VIN#">
+                </div>
+            </div>
+            
+            <!-- Insurance Info -->
+            <h4 style="color: #2a5298; margin: 20px 0 15px;">Insurance Information (Optional)</h4>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currentCarrier">Current Carrier:</label>
+                    <input type="text" id="currentCarrier" placeholder="State Farm">
+                </div>
+                
+                <div class="form-group">
+                    <label for="policyNumber">Policy Number:</label>
+                    <input type="text" id="policyNumber" placeholder="POL123456">
+                </div>
+            </div>
+            
+            <!-- Generate Button -->
+            <button onclick="generateLink()" class="generate-btn">
+                Generate Pre-filled Link
+            </button>
+            
+            <!-- Results Section -->
+            <div id="resultSection" class="result-section">
+                <h3 style="color: #1e3c72; margin-bottom: 20px;">Generated Link & Templates</h3>
+                
+                <label style="font-weight: 600;">Direct Link:</label>
+                <div class="generated-link" id="generatedLink"></div>
+                
+                <div style="text-align: center; margin: 15px 0;">
+                    <button onclick="copyLink()" class="copy-btn">📋 Copy Link</button>
+                    <button onclick="testLink()" class="test-btn">🔗 Test Link</button>
+                </div>
+                
+                <label style="font-weight: 600; margin-top: 20px; display: block;">Text Message Template:</label>
+                <div class="template-box" id="textTemplate"></div>
+                <button onclick="copyText()" class="copy-btn">📱 Copy Text Message</button>
+                
+                <label style="font-weight: 600; margin-top: 20px; display: block;">Email Template:</label>
+                <div class="template-box" id="emailTemplate"></div>
+                <button onclick="copyEmail()" class="copy-btn">📧 Copy Email</button>
+                
+                <div class="qr-code" id="qrCode"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ⚠️ UPDATE THIS WITH YOUR GITHUB USERNAME! ⚠️
+        const BASE_URL = 'https://YOUR-GITHUB-USERNAME.github.io/insurance-image-upload/';
+        // Example: const BASE_URL = 'https://johnsmith.github.io/insurance-image-upload/';
+        
+        let currentLink = '';
+        let selectedType = 'HOME';
+        
+        // Setup event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Type selection
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedType = this.dataset.type;
+                    toggleFields();
+                });
+            });
+            
+            // Phone formatting
+            document.getElementById('phone').addEventListener('input', formatPhone);
+        });
+        
+        function toggleFields() {
+            if (selectedType === 'HOME') {
+                document.getElementById('propertyFields').style.display = 'block';
+                document.getElementById('vehicleFields').style.display = 'none';
+            } else {
+                document.getElementById('propertyFields').style.display = 'none';
+                document.getElementById('vehicleFields').style.display = 'block';
+            }
+        }
+        
+        function generateLink() {
+            // Get all field values
+            const params = new URLSearchParams();
+            
+            // Add type and purpose
+            params.append('type', selectedType);
+            params.append('purpose', document.getElementById('purpose').value);
+            
+            // Add customer info
+            const customerName = document.getElementById('customerName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            
+            if (customerName) params.append('customerName', customerName);
+            if (phone) params.append('phone', phone);
+            if (email) params.append('email', email);
+            
+            // Add property/vehicle info
+            if (selectedType === 'HOME') {
+                const address = document.getElementById('address').value;
+                const city = document.getElementById('city').value;
+                const state = document.getElementById('state').value;
+                const zip = document.getElementById('zip').value;
+                
+                if (address) params.append('address', address);
+                if (city) params.append('city', city);
+                if (state) params.append('state', state);
+                if (zip) params.append('zip', zip);
+            } else {
+                const vehicleInfo = document.getElementById('vehicleInfo').value;
+                if (vehicleInfo) params.append('vehicleInfo', vehicleInfo);
+            }
+            
+            // Add insurance info
+            const currentCarrier = document.getElementById('currentCarrier').value;
+            const policyNumber = document.getElementById('policyNumber').value;
+            
+            if (currentCarrier) params.append('currentCarrier', currentCarrier);
+            if (policyNumber) params.append('policyNumber', policyNumber);
+            
+            // Generate the link
+            currentLink = BASE_URL + '?' + params.toString();
+            
+            // Display results
+            document.getElementById('generatedLink').textContent = currentLink;
+            document.getElementById('resultSection').classList.add('show');
+            
+            // Generate templates
+            const purposeText = document.getElementById('purpose').options[document.getElementById('purpose').selectedIndex].text;
+            
+            // Text message template
+            const textTemplate = `Hi ${customerName || '[Customer Name]'},
+
+Please upload photos of your ${selectedType === 'HOME' ? 'home' : 'vehicle'} for your ${purposeText.toLowerCase()} using this link:
+
+${currentLink}
+
+Your information has been pre-filled for convenience. Just add your photos and submit!
+
+Questions? Call 336-835-1993
+
+Bill Layne Insurance`;
+            
+            // Email template
+            const emailTemplate = `Subject: Action Required - Upload ${selectedType === 'HOME' ? 'Home' : 'Vehicle'} Photos
+
+Dear ${customerName || '[Customer Name]'},
+
+Thank you for choosing Bill Layne Insurance Agency for your ${purposeText.toLowerCase()}.
+
+Please click the link below to upload photos of your ${selectedType === 'HOME' ? 'home' : 'vehicle'}:
+
+${currentLink}
+
+Your information has been pre-filled. Simply:
+1. Review your information
+2. Upload your photos
+3. Click submit
+
+The process takes less than 2 minutes on your phone.
+
+If you have any questions, please call us at 336-835-1993.
+
+Thank you,
+Bill Layne Insurance Agency
+1283 N Bridge St, Elkin NC 28621
+336-835-1993
+www.BillLayneInsurance.com`;
+            
+            document.getElementById('textTemplate').textContent = textTemplate;
+            document.getElementById('emailTemplate').textContent = emailTemplate;
+            
+            // Generate QR code
+            generateQRCode();
+            
+            // Scroll to results
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function copyLink() {
+            navigator.clipboard.writeText(currentLink);
+            alert('Link copied to clipboard!');
+        }
+        
+        function copyText() {
+            const text = document.getElementById('textTemplate').textContent;
+            navigator.clipboard.writeText(text);
+            alert('Text message template copied!');
+        }
+        
+        function copyEmail() {
+            const email = document.getElementById('emailTemplate').textContent;
+            navigator.clipboard.writeText(email);
+            alert('Email template copied!');
+        }
+        
+        function testLink() {
+            window.open(currentLink, '_blank');
+        }
+        
+        function formatPhone() {
+            const input = document.getElementById('phone');
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = `(${value}`;
+                } else if (value.length <= 6) {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                } else {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                }
+            }
+            
+            input.value = value;
+        }
+        
+        function generateQRCode() {
+            // Using QR Server API for simplicity
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentLink)}`;
+            const qrHtml = `
+                <label style="font-weight: 600; display: block; margin-bottom: 10px;">QR Code (for printing):</label>
+                <img src="${qrUrl}" alt="QR Code" style="max-width: 200px;">
+                <p style="font-size: 12px; color: #666; margin-top: 10px;">Scan to open the upload form</p>
+            `;
+            document.getElementById('qrCode').innerHTML = qrHtml;
+        }
+    </script>
+</body>
+</html>
