@@ -840,47 +840,114 @@
             }
         }
         
+        // Generate reference number (matches backend format)
+        function generateReferenceNumber() {
+            const date = new Date();
+            const year = date.getFullYear().toString().slice(-2);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `BLI-${year}${month}${day}-${random}`;
+        }
+        
         // Show success message
         function showSuccess() {
+            // Generate reference number for display
+            const referenceNumber = generateReferenceNumber();
+            
             // Hide form
             document.getElementById('imageForm').style.display = 'none';
             
-            // Show success message
-            const container = document.querySelector('.form-container');
+            // Get customer info for personalized message
             const customerName = document.getElementById('customerName').value;
             const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
             
+            // Show success message
+            const container = document.querySelector('.form-container');
             container.innerHTML = `
-                <div style="text-align: center; padding: 40px 20px;">
-                    <div style="font-size: 72px; margin-bottom: 20px;">✅</div>
-                    <h2 style="color: #28a745; margin-bottom: 15px;">Photos Uploaded Successfully!</h2>
-                    <p style="font-size: 16px; color: #666; margin-bottom: 10px;">
-                        Thank you for submitting your ${selectedType === 'HOME' ? 'home' : 'vehicle'} photos.
-                    </p>
-                    <p style="font-size: 16px; color: #666; margin-bottom: 30px;">
-                        We'll review them and contact you shortly with your 
-                        ${selectedPurpose === 'quote' ? 'quote' : selectedPurpose === 'add' ? 'coverage options' : 'next steps'}.
-                    </p>
-                    <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 30px;">
-                        <p style="font-size: 14px; color: #333; margin-bottom: 10px;">
-                            <strong>What happens next?</strong>
+                <div style="text-align: center; padding: 30px 20px;">
+                    <!-- Success Icon -->
+                    <div style="font-size: 80px; margin-bottom: 20px; animation: checkmark 0.6s ease;">✅</div>
+                    
+                    <!-- Main Success Message -->
+                    <h2 style="color: #28a745; margin-bottom: 20px; font-size: 28px;">
+                        Your Photos Have Been Submitted!
+                    </h2>
+                    
+                    <!-- Reference Number Box -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px; padding: 25px; margin: 25px 0; box-shadow: 0 10px 30px rgba(102,126,234,0.3);">
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Your Reference Number</p>
+                        <p style="margin: 10px 0 0 0; font-size: 32px; font-weight: bold; letter-spacing: 1px;">
+                            ${referenceNumber}
                         </p>
-                        <ol style="text-align: left; margin: 0; padding-left: 20px; color: #666;">
-                            <li style="margin: 5px 0;">We'll review your photos within 1-2 hours</li>
-                            <li style="margin: 5px 0;">Our team will prepare your ${selectedPurpose === 'quote' ? 'personalized quote' : 'information'}</li>
-                            <li style="margin: 5px 0;">You'll hear from us via ${email ? 'email or phone' : 'phone'}</li>
+                        <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">Please save this for your records</p>
+                    </div>
+                    
+                    <!-- Confirmation Details -->
+                    <div style="background: #f0f8ff; border-radius: 12px; padding: 20px; margin-bottom: 25px; text-align: left;">
+                        <h3 style="color: #1e3c72; margin: 0 0 15px 0; font-size: 18px;">📋 Submission Confirmed</h3>
+                        <div style="color: #333; line-height: 1.8;">
+                            <p style="margin: 5px 0;"><strong>Name:</strong> ${customerName}</p>
+                            <p style="margin: 5px 0;"><strong>Phone:</strong> ${phone}</p>
+                            ${email ? `<p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>` : ''}
+                            <p style="margin: 5px 0;"><strong>Type:</strong> ${selectedType === 'HOME' ? '🏠 Home' : '🚗 Vehicle'} ${selectedPurpose === 'quote' ? 'Quote' : selectedPurpose === 'add' ? 'Coverage' : 'Documentation'}</p>
+                            <p style="margin: 5px 0;"><strong>Photos Uploaded:</strong> ${uploadedImages.length}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- What Happens Next -->
+                    <div style="background: #fff9e6; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                        <h3 style="color: #996600; margin: 0 0 15px 0; font-size: 18px;">⏱️ What Happens Next?</h3>
+                        <ol style="text-align: left; margin: 0; padding-left: 20px; color: #666; line-height: 1.8;">
+                            <li style="margin: 8px 0;">Your photos are being reviewed by our team</li>
+                            <li style="margin: 8px 0;">We'll prepare your ${selectedPurpose === 'quote' ? 'personalized quote' : selectedPurpose === 'add' ? 'coverage options' : 'documentation'}</li>
+                            <li style="margin: 8px 0;">You'll hear from us within <strong>1-2 business hours</strong></li>
+                            ${email ? '<li style="margin: 8px 0;">Check your email for confirmation</li>' : ''}
                         </ol>
                     </div>
-                    <div style="background: #e8f4f8; border-radius: 10px; padding: 20px;">
-                        <p style="font-size: 14px; color: #1e3c72; margin-bottom: 15px;">
-                            <strong>Need immediate assistance?</strong>
+                    
+                    <!-- Contact Section -->
+                    <div style="background: #e8f4f8; border-radius: 12px; padding: 25px;">
+                        <p style="font-size: 16px; color: #1e3c72; margin-bottom: 15px; font-weight: 600;">
+                            Need Immediate Assistance?
                         </p>
-                        <a href="tel:3368351993" style="display: inline-block; background: #1e3c72; color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                        <p style="color: #666; margin-bottom: 20px;">
+                            Our team is here to help!
+                        </p>
+                        <a href="tel:3368351993" style="display: inline-block; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 15px 35px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 18px; box-shadow: 0 5px 15px rgba(30,60,114,0.3);">
                             📞 Call 336-835-1993
                         </a>
+                        <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                            Reference: ${referenceNumber}
+                        </p>
+                    </div>
+                    
+                    <!-- Agency Footer -->
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                        <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                            Thank you for choosing<br>
+                            <strong style="color: #1e3c72; font-size: 16px;">Bill Layne Insurance Agency</strong><br>
+                            1283 N Bridge St, Elkin NC 28621<br>
+                            <a href="https://www.billLayneinsurance.com" style="color: #667eea; text-decoration: none;">www.BillLayneInsurance.com</a>
+                        </p>
                     </div>
                 </div>
             `;
+            
+            // Add animation keyframes if not already present
+            if (!document.querySelector('#checkmarkAnimation')) {
+                const style = document.createElement('style');
+                style.id = 'checkmarkAnimation';
+                style.textContent = `
+                    @keyframes checkmark {
+                        0% { transform: scale(0) rotate(0deg); opacity: 0; }
+                        50% { transform: scale(1.2) rotate(10deg); }
+                        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         }
         
         // Show message
