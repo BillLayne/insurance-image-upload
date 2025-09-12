@@ -784,6 +784,19 @@
                 return;
             }
             
+            // CAPTURE VALUES FIRST - BEFORE ANYTHING ELSE
+            const capturedData = {
+                customerName: document.getElementById('customerName').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                imageCount: uploadedImages.length,
+                type: selectedType,
+                purpose: selectedPurpose
+            };
+            
+            // Store globally for showSuccess to use
+            window.submissionData = capturedData;
+            
             // Get form data
             const formData = new FormData(e.target);
             const data = {
@@ -856,16 +869,20 @@
         
         // Show success message
         function showSuccess() {
+            // Use pre-captured data from submission
+            const data = window.submissionData || {};
+            const customerName = data.customerName || 'Customer';
+            const email = data.email || '';
+            const phone = data.phone || '';
+            const imageCount = data.imageCount || 0;
+            
             // Generate reference number for display
             const referenceNumber = generateReferenceNumber();
             
-            // Hide form
-            document.getElementById('imageForm').style.display = 'none';
-            
-            // Get customer info for personalized message
-            const customerName = document.getElementById('customerName').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
+            // Hide form if it exists
+            if (document.getElementById('imageForm')) {
+                document.getElementById('imageForm').style.display = 'none';
+            }
             
             // Show success message
             const container = document.querySelector('.form-container');
@@ -895,8 +912,8 @@
                             <p style="margin: 5px 0;"><strong>Name:</strong> ${customerName}</p>
                             <p style="margin: 5px 0;"><strong>Phone:</strong> ${phone}</p>
                             ${email ? `<p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>` : ''}
-                            <p style="margin: 5px 0;"><strong>Type:</strong> ${selectedType === 'HOME' ? '🏠 Home' : '🚗 Vehicle'} ${selectedPurpose === 'quote' ? 'Quote' : selectedPurpose === 'add' ? 'Coverage' : 'Documentation'}</p>
-                            <p style="margin: 5px 0;"><strong>Photos Uploaded:</strong> ${uploadedImages.length}</p>
+                            <p style="margin: 5px 0;"><strong>Type:</strong> ${data.type === 'HOME' ? '🏠 Home' : '🚗 Vehicle'} ${data.purpose === 'quote' ? 'Quote' : data.purpose === 'add' ? 'Coverage' : 'Documentation'}</p>
+                            <p style="margin: 5px 0;"><strong>Photos Uploaded:</strong> ${imageCount}</p>
                         </div>
                     </div>
                     
@@ -905,7 +922,7 @@
                         <h3 style="color: #996600; margin: 0 0 15px 0; font-size: 18px;">⏱️ What Happens Next?</h3>
                         <ol style="text-align: left; margin: 0; padding-left: 20px; color: #666; line-height: 1.8;">
                             <li style="margin: 8px 0;">Your photos are being reviewed by our team</li>
-                            <li style="margin: 8px 0;">We'll prepare your ${selectedPurpose === 'quote' ? 'personalized quote' : selectedPurpose === 'add' ? 'coverage options' : 'documentation'}</li>
+                            <li style="margin: 8px 0;">We'll prepare your ${data.purpose === 'quote' ? 'personalized quote' : data.purpose === 'add' ? 'coverage options' : 'documentation'}</li>
                             <li style="margin: 8px 0;">You'll hear from us within <strong>1-2 business hours</strong></li>
                             ${email ? '<li style="margin: 8px 0;">Check your email for confirmation</li>' : ''}
                         </ol>
