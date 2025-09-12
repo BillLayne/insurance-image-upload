@@ -594,6 +594,157 @@
         </div>
     </div>
     
+    <!-- SUCCESS MODAL (like your No Loss form) -->
+    <style>
+        .success-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .success-modal-overlay.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .success-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out 0.2s both;
+        }
+        
+        .success-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: drawCheck 0.6s ease-out 0.5s both;
+        }
+        
+        .confirmation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .confirmation-number {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 10px 0;
+        }
+        
+        .btn-ok {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .btn-ok:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        
+        @keyframes drawCheck {
+            from {
+                stroke-dasharray: 50;
+                stroke-dashoffset: 50;
+            }
+            to {
+                stroke-dasharray: 50;
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+    
+    <div class="success-modal-overlay" id="successModalOverlay">
+        <div class="success-modal">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h2 style="color: #28a745; margin-bottom: 20px; font-size: 28px;">
+                Photos Submitted Successfully!
+            </h2>
+            <p style="color: #666; margin-bottom: 20px;">
+                Your images have been received and will be reviewed within 1-2 business hours.
+            </p>
+            <div class="confirmation-box">
+                <p style="margin: 0; font-size: 14px; opacity: 0.9;">Your Reference Number</p>
+                <div class="confirmation-number" id="confirmNumber">
+                    BLI-250912-0000
+                </div>
+                <p style="margin: 0; font-size: 14px; opacity: 0.9;">Please save this for your records</p>
+            </div>
+            <div style="background: #f0f8ff; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: left;">
+                <p style="margin: 5px 0;"><strong>Name:</strong> <span id="modalName"></span></p>
+                <p style="margin: 5px 0;"><strong>Phone:</strong> <span id="modalPhone"></span></p>
+                <p style="margin: 5px 0;"><strong>Images:</strong> <span id="modalImages"></span></p>
+            </div>
+            <button class="btn-ok" onclick="closeSuccessModal()">OK</button>
+        </div>
+    </div>
+    
     <script>
         // Configuration - YOUR ACTUAL SCRIPT URL IS HERE!
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgRcVZgCDznG5bBTLpAxun6enA4OP4k6HQhYHYeyq4nkFNKxBkFg3QVQr5n9p9olAlag/exec';
@@ -672,6 +823,13 @@
             // ZIP code formatting
             document.getElementById('zip').addEventListener('input', function(e) {
                 e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
+            });
+            
+            // Close modal when clicking outside
+            document.getElementById('successModalOverlay').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeSuccessModal();
+                }
             });
         }
         
@@ -867,108 +1025,50 @@
             return `BLI-${year}${month}${day}-${random}`;
         }
         
-        // Show success message
+        // Show success modal (like your No Loss form)
         function showSuccess() {
             // Use pre-captured data from submission
             const data = window.submissionData || {};
             const customerName = data.customerName || 'Customer';
-            const email = data.email || '';
             const phone = data.phone || '';
             const imageCount = data.imageCount || 0;
             
-            // Generate reference number for display
+            // Generate reference number
             const referenceNumber = generateReferenceNumber();
             
-            // Hide form if it exists
-            if (document.getElementById('imageForm')) {
-                document.getElementById('imageForm').style.display = 'none';
-            }
+            // Update modal content
+            document.getElementById('confirmNumber').textContent = referenceNumber;
+            document.getElementById('modalName').textContent = customerName;
+            document.getElementById('modalPhone').textContent = phone;
+            document.getElementById('modalImages').textContent = imageCount;
             
-            // Show success message
-            const container = document.querySelector('.form-container');
-            container.innerHTML = `
-                <div style="text-align: center; padding: 30px 20px;">
-                    <!-- Success Icon -->
-                    <div style="font-size: 80px; margin-bottom: 20px; animation: checkmark 0.6s ease;">✅</div>
-                    
-                    <!-- Main Success Message -->
-                    <h2 style="color: #28a745; margin-bottom: 20px; font-size: 28px;">
-                        Your Photos Have Been Submitted!
-                    </h2>
-                    
-                    <!-- Reference Number Box -->
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px; padding: 25px; margin: 25px 0; box-shadow: 0 10px 30px rgba(102,126,234,0.3);">
-                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">Your Reference Number</p>
-                        <p style="margin: 10px 0 0 0; font-size: 32px; font-weight: bold; letter-spacing: 1px;">
-                            ${referenceNumber}
-                        </p>
-                        <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">Please save this for your records</p>
-                    </div>
-                    
-                    <!-- Confirmation Details -->
-                    <div style="background: #f0f8ff; border-radius: 12px; padding: 20px; margin-bottom: 25px; text-align: left;">
-                        <h3 style="color: #1e3c72; margin: 0 0 15px 0; font-size: 18px;">📋 Submission Confirmed</h3>
-                        <div style="color: #333; line-height: 1.8;">
-                            <p style="margin: 5px 0;"><strong>Name:</strong> ${customerName}</p>
-                            <p style="margin: 5px 0;"><strong>Phone:</strong> ${phone}</p>
-                            ${email ? `<p style="margin: 5px 0;"><strong>Email:</strong> ${email}</p>` : ''}
-                            <p style="margin: 5px 0;"><strong>Type:</strong> ${data.type === 'HOME' ? '🏠 Home' : '🚗 Vehicle'} ${data.purpose === 'quote' ? 'Quote' : data.purpose === 'add' ? 'Coverage' : 'Documentation'}</p>
-                            <p style="margin: 5px 0;"><strong>Photos Uploaded:</strong> ${imageCount}</p>
-                        </div>
-                    </div>
-                    
-                    <!-- What Happens Next -->
-                    <div style="background: #fff9e6; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
-                        <h3 style="color: #996600; margin: 0 0 15px 0; font-size: 18px;">⏱️ What Happens Next?</h3>
-                        <ol style="text-align: left; margin: 0; padding-left: 20px; color: #666; line-height: 1.8;">
-                            <li style="margin: 8px 0;">Your photos are being reviewed by our team</li>
-                            <li style="margin: 8px 0;">We'll prepare your ${data.purpose === 'quote' ? 'personalized quote' : data.purpose === 'add' ? 'coverage options' : 'documentation'}</li>
-                            <li style="margin: 8px 0;">You'll hear from us within <strong>1-2 business hours</strong></li>
-                            ${email ? '<li style="margin: 8px 0;">Check your email for confirmation</li>' : ''}
-                        </ol>
-                    </div>
-                    
-                    <!-- Contact Section -->
-                    <div style="background: #e8f4f8; border-radius: 12px; padding: 25px;">
-                        <p style="font-size: 16px; color: #1e3c72; margin-bottom: 15px; font-weight: 600;">
-                            Need Immediate Assistance?
-                        </p>
-                        <p style="color: #666; margin-bottom: 20px;">
-                            Our team is here to help!
-                        </p>
-                        <a href="tel:3368351993" style="display: inline-block; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 15px 35px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 18px; box-shadow: 0 5px 15px rgba(30,60,114,0.3);">
-                            📞 Call 336-835-1993
-                        </a>
-                        <p style="margin-top: 15px; color: #666; font-size: 14px;">
-                            Reference: ${referenceNumber}
-                        </p>
-                    </div>
-                    
-                    <!-- Agency Footer -->
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-                        <p style="color: #666; font-size: 14px; line-height: 1.6;">
-                            Thank you for choosing<br>
-                            <strong style="color: #1e3c72; font-size: 16px;">Bill Layne Insurance Agency</strong><br>
-                            1283 N Bridge St, Elkin NC 28621<br>
-                            <a href="https://www.billLayneinsurance.com" style="color: #667eea; text-decoration: none;">www.BillLayneInsurance.com</a>
-                        </p>
-                    </div>
-                </div>
-            `;
+            // Show the modal
+            document.getElementById('successModalOverlay').classList.add('show');
             
-            // Add animation keyframes if not already present
-            if (!document.querySelector('#checkmarkAnimation')) {
-                const style = document.createElement('style');
-                style.id = 'checkmarkAnimation';
-                style.textContent = `
-                    @keyframes checkmark {
-                        0% { transform: scale(0) rotate(0deg); opacity: 0; }
-                        50% { transform: scale(1.2) rotate(10deg); }
-                        100% { transform: scale(1) rotate(0deg); opacity: 1; }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
+            // Store reference for later use
+            window.currentReferenceNumber = referenceNumber;
+            
+            // Log success
+            console.log('Success modal shown with reference:', referenceNumber);
+        }
+        
+        // Close success modal
+        function closeSuccessModal() {
+            document.getElementById('successModalOverlay').classList.remove('show');
+            
+            // Reset form and go back to start
+            document.getElementById('imageForm').style.display = 'block';
+            document.getElementById('imageForm').reset();
+            uploadedImages = [];
+            displayImages();
+            updateImageCounter();
+            
+            // Reset to home type
+            selectedType = 'HOME';
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.type === 'HOME');
+            });
+            toggleSections();
         }
         
         // Show message
