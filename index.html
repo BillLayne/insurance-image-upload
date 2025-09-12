@@ -825,7 +825,11 @@
                     body: JSON.stringify(data)
                 });
                 
-                // Show success
+                // Wait a moment for the request to send (no-cors doesn't give us response)
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Show success - force it to run
+                console.log('Submission sent, showing success screen...');
                 showSuccess();
                 
             } catch (error) {
