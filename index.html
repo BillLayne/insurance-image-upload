@@ -942,6 +942,9 @@
                 return;
             }
             
+            // Generate reference number ONCE here
+            const referenceNumber = generateReferenceNumber();
+            
             // CAPTURE VALUES FIRST - BEFORE ANYTHING ELSE
             const capturedData = {
                 customerName: document.getElementById('customerName').value,
@@ -949,7 +952,8 @@
                 email: document.getElementById('email').value,
                 imageCount: uploadedImages.length,
                 type: selectedType,
-                purpose: selectedPurpose
+                purpose: selectedPurpose,
+                referenceNumber: referenceNumber  // Store the reference number
             };
             
             // Store globally for showSuccess to use
@@ -971,6 +975,7 @@
                 currentCarrier: formData.get('currentCarrier'),
                 policyNumber: formData.get('policyNumber'),
                 notes: formData.get('notes'),
+                referenceNumber: referenceNumber,  // Include reference number for backend
                 images: uploadedImages,
                 submittedAt: new Date().toISOString()
             };
@@ -1033,8 +1038,8 @@
             const phone = data.phone || '';
             const imageCount = data.imageCount || 0;
             
-            // Generate reference number
-            const referenceNumber = generateReferenceNumber();
+            // Use the SAME reference number that was sent to backend
+            const referenceNumber = data.referenceNumber || generateReferenceNumber();
             
             // Update modal content
             document.getElementById('confirmNumber').textContent = referenceNumber;
