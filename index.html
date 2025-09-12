@@ -549,6 +549,133 @@
                     <span class="counter" id="imageCounter">0</span>
                 </h3>
                 
+                <!-- Photo Instructions - Dynamic based on type AND purpose -->
+                <div id="photoInstructions" style="background: #e8f4f8; border-left: 4px solid #17a2b8; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+                    <h4 style="color: #17a2b8; margin: 0 0 10px 0; font-size: 16px;">📷 Photo Guidelines</h4>
+                    
+                    <!-- HOME + QUOTE -->
+                    <div id="home-quote" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>For an accurate home insurance quote, please include:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>All 4 sides of your home</strong> - Front, back, left, and right views</li>
+                            <li><strong>Roof angle</strong> - Best visible angle showing roof condition</li>
+                            <li><strong>Any detached structures</strong> - Garage, shed, pool house, etc.</li>
+                            <li><strong>Special features</strong> - Pool, deck, hot tub, solar panels, etc.</li>
+                        </ul>
+                        <p style="margin: 10px 0 0 0; color: #666; font-size: 13px; font-style: italic;">
+                            💡 Tip: Stand back to capture the entire structure in each photo
+                        </p>
+                    </div>
+                    
+                    <!-- HOME + ADD -->
+                    <div id="home-add" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>To add coverage for new additions/improvements:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>New addition/improvement</strong> - Multiple angles</li>
+                            <li><strong>Overall home view</strong> - Showing new addition in context</li>
+                            <li><strong>Close-up details</strong> - Materials, fixtures, special features</li>
+                            <li><strong>Receipts/invoices</strong> - If available for valuation</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- HOME + CLAIM -->
+                    <div id="home-claim" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>For claim documentation, please include:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>All damaged areas</strong> - Wide shots and close-ups</li>
+                            <li><strong>Cause of damage</strong> - If visible (tree, water source, etc.)</li>
+                            <li><strong>Affected rooms/areas</strong> - Multiple angles</li>
+                            <li><strong>Damaged personal property</strong> - Individual items</li>
+                            <li><strong>Overall context</strong> - Showing extent of damage</li>
+                        </ul>
+                        <p style="margin: 10px 0 0 0; color: #dc3545; font-size: 13px; font-weight: 600;">
+                            ⚠️ Document everything before making repairs if safe to do so
+                        </p>
+                    </div>
+                    
+                    <!-- HOME + REVIEW -->
+                    <div id="home-review" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>For policy review, please include:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>Current renewal notice</strong> - All pages</li>
+                            <li><strong>Declaration page</strong> - From current policy</li>
+                            <li><strong>Any changes to property</strong> - New additions, renovations</li>
+                            <li><strong>Updated home photos</strong> - If significant changes made</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- VEHICLE + QUOTE -->
+                    <div id="vehicle-quote" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>For an accurate auto insurance quote, please include:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>All 4 sides of vehicle</strong> - Front, back, both sides</li>
+                            <li><strong>VIN number</strong> - Dashboard or driver door frame</li>
+                            <li><strong>Odometer reading</strong> - Current mileage</li>
+                            <li><strong>License plates</strong> - Front and back if applicable</li>
+                            <li><strong>Any existing damage</strong> - Document pre-existing issues</li>
+                        </ul>
+                        <p style="margin: 10px 0 0 0; color: #666; font-size: 13px; font-style: italic;">
+                            💡 Tip: Clean vehicle and take photos in good lighting
+                        </p>
+                    </div>
+                    
+                    <!-- VEHICLE + ADD -->
+                    <div id="vehicle-add" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>To add a vehicle to your policy:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>All 4 sides of new vehicle</strong> - Complete views</li>
+                            <li><strong>VIN number</strong> - Clear photo</li>
+                            <li><strong>Purchase paperwork</strong> - Bill of sale or dealer invoice</li>
+                            <li><strong>Title or registration</strong> - If available</li>
+                            <li><strong>Odometer reading</strong> - Current mileage</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- VEHICLE + CLAIM -->
+                    <div id="vehicle-claim" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>For auto claim documentation:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>All damage areas</strong> - Multiple angles and close-ups</li>
+                            <li><strong>Impact points</strong> - Where contact occurred</li>
+                            <li><strong>Interior damage</strong> - If applicable</li>
+                            <li><strong>Other vehicle(s)</strong> - If multi-vehicle accident</li>
+                            <li><strong>Scene photos</strong> - Location, road conditions if relevant</li>
+                            <li><strong>Police report number</strong> - Photo of exchange slip or report</li>
+                        </ul>
+                        <p style="margin: 10px 0 0 0; color: #dc3545; font-size: 13px; font-weight: 600;">
+                            ⚠️ Take photos before moving vehicle if safe to do so
+                        </p>
+                    </div>
+                    
+                    <!-- VEHICLE + REVIEW -->
+                    <div id="vehicle-review" class="photo-instruction" style="display: none;">
+                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                            <strong>For auto policy review, please include:</strong>
+                        </p>
+                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
+                            <li><strong>Current renewal notice</strong> - All pages</li>
+                            <li><strong>Declaration page</strong> - From current policy</li>
+                            <li><strong>Current registration</strong> - For all vehicles</li>
+                            <li><strong>Driver's licenses</strong> - All household drivers</li>
+                            <li><strong>Updated vehicle photos</strong> - If changes/modifications made</li>
+                        </ul>
+                    </div>
+                </div>
+                
                 <div class="image-upload-section">
                     <div class="upload-area" id="uploadArea">
                         <div class="upload-icon">📷</div>
@@ -556,7 +683,7 @@
                         <div class="upload-subtext">or drag and drop</div>
                         
                         <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
-                        <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="environment">
+                        <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="camera">
                         
                         <div>
                             <button type="button" class="camera-btn" id="cameraBtn">
@@ -761,6 +888,7 @@
             setupEventListeners();
             loadFromURL();
             updateImageCounter();
+            updatePhotoInstructions(); // Show initial instructions
         });
         
         // Setup Event Listeners
@@ -781,6 +909,8 @@
                     document.querySelectorAll('.purpose-option').forEach(o => o.classList.remove('active'));
                     this.classList.add('active');
                     selectedPurpose = this.dataset.purpose;
+                    // Update photo instructions when purpose changes
+                    updatePhotoInstructions();
                 });
             });
             
@@ -835,12 +965,31 @@
         
         // Toggle sections based on type
         function toggleSections() {
+            // Toggle property/vehicle sections
             if (selectedType === 'HOME') {
                 document.getElementById('propertySection').style.display = 'block';
                 document.getElementById('vehicleSection').style.display = 'none';
             } else {
                 document.getElementById('propertySection').style.display = 'none';
                 document.getElementById('vehicleSection').style.display = 'block';
+            }
+            
+            // Update photo instructions based on both type and purpose
+            updatePhotoInstructions();
+        }
+        
+        // Update photo instructions based on type and purpose
+        function updatePhotoInstructions() {
+            // Hide all instruction sets
+            document.querySelectorAll('.photo-instruction').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Show the correct instruction set
+            const instructionId = `${selectedType.toLowerCase()}-${selectedPurpose}`;
+            const instructionElement = document.getElementById(instructionId);
+            if (instructionElement) {
+                instructionElement.style.display = 'block';
             }
         }
         
