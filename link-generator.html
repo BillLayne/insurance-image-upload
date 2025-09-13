@@ -4,224 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Collection Link Generator - Bill Layne Insurance</title>
+    
+    <!-- Tailwind CSS CDN for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* Custom styles not available in Tailwind */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px 10px;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+
+        /* Thicker border for interactive buttons on hover/active */
+        .interactive-border:hover, .interactive-border:focus, .interactive-border.active {
+            border-width: 2px;
+            border-color: #6366F1;
         }
         
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        
-        .instructions-box {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .instructions-box h3 {
-            color: #d63384;
-            font-size: 18px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .instructions-box ol {
-            margin-left: 20px;
-            color: #333;
-            line-height: 1.8;
-        }
-        
-        .instructions-box li {
-            margin-bottom: 8px;
-        }
-        
-        .instructions-box .highlight {
-            color: #dc3545;
-            font-weight: 600;
-        }
-        
-        .form-container {
-            padding: 30px;
-        }
-        
-        .type-selector {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        
-        .type-btn {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #e1e8ed;
-            border-radius: 12px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .type-btn.active {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .type-btn .icon {
-            font-size: 24px;
-            margin-bottom: 5px;
-            display: block;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 0;
-        }
-        
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        label {
-            display: block;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-            background: #f8f9fa;
-        }
-        
-        input:focus, select:focus {
+        /* Custom focus styles for inputs and selects */
+        .form-input-focus:focus {
+            border-width: 3px;
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
             outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
         }
-        
-        .purpose-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+
+        /* Output text styling */
+        .output-content {
+            white-space: pre-wrap;
+            word-break: break-all;
         }
-        
-        .purpose-option {
-            padding: 12px;
-            border: 2px solid #e1e8ed;
-            border-radius: 10px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .purpose-option.active {
-            border-color: #667eea;
-            background: #f8f4ff;
-            color: #667eea;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-        }
-        
-        .btn {
-            padding: 14px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .output-section {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-        }
-        
+
+        /* Show/hide animation */
         .output-section.show {
             display: block;
             animation: slideDown 0.5s ease-out;
@@ -237,270 +53,100 @@
                 transform: translateY(0);
             }
         }
-        
-        .output-group {
-            margin-bottom: 20px;
-        }
-        
-        .output-label {
-            font-weight: 600;
-            color: #2a5298;
-            margin-bottom: 10px;
-            display: block;
-            font-size: 14px;
-        }
-        
-        .output-content {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            position: relative;
-            word-break: break-all;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-        
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .copy-btn:hover {
-            background: #5568d3;
-        }
-        
-        .copy-btn.copied {
-            background: #4CAF50;
-        }
-        
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .action-btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-            color: white;
-        }
-        
-        .action-btn.copy-matrix {
-            background: #28a745;
-            grid-column: 1 / -1;
-        }
-        
-        .action-btn.copy-matrix:hover {
-            background: #218838;
-        }
-        
-        .action-btn.send-email {
-            background: #17a2b8;
-        }
-        
-        .action-btn.send-email:hover {
-            background: #138496;
-        }
-        
-        .action-btn.open-matrix {
-            background: #ffc107;
-            color: #333;
-        }
-        
-        .action-btn.open-matrix:hover {
-            background: #e0a800;
-        }
-        
-        .action-btn.copy-link {
-            background: #6c757d;
-        }
-        
-        .action-btn.copy-link:hover {
-            background: #5a6268;
-        }
-        
-        .action-btn.test-link {
-            background: #dc3545;
-        }
-        
-        .action-btn.test-link:hover {
-            background: #c82333;
-        }
-        
-        .action-btn.website {
-            background: #563d7c;
-        }
-        
-        .action-btn.website:hover {
-            background: #452e5f;
-        }
-        
-        .success-message {
-            background: #4CAF50;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
-        
-        .success-message.show {
-            display: block;
-            animation: slideDown 0.5s ease-out;
-        }
-        
-        .qr-code {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-        
-        .qr-code img {
-            border: 2px solid #e1e8ed;
-            border-radius: 10px;
-            padding: 10px;
-            background: white;
-        }
-        
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .purpose-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .action-btn.copy-matrix {
-                grid-column: 1;
-            }
-            
-            .button-group {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📸 Image Collection Link Generator</h1>
-            <p>Bill Layne Insurance Agency - Staff Tool</p>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen py-8 px-4">
+    <div class="container w-full max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden md:p-8">
+        <!-- Header -->
+        <div class="header bg-gradient-to-br from-indigo-600 to-indigo-800 text-white p-6 rounded-t-3xl md:rounded-t-2xl text-center">
+            <h1 class="text-3xl font-bold mt-1">📸 Image Collection Link Generator</h1>
+            <p class="text-sm opacity-90 mt-2">Bill Layne Insurance Agency - Staff Tool</p>
         </div>
         
-        <div class="instructions-box">
-            <h3>⚡ Quick Instructions:</h3>
-            <ol>
-                <li>Select <span class="highlight">Home or Vehicle</span> type</li>
-                <li>Choose the <span class="highlight">purpose</span> (Quote, Add Coverage, etc.)</li>
-                <li>Fill in customer's information</li>
-                <li>Click "Generate Link"</li>
-                <li>Copy text & open Agency Matrix -OR- Send via email</li>
-                <li>Customer clicks link → Takes photos → Auto-submits to <strong>Docs@BillLayneInsurance.com</strong></li>
+        <!-- Instructions -->
+        <div class="instructions-box bg-yellow-50 border-l-4 border-yellow-400 p-6 m-6 rounded-lg shadow-sm">
+            <h3 class="flex items-center text-lg font-semibold text-pink-600 mb-4 gap-2">
+                ⚡ Quick Instructions:
+            </h3>
+            <ol class="list-decimal list-inside text-gray-700 text-sm space-y-2">
+                <li>Select the **Home** or **Vehicle** type</li>
+                <li>Choose the **purpose** (Quote, Add Coverage, etc.)</li>
+                <li>Fill in the customer's information</li>
+                <li>Click **"Generate Link"**</li>
+                <li>Copy the link or template to send to the customer</li>
+                <li>Customer clicks the link → Takes photos → Auto-submits to **Docs@BillLayneInsurance.com**</li>
             </ol>
         </div>
         
-        <div class="form-container">
+        <div class="form-container p-6 md:p-8">
             <form id="linkGenerator">
                 <!-- Type Selection -->
-                <label style="font-weight: 600; color: #1e3c72; margin-bottom: 10px;">Type of Request:</label>
-                <div class="type-selector">
-                    <div class="type-btn active" data-type="HOME">
-                        <span class="icon">🏠</span>
-                        Home
+                <label class="block text-sm font-semibold text-gray-800 mb-2">Type of Request:</label>
+                <div class="type-selector flex gap-2 mb-6">
+                    <div class="type-btn flex-1 p-4 border-2 border-gray-200 rounded-xl bg-white cursor-pointer transition-all duration-300 text-center hover:shadow-sm" data-type="HOME">
+                        <span class="text-2xl block mb-1">🏠</span>
+                        <span class="text-sm font-semibold text-gray-700">Home</span>
                     </div>
-                    <div class="type-btn" data-type="VEHICLE">
-                        <span class="icon">🚗</span>
-                        Vehicle
+                    <div class="type-btn flex-1 p-4 border-2 border-gray-200 rounded-xl bg-white cursor-pointer transition-all duration-300 text-center hover:shadow-sm" data-type="VEHICLE">
+                        <span class="text-2xl block mb-1">🚗</span>
+                        <span class="text-sm font-semibold text-gray-700">Vehicle</span>
                     </div>
                 </div>
                 
                 <!-- Purpose Selection -->
-                <label style="font-weight: 600; color: #1e3c72; margin-bottom: 10px;">Purpose:</label>
-                <div class="purpose-grid">
-                    <div class="purpose-option active" data-purpose="quote">
+                <label class="block text-sm font-semibold text-gray-800 mb-2">Purpose:</label>
+                <div class="purpose-grid grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+                    <div class="purpose-option p-3 border-2 border-gray-200 rounded-xl bg-white cursor-pointer transition-all duration-300 text-center text-sm font-medium text-gray-700 hover:shadow-sm" data-purpose="quote">
                         Quote Request
                     </div>
-                    <div class="purpose-option" data-purpose="add">
+                    <div class="purpose-option p-3 border-2 border-gray-200 rounded-xl bg-white cursor-pointer transition-all duration-300 text-center text-sm font-medium text-gray-700 hover:shadow-sm" data-purpose="add">
                         Add Coverage
                     </div>
-                    <div class="purpose-option" data-purpose="claim">
+                    <div class="purpose-option p-3 border-2 border-gray-200 rounded-xl bg-white cursor-pointer transition-all duration-300 text-center text-sm font-medium text-gray-700 hover:shadow-sm" data-purpose="claim">
                         Claim
                     </div>
-                    <div class="purpose-option" data-purpose="review">
+                    <div class="purpose-option p-3 border-2 border-gray-200 rounded-xl bg-white cursor-pointer transition-all duration-300 text-center text-sm font-medium text-gray-700 hover:shadow-sm" data-purpose="review">
                         Policy Review
                     </div>
                 </div>
                 
                 <!-- Customer Information -->
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label for="customerName">Customer Name</label>
-                        <input type="text" id="customerName" required placeholder="John Smith">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" required placeholder="(336) 555-1234">
+                <div class="form-section mb-6">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">👤 Customer Information</h4>
+                    <div class="form-group mb-4">
+                        <label for="customerName" class="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
+                        <input type="text" id="customerName" required placeholder="John Smith" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
                     </div>
                     
-                    <div class="form-group">
-                        <label for="email">Email Address (Optional)</label>
-                        <input type="email" id="email" placeholder="customer@email.com">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="form-group">
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                            <input type="tel" id="phone" required placeholder="(336) 555-1234" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address (Optional)</label>
+                            <input type="email" id="email" placeholder="customer@email.com" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Property Address (for Home) -->
-                <div id="propertyFields">
-                    <h4 style="color: #2a5298; margin: 20px 0 15px;">Property Address</h4>
+                <div id="propertyFields" class="form-section mb-6">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">🏠 Property Address</h4>
                     
-                    <div class="form-group full-width">
-                        <label for="address">Street Address</label>
-                        <input type="text" id="address" placeholder="123 Main Street">
+                    <div class="form-group mb-4">
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+                        <input type="text" id="address" placeholder="123 Main Street" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
                     </div>
                     
-                    <div class="form-row">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div class="form-group">
-                            <label for="city">City</label>
-                            <input type="text" id="city" placeholder="Elkin">
+                            <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                            <input type="text" id="city" placeholder="Elkin" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
                         </div>
-                        
                         <div class="form-group">
-                            <label for="state">State</label>
-                            <select id="state">
+                            <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                            <select id="state" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base appearance-none">
                                 <option value="">Select State</option>
                                 <option value="NC" selected>North Carolina</option>
                                 <option value="SC">South Carolina</option>
@@ -511,110 +157,127 @@
                         </div>
                     </div>
                     
-                    <div class="form-group" style="max-width: 200px;">
-                        <label for="zip">ZIP Code</label>
-                        <input type="text" id="zip" placeholder="28621" maxlength="5">
+                    <div class="form-group max-w-[200px]">
+                        <label for="zip" class="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
+                        <input type="text" id="zip" placeholder="28621" maxlength="5" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
                     </div>
                 </div>
                 
                 <!-- Vehicle Info (for Vehicle) -->
-                <div id="vehicleFields" style="display: none;">
-                    <h4 style="color: #2a5298; margin: 20px 0 15px;">Vehicle Information</h4>
+                <div id="vehicleFields" class="form-section mb-6 hidden">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">🚗 Vehicle Information</h4>
                     
-                    <div class="form-group full-width">
-                        <label for="vehicleInfo">Vehicle Details</label>
-                        <input type="text" id="vehicleInfo" placeholder="2024 Toyota Camry or VIN#">
+                    <div class="form-group">
+                        <label for="vehicleInfo" class="block text-sm font-medium text-gray-700 mb-1">Vehicle Details</label>
+                        <input type="text" id="vehicleInfo" placeholder="2024 Toyota Camry or VIN#" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
                     </div>
                 </div>
                 
                 <!-- Insurance Information -->
-                <h4 style="color: #2a5298; margin: 20px 0 15px;">Insurance Information (Optional)</h4>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="currentCarrier">Current Carrier</label>
-                        <select id="currentCarrier">
-                            <option value="">Select Carrier</option>
-                            <option value="Nationwide">Nationwide</option>
-                            <option value="Progressive">Progressive</option>
-                            <option value="National General">National General</option>
-                            <option value="Alamance">Alamance</option>
-                            <option value="Travelers">Travelers</option>
-                            <option value="Foremost">Foremost</option>
-                            <option value="State Farm">State Farm</option>
-                            <option value="Allstate">Allstate</option>
-                            <option value="GEICO">GEICO</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                <div class="form-section mb-6">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">📝 Insurance Information (Optional)</h4>
                     
-                    <div class="form-group">
-                        <label for="policyNumber">Policy Number</label>
-                        <input type="text" id="policyNumber" placeholder="POL123456">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="currentCarrier" class="block text-sm font-medium text-gray-700 mb-1">Current Carrier</label>
+                            <select id="currentCarrier" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base appearance-none">
+                                <option value="">Select Carrier</option>
+                                <option value="Nationwide">Nationwide</option>
+                                <option value="Progressive">Progressive</option>
+                                <option value="National General">National General</option>
+                                <option value="Alamance">Alamance</option>
+                                <option value="Travelers">Travelers</option>
+                                <option value="Foremost">Foremost</option>
+                                <option value="State Farm">State Farm</option>
+                                <option value="Allstate">Allstate</option>
+                                <option value="GEICO">GEICO</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="policyNumber" class="block text-sm font-medium text-gray-700 mb-1">Policy Number</label>
+                            <input type="text" id="policyNumber" placeholder="POL123456" class="w-full p-3 border-2 border-gray-300 rounded-xl form-input-focus transition-all duration-200 text-base">
+                        </div>
                     </div>
                 </div>
                 
-                <div class="button-group">
-                    <button type="submit" class="btn btn-primary">Generate Link</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+                <div class="button-group flex flex-col md:flex-row gap-4 mt-6">
+                    <button type="submit" class="btn btn-primary w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        Generate Link
+                    </button>
+                    <button type="button" class="btn btn-secondary w-full py-4 bg-gray-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105" onclick="clearForm()">
+                        Clear Form
+                    </button>
                 </div>
             </form>
             
-            <div id="output" class="output-section">
-                <div class="output-group">
-                    <label class="output-label">📱 Direct Upload Link</label>
-                    <div class="output-content">
-                        <span id="generatedLink"></span>
-                        <button class="copy-btn" onclick="copyToClipboard('generatedLink')">Copy</button>
+            <div id="output" class="output-section hidden mt-8 bg-gray-50 p-6 rounded-xl shadow-sm">
+                <div class="output-group mb-6">
+                    <label class="output-label text-indigo-800 text-sm font-bold mb-2 block">📱 Direct Upload Link</label>
+                    <div class="output-content relative bg-white p-4 rounded-lg border border-gray-300">
+                        <span id="generatedLink" class="text-sm"></span>
+                        <button class="copy-btn absolute top-2 right-2 px-3 py-1 bg-indigo-500 text-white text-xs font-semibold rounded-md hover:bg-indigo-600 transition-colors duration-200" onclick="copyToClipboard('generatedLink')">
+                            Copy
+                        </button>
                     </div>
                 </div>
                 
-                <div class="output-group">
-                    <label class="output-label">💬 Text Message Template</label>
-                    <div class="output-content">
-                        <span id="textTemplate"></span>
-                        <button class="copy-btn" onclick="copyToClipboard('textTemplate')">Copy</button>
+                <div class="output-group mb-6">
+                    <label class="output-label text-indigo-800 text-sm font-bold mb-2 block">💬 Text Message Template</label>
+                    <div class="output-content relative bg-white p-4 rounded-lg border border-gray-300">
+                        <span id="textTemplate" class="text-sm"></span>
+                        <button class="copy-btn absolute top-2 right-2 px-3 py-1 bg-indigo-500 text-white text-xs font-semibold rounded-md hover:bg-indigo-600 transition-colors duration-200" onclick="copyToClipboard('textTemplate')">
+                            Copy
+                        </button>
                     </div>
                 </div>
                 
-                <div class="output-group">
-                    <label class="output-label">📧 Email Template</label>
-                    <div class="output-content">
-                        <span id="emailTemplate"></span>
-                        <button class="copy-btn" onclick="copyToClipboard('emailTemplate')">Copy</button>
+                <div class="output-group mb-6">
+                    <label class="output-label text-indigo-800 text-sm font-bold mb-2 block">📧 Email Template</label>
+                    <div class="output-content relative bg-white p-4 rounded-lg border border-gray-300">
+                        <span id="emailTemplate" class="text-sm"></span>
+                        <button class="copy-btn absolute top-2 right-2 px-3 py-1 bg-indigo-500 text-white text-xs font-semibold rounded-md hover:bg-indigo-600 transition-colors duration-200" onclick="copyToClipboard('emailTemplate')">
+                            Copy
+                        </button>
                     </div>
                 </div>
                 
-                <div class="action-buttons">
-                    <button class="action-btn copy-matrix" onclick="copyAndOpenMatrix()">
+                <div class="action-buttons grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="action-btn w-full py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200" onclick="copyAndOpenMatrix()">
                         📋 Copy Text & Open Agency Matrix
                     </button>
-                    <a href="#" id="emailLink" class="action-btn send-email" onclick="openGmailCompose(event)">
+                    <a href="#" id="emailLink" class="action-btn w-full py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center" onclick="openGmailCompose(event)">
                         ✉️ Send Email (Gmail)
                     </a>
-                    <button class="action-btn open-matrix" onclick="openMatrix()">
+                    <button class="action-btn w-full py-3 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-yellow-500 transition-colors duration-200" onclick="openMatrix()">
                         🚀 Open Agency Matrix
                     </button>
-                    <button class="action-btn copy-link" onclick="copyLinkOnly()">
+                    <button class="action-btn w-full py-3 bg-gray-600 text-white font-semibold rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-200" onclick="copyLinkOnly()">
                         🔗 Copy Link Only
                     </button>
-                    <a href="#" id="testLink" class="action-btn test-link" onclick="testLink(event)">
+                    <a href="#" id="testLink" class="action-btn w-full py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition-colors duration-200 flex items-center justify-center" onclick="testLink(event)">
                         🔍 Test Link
                     </a>
-                    <a href="https://www.BillLayneInsurance.com" target="_blank" class="action-btn website">
+                    <a href="https://www.BillLayneInsurance.com" target="_blank" class="action-btn w-full py-3 bg-purple-800 text-white font-semibold rounded-lg shadow-md hover:bg-purple-900 transition-colors duration-200 flex items-center justify-center">
                         🌐 Agency Website
                     </a>
                 </div>
                 
-                <div class="qr-code" id="qrCode"></div>
+                <div class="qr-code text-center my-6 p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
+                    <label class="text-sm font-semibold text-gray-800 mb-2 block">QR Code (for printing or in-person)</label>
+                    <img id="qrCodeImage" src="" alt="QR Code" class="max-w-[200px] mx-auto border-2 border-gray-300 rounded-lg p-2">
+                    <p class="text-xs text-gray-500 mt-2">Scan to open the upload form</p>
+                </div>
                 
-                <div id="successMessage" class="success-message">
+                <div id="successMessage" class="success-message hidden bg-green-500 text-white font-bold p-4 rounded-lg text-center mt-6">
                     ✅ Text copied! Opening Agency Matrix to customer search...
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- The original JavaScript functions are retained here -->
     <script>
         const BASE_URL = 'https://billlayne.github.io/insurance-image-upload/';
         let selectedType = 'HOME';
@@ -630,20 +293,32 @@
             // Type selection
             document.querySelectorAll('.type-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('bg-indigo-500', 'text-white', 'shadow-md'));
+                    this.classList.add('bg-indigo-500', 'text-white', 'shadow-md');
                     selectedType = this.dataset.type;
                     toggleFields();
                 });
+            });
+            // Initial active state for type buttons
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                if (btn.dataset.type === selectedType) {
+                    btn.classList.add('bg-indigo-500', 'text-white', 'shadow-md');
+                }
             });
             
             // Purpose selection
             document.querySelectorAll('.purpose-option').forEach(option => {
                 option.addEventListener('click', function() {
-                    document.querySelectorAll('.purpose-option').forEach(o => o.classList.remove('active'));
-                    this.classList.add('active');
+                    document.querySelectorAll('.purpose-option').forEach(o => o.classList.remove('bg-indigo-100', 'border-indigo-500'));
+                    this.classList.add('bg-indigo-100', 'border-indigo-500');
                     selectedPurpose = this.dataset.purpose;
                 });
+            });
+            // Initial active state for purpose buttons
+            document.querySelectorAll('.purpose-option').forEach(option => {
+                if (option.dataset.purpose === selectedPurpose) {
+                    option.classList.add('bg-indigo-100', 'border-indigo-500');
+                }
             });
             
             // Phone formatting
@@ -663,11 +338,11 @@
         
         function toggleFields() {
             if (selectedType === 'HOME') {
-                document.getElementById('propertyFields').style.display = 'block';
-                document.getElementById('vehicleFields').style.display = 'none';
+                document.getElementById('propertyFields').classList.remove('hidden');
+                document.getElementById('vehicleFields').classList.add('hidden');
             } else {
-                document.getElementById('propertyFields').style.display = 'none';
-                document.getElementById('vehicleFields').style.display = 'block';
+                document.getElementById('propertyFields').classList.add('hidden');
+                document.getElementById('vehicleFields').classList.remove('hidden');
             }
         }
         
@@ -830,11 +505,11 @@ www.BillLayneInsurance.com`;
                 const btn = event.target;
                 const originalText = btn.textContent;
                 btn.textContent = 'Copied!';
-                btn.classList.add('copied');
+                btn.classList.add('bg-green-600', 'hover:bg-green-700');
                 
                 setTimeout(() => {
                     btn.textContent = originalText;
-                    btn.classList.remove('copied');
+                    btn.classList.remove('bg-green-600', 'hover:bg-green-700');
                 }, 2000);
             });
         }
@@ -848,7 +523,7 @@ www.BillLayneInsurance.com`;
             navigator.clipboard.writeText(textTemplate).then(() => {
                 // Show success message
                 const successMsg = document.getElementById('successMessage');
-                successMsg.classList.add('show');
+                successMsg.classList.remove('hidden');
                 
                 // Open Agency Matrix with phone number search
                 const phoneNumber = generatedData.phoneClean;
@@ -857,7 +532,7 @@ www.BillLayneInsurance.com`;
                 
                 // Hide success message after 3 seconds
                 setTimeout(() => {
-                    successMsg.classList.remove('show');
+                    successMsg.classList.add('hidden');
                 }, 3000);
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
@@ -889,10 +564,10 @@ www.BillLayneInsurance.com`;
             // Show brief success message
             const successMsg = document.getElementById('successMessage');
             successMsg.textContent = '✅ Opening Gmail with email ready to send...';
-            successMsg.classList.add('show');
+            successMsg.classList.remove('hidden');
             
             setTimeout(() => {
-                successMsg.classList.remove('show');
+                successMsg.classList.add('hidden');
                 successMsg.textContent = '✅ Text copied! Opening Agency Matrix to customer search...';
             }, 2000);
         }
@@ -901,10 +576,10 @@ www.BillLayneInsurance.com`;
             navigator.clipboard.writeText(generatedData.link).then(() => {
                 const successMsg = document.getElementById('successMessage');
                 successMsg.textContent = '✅ Link copied to clipboard!';
-                successMsg.classList.add('show');
+                successMsg.classList.remove('hidden');
                 
                 setTimeout(() => {
-                    successMsg.classList.remove('show');
+                    successMsg.classList.add('hidden');
                     successMsg.textContent = '✅ Text copied! Opening Agency Matrix to customer search...';
                 }, 3000);
             });
@@ -920,27 +595,29 @@ www.BillLayneInsurance.com`;
         function generateQRCode() {
             // Using QR Server API for simplicity
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(generatedData.link)}`;
-            const qrHtml = `
-                <label style="font-weight: 600; display: block; margin-bottom: 10px; color: #2a5298;">QR Code (for printing or in-person)</label>
-                <img src="${qrUrl}" alt="QR Code" style="max-width: 200px;">
-                <p style="font-size: 12px; color: #666; margin-top: 10px;">Scan to open the upload form</p>
-            `;
-            document.getElementById('qrCode').innerHTML = qrHtml;
+            const qrCodeImage = document.getElementById('qrCodeImage');
+            qrCodeImage.src = qrUrl;
         }
         
         function clearForm() {
             document.getElementById('linkGenerator').reset();
-            document.getElementById('output').classList.remove('show');
+            document.getElementById('output').classList.add('hidden');
             generatedData = {};
             selectedType = 'HOME';
             selectedPurpose = 'quote';
             
             // Reset active states
             document.querySelectorAll('.type-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.type === 'HOME');
+                btn.classList.remove('bg-indigo-500', 'text-white', 'shadow-md');
+                if (btn.dataset.type === 'HOME') {
+                    btn.classList.add('bg-indigo-500', 'text-white', 'shadow-md');
+                }
             });
             document.querySelectorAll('.purpose-option').forEach(option => {
-                option.classList.toggle('active', option.dataset.purpose === 'quote');
+                option.classList.remove('bg-indigo-100', 'border-indigo-500');
+                if (option.dataset.purpose === 'quote') {
+                    option.classList.add('bg-indigo-100', 'border-indigo-500');
+                }
             });
             toggleFields();
         }
