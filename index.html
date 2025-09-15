@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a4789">
     <title>Quick Photo Upload - Bill Layne Insurance</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/cBAgeX8.png">
+    
+    <!-- Modern Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -16,10 +25,10 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            padding: 10px;
+            padding: 15px;
             overflow-x: hidden;
         }
         
@@ -27,170 +36,205 @@
             max-width: 500px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 10px 15px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: #1a4789;
             color: white;
-            padding: 20px;
+            padding: 30px 25px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         
-        
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-            font-weight: 600;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+            pointer-events: none;
         }
         
         .header h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
+            font-size: 16px;
             font-weight: 500;
-            opacity: 0.95;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
         .header p {
             font-size: 14px;
-            opacity: 0.9;
+            opacity: 0.85;
+            font-weight: 400;
         }
         
         .type-selector {
             display: flex;
-            padding: 20px;
-            gap: 10px;
-            background: #f8f9fa;
+            padding: 25px 20px;
+            gap: 12px;
+            background: #fafbfc;
+            border-bottom: 1px solid #e8ecf0;
         }
         
         .type-btn {
             flex: 1;
-            padding: 15px;
-            border: 2px solid #e1e8ed;
+            padding: 16px;
+            border: 1.5px solid #e2e8f0;
             border-radius: 12px;
             background: white;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             text-align: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .type-btn:active {
+            transform: scale(0.98);
         }
         
         .type-btn.active {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #1a4789;
+            background: #1a4789;
             color: white;
+            box-shadow: 0 2px 8px rgba(26,71,137,0.2);
         }
         
         .type-btn .icon {
-            font-size: 30px;
-            margin-bottom: 5px;
+            font-size: 32px;
+            margin-bottom: 6px;
         }
         
         .type-btn .label {
             font-size: 14px;
             font-weight: 600;
+            letter-spacing: -0.2px;
         }
         
         .form-container {
-            padding: 20px;
+            padding: 25px 20px;
         }
         
         .form-section {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
         
         .section-title {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
-            color: #1e3c72;
-            margin-bottom: 15px;
+            color: #1a4789;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            letter-spacing: -0.3px;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
         }
         
         label {
             display: block;
             font-size: 14px;
             font-weight: 500;
-            color: #333;
-            margin-bottom: 6px;
+            color: #4a5568;
+            margin-bottom: 8px;
+            letter-spacing: -0.1px;
         }
         
         input, select, textarea {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e8ed;
+            padding: 14px 16px;
+            border: 1px solid #e2e8f0;
             border-radius: 10px;
             font-size: 16px;
-            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
             -webkit-appearance: none;
+            background: white;
         }
         
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+            border-color: #1a4789;
+            box-shadow: 0 0 0 3px rgba(26,71,137,0.08);
+        }
+        
+        input::placeholder {
+            color: #a0aec0;
         }
         
         select {
-            background: white url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") right 12px center no-repeat;
-            background-size: 20px;
-            padding-right: 40px;
+            background: white url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") right 14px center no-repeat;
+            background-size: 18px;
+            padding-right: 42px;
         }
         
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 90px;
+            line-height: 1.5;
         }
         
         .image-upload-section {
-            background: #f8f9fa;
+            background: #f8fafc;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
         }
         
         .upload-area {
-            border: 2px dashed #667eea;
+            border: 2px dashed #cbd5e0;
             border-radius: 12px;
-            padding: 30px 20px;
+            padding: 35px 20px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             background: white;
+            position: relative;
         }
         
         .upload-area:hover {
-            border-color: #764ba2;
-            background: #f8f4ff;
+            border-color: #1a4789;
+            background: #f7fafd;
         }
         
         .upload-area.dragover {
-            background: #f0e6ff;
-            border-color: #764ba2;
+            background: #e6f2ff;
+            border-color: #1a4789;
         }
         
         .upload-icon {
             font-size: 48px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            filter: grayscale(20%);
         }
         
         .upload-text {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+            color: #2d3748;
+            margin-bottom: 6px;
+            letter-spacing: -0.2px;
         }
         
         .upload-subtext {
             font-size: 14px;
-            color: #666;
+            color: #718096;
         }
         
         .file-input {
@@ -199,35 +243,43 @@
         
         .camera-btn, .gallery-btn {
             display: inline-block;
-            padding: 12px 24px;
-            margin: 10px 5px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 13px 24px;
+            margin: 12px 4px 0;
+            background: #1a4789;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
+            letter-spacing: -0.1px;
+        }
+        
+        .camera-btn:hover, .gallery-btn:hover {
+            background: #15396e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(26,71,137,0.25);
         }
         
         .camera-btn:active, .gallery-btn:active {
-            transform: scale(0.95);
+            transform: translateY(0);
         }
         
         .image-preview {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 18px;
         }
         
         .preview-item {
             position: relative;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
             aspect-ratio: 1;
-            background: #f0f0f0;
+            background: #f1f5f9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
         }
         
         .preview-item img {
@@ -238,30 +290,37 @@
         
         .preview-item .remove-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(255,0,0,0.8);
+            top: 6px;
+            right: 6px;
+            background: rgba(239,68,68,0.9);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             font-size: 18px;
             line-height: 1;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .preview-item .remove-btn:hover {
+            background: rgba(220,38,38,1);
+            transform: scale(1.1);
         }
         
         .preview-item .image-number {
             position: absolute;
-            bottom: 5px;
-            left: 5px;
-            background: rgba(0,0,0,0.7);
+            bottom: 6px;
+            left: 6px;
+            background: rgba(0,0,0,0.75);
             color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
         }
@@ -269,27 +328,49 @@
         .submit-btn {
             width: 100%;
             padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a4789;
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            letter-spacing: -0.2px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .submit-btn:active::before {
+            width: 600px;
+            height: 600px;
         }
         
         .submit-btn:hover:not(:disabled) {
+            background: #15396e;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+            box-shadow: 0 6px 20px rgba(26,71,137,0.3);
         }
         
         .submit-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
         }
         
@@ -308,95 +389,190 @@
         }
         
         .message {
-            padding: 15px;
+            padding: 16px;
             border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
             display: none;
+            font-size: 14px;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
         }
         
         .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
         }
         
         .info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
         }
         
         .footer {
             text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            color: #666;
-            font-size: 14px;
+            padding: 25px 20px;
+            background: #fafbfc;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+            border-top: 1px solid #e8ecf0;
+        }
+        
+        .footer strong {
+            color: #475569;
+            font-weight: 600;
         }
         
         .footer a {
-            color: #667eea;
+            color: #1a4789;
             text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
         }
         
         .required {
-            color: #e74c3c;
+            color: #ef4444;
+            font-weight: 600;
         }
         
         .counter {
             display: inline-block;
-            background: #667eea;
+            background: #1a4789;
             color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-            margin-left: 5px;
+            margin-left: 8px;
         }
         
         .purpose-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 12px;
         }
         
         .purpose-option {
-            padding: 12px;
-            border: 2px solid #e1e8ed;
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
             border-radius: 10px;
             background: white;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             text-align: center;
             font-size: 14px;
             font-weight: 500;
+            letter-spacing: -0.1px;
+        }
+        
+        .purpose-option:active {
+            transform: scale(0.98);
         }
         
         .purpose-option.active {
-            border-color: #667eea;
-            background: #f8f4ff;
-            color: #667eea;
+            border-color: #1a4789;
+            background: #eff6ff;
+            color: #1a4789;
+            box-shadow: 0 2px 4px rgba(26,71,137,0.1);
+        }
+        
+        /* Photo Instructions - Enhanced Styling */
+        #photoInstructions {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border-left: 4px solid #1a4789;
+            padding: 18px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        
+        #photoInstructions h4 {
+            color: #1a4789;
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #photoInstructions p {
+            margin: 0 0 12px 0;
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        #photoInstructions ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 2;
+        }
+        
+        #photoInstructions li strong {
+            color: #2d3748;
+        }
+        
+        #photoInstructions p:last-child {
+            margin-bottom: 0;
+            font-size: 13px;
         }
         
         /* Mobile specific optimizations */
         @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
             .header h1 {
-                font-size: 20px;
+                font-size: 24px;
             }
             
             .image-preview {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
             }
             
             .purpose-grid {
                 grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .form-container {
+                padding: 20px 15px;
+            }
+            
+            .type-selector {
+                padding: 20px 15px;
             }
         }
         
@@ -410,6 +586,8 @@
         /* Smooth scrolling */
         html {
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         
         /* Loading state */
@@ -417,13 +595,23 @@
             pointer-events: none;
             opacity: 0.6;
         }
+        
+        /* Touch feedback for mobile */
+        @media (hover: none) {
+            .type-btn:active,
+            .purpose-option:active,
+            .camera-btn:active,
+            .gallery-btn:active {
+                transform: scale(0.96);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h2 style="font-size: 20px; margin-bottom: 10px; font-weight: 500; opacity: 0.95;">Bill Layne Insurance</h2>
+            <h2 style="font-size: 16px; margin-bottom: 8px; font-weight: 500; opacity: 0.9;">Bill Layne Insurance</h2>
             <h1>Quick Photo Upload</h1>
             <p>Fast & Easy Insurance Documentation</p>
         </div>
@@ -550,128 +738,128 @@
                 </h3>
                 
                 <!-- Photo Instructions - Dynamic based on type AND purpose -->
-                <div id="photoInstructions" style="background: #e8f4f8; border-left: 4px solid #17a2b8; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-                    <h4 style="color: #17a2b8; margin: 0 0 10px 0; font-size: 16px;">📷 Photo Guidelines</h4>
+                <div id="photoInstructions" style="background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); border-left: 4px solid #1a4789; padding: 18px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">
+                    <h4 style="color: #1a4789; margin: 0 0 12px 0; font-size: 16px; font-weight: 600;">📷 Photo Guidelines</h4>
                     
                     <!-- HOME + QUOTE -->
                     <div id="home-quote" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>For an accurate home insurance quote, please include:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>All 4 sides of your home</strong> - Front, back, left, and right views</li>
-                            <li><strong>Roof angle</strong> - Best visible angle showing roof condition</li>
-                            <li><strong>Any detached structures</strong> - Garage, shed, pool house, etc.</li>
-                            <li><strong>Special features</strong> - Pool, deck, hot tub, solar panels, etc.</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">All 4 sides of your home</strong> - Front, back, left, and right views</li>
+                            <li><strong style="color: #2d3748;">Roof angle</strong> - Best visible angle showing roof condition</li>
+                            <li><strong style="color: #2d3748;">Any detached structures</strong> - Garage, shed, pool house, etc.</li>
+                            <li><strong style="color: #2d3748;">Special features</strong> - Pool, deck, hot tub, solar panels, etc.</li>
                         </ul>
-                        <p style="margin: 10px 0 0 0; color: #666; font-size: 13px; font-style: italic;">
+                        <p style="margin: 12px 0 0 0; color: #718096; font-size: 13px; font-style: italic;">
                             💡 Tip: Stand back to capture the entire structure in each photo
                         </p>
                     </div>
                     
                     <!-- HOME + ADD -->
                     <div id="home-add" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>To add coverage for new additions/improvements:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>New addition/improvement</strong> - Multiple angles</li>
-                            <li><strong>Overall home view</strong> - Showing new addition in context</li>
-                            <li><strong>Close-up details</strong> - Materials, fixtures, special features</li>
-                            <li><strong>Receipts/invoices</strong> - If available for valuation</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">New addition/improvement</strong> - Multiple angles</li>
+                            <li><strong style="color: #2d3748;">Overall home view</strong> - Showing new addition in context</li>
+                            <li><strong style="color: #2d3748;">Close-up details</strong> - Materials, fixtures, special features</li>
+                            <li><strong style="color: #2d3748;">Receipts/invoices</strong> - If available for valuation</li>
                         </ul>
                     </div>
                     
                     <!-- HOME + CLAIM -->
                     <div id="home-claim" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>For claim documentation, please include:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>All damaged areas</strong> - Wide shots and close-ups</li>
-                            <li><strong>Cause of damage</strong> - If visible (tree, water source, etc.)</li>
-                            <li><strong>Affected rooms/areas</strong> - Multiple angles</li>
-                            <li><strong>Damaged personal property</strong> - Individual items</li>
-                            <li><strong>Overall context</strong> - Showing extent of damage</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">All damaged areas</strong> - Wide shots and close-ups</li>
+                            <li><strong style="color: #2d3748;">Cause of damage</strong> - If visible (tree, water source, etc.)</li>
+                            <li><strong style="color: #2d3748;">Affected rooms/areas</strong> - Multiple angles</li>
+                            <li><strong style="color: #2d3748;">Damaged personal property</strong> - Individual items</li>
+                            <li><strong style="color: #2d3748;">Overall context</strong> - Showing extent of damage</li>
                         </ul>
-                        <p style="margin: 10px 0 0 0; color: #dc3545; font-size: 13px; font-weight: 600;">
+                        <p style="margin: 12px 0 0 0; color: #dc3545; font-size: 13px; font-weight: 600;">
                             ⚠️ Document everything before making repairs if safe to do so
                         </p>
                     </div>
                     
                     <!-- HOME + REVIEW -->
                     <div id="home-review" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>For policy review, please include:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>Current renewal notice</strong> - All pages</li>
-                            <li><strong>Declaration page</strong> - From current policy</li>
-                            <li><strong>Any changes to property</strong> - New additions, renovations</li>
-                            <li><strong>Updated home photos</strong> - If significant changes made</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">Current renewal notice</strong> - All pages</li>
+                            <li><strong style="color: #2d3748;">Declaration page</strong> - From current policy</li>
+                            <li><strong style="color: #2d3748;">Any changes to property</strong> - New additions, renovations</li>
+                            <li><strong style="color: #2d3748;">Updated home photos</strong> - If significant changes made</li>
                         </ul>
                     </div>
                     
                     <!-- VEHICLE + QUOTE -->
                     <div id="vehicle-quote" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>For an accurate auto insurance quote, please include:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>All 4 sides of vehicle</strong> - Front, back, both sides</li>
-                            <li><strong>VIN number</strong> - Dashboard or driver door frame</li>
-                            <li><strong>Odometer reading</strong> - Current mileage</li>
-                            <li><strong>License plates</strong> - Front and back if applicable</li>
-                            <li><strong>Any existing damage</strong> - Document pre-existing issues</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">All 4 sides of vehicle</strong> - Front, back, both sides</li>
+                            <li><strong style="color: #2d3748;">VIN number</strong> - Dashboard or driver door frame</li>
+                            <li><strong style="color: #2d3748;">Odometer reading</strong> - Current mileage</li>
+                            <li><strong style="color: #2d3748;">License plates</strong> - Front and back if applicable</li>
+                            <li><strong style="color: #2d3748;">Any existing damage</strong> - Document pre-existing issues</li>
                         </ul>
-                        <p style="margin: 10px 0 0 0; color: #666; font-size: 13px; font-style: italic;">
+                        <p style="margin: 12px 0 0 0; color: #718096; font-size: 13px; font-style: italic;">
                             💡 Tip: Clean vehicle and take photos in good lighting
                         </p>
                     </div>
                     
                     <!-- VEHICLE + ADD -->
                     <div id="vehicle-add" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>To add a vehicle to your policy:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>All 4 sides of new vehicle</strong> - Complete views</li>
-                            <li><strong>VIN number</strong> - Clear photo</li>
-                            <li><strong>Purchase paperwork</strong> - Bill of sale or dealer invoice</li>
-                            <li><strong>Title or registration</strong> - If available</li>
-                            <li><strong>Odometer reading</strong> - Current mileage</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">All 4 sides of new vehicle</strong> - Complete views</li>
+                            <li><strong style="color: #2d3748;">VIN number</strong> - Clear photo</li>
+                            <li><strong style="color: #2d3748;">Purchase paperwork</strong> - Bill of sale or dealer invoice</li>
+                            <li><strong style="color: #2d3748;">Title or registration</strong> - If available</li>
+                            <li><strong style="color: #2d3748;">Odometer reading</strong> - Current mileage</li>
                         </ul>
                     </div>
                     
                     <!-- VEHICLE + CLAIM -->
                     <div id="vehicle-claim" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>For auto claim documentation:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>All damage areas</strong> - Multiple angles and close-ups</li>
-                            <li><strong>Impact points</strong> - Where contact occurred</li>
-                            <li><strong>Interior damage</strong> - If applicable</li>
-                            <li><strong>Other vehicle(s)</strong> - If multi-vehicle accident</li>
-                            <li><strong>Scene photos</strong> - Location, road conditions if relevant</li>
-                            <li><strong>Police report number</strong> - Photo of exchange slip or report</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">All damage areas</strong> - Multiple angles and close-ups</li>
+                            <li><strong style="color: #2d3748;">Impact points</strong> - Where contact occurred</li>
+                            <li><strong style="color: #2d3748;">Interior damage</strong> - If applicable</li>
+                            <li><strong style="color: #2d3748;">Other vehicle(s)</strong> - If multi-vehicle accident</li>
+                            <li><strong style="color: #2d3748;">Scene photos</strong> - Location, road conditions if relevant</li>
+                            <li><strong style="color: #2d3748;">Police report number</strong> - Photo of exchange slip or report</li>
                         </ul>
-                        <p style="margin: 10px 0 0 0; color: #dc3545; font-size: 13px; font-weight: 600;">
+                        <p style="margin: 12px 0 0 0; color: #dc3545; font-size: 13px; font-weight: 600;">
                             ⚠️ Take photos before moving vehicle if safe to do so
                         </p>
                     </div>
                     
                     <!-- VEHICLE + REVIEW -->
                     <div id="vehicle-review" class="photo-instruction" style="display: none;">
-                        <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; line-height: 1.6;">
+                        <p style="margin: 0 0 12px 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
                             <strong>For auto policy review, please include:</strong>
                         </p>
-                        <ul style="margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.8;">
-                            <li><strong>Current renewal notice</strong> - All pages</li>
-                            <li><strong>Declaration page</strong> - From current policy</li>
-                            <li><strong>Current registration</strong> - For all vehicles</li>
-                            <li><strong>Driver's licenses</strong> - All household drivers</li>
-                            <li><strong>Updated vehicle photos</strong> - If changes/modifications made</li>
+                        <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 14px; line-height: 2;">
+                            <li><strong style="color: #2d3748;">Current renewal notice</strong> - All pages</li>
+                            <li><strong style="color: #2d3748;">Declaration page</strong> - From current policy</li>
+                            <li><strong style="color: #2d3748;">Current registration</strong> - For all vehicles</li>
+                            <li><strong style="color: #2d3748;">Driver's licenses</strong> - All household drivers</li>
+                            <li><strong style="color: #2d3748;">Updated vehicle photos</strong> - If changes/modifications made</li>
                         </ul>
                     </div>
                 </div>
@@ -730,7 +918,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
             z-index: 10000;
             animation: fadeIn 0.3s ease-out;
         }
@@ -743,13 +932,13 @@
         
         .success-modal {
             background: white;
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 40px 30px;
             max-width: 500px;
             width: 90%;
             text-align: center;
             animation: slideUp 0.4s ease-out;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -758,7 +947,7 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 20px;
-            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -778,36 +967,38 @@
         }
         
         .confirmation-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a4789;
             color: white;
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 12px;
             margin: 20px 0;
         }
         
         .confirmation-number {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: bold;
             letter-spacing: 1px;
             margin: 10px 0;
         }
         
         .btn-ok {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a4789;
             color: white;
             padding: 15px 40px;
             border: none;
             border-radius: 10px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             margin-top: 20px;
+            letter-spacing: -0.2px;
         }
         
         .btn-ok:hover {
+            background: #15396e;
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 6px 20px rgba(26,71,137,0.3);
         }
         
         @keyframes fadeIn {
@@ -850,10 +1041,10 @@
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             </div>
-            <h2 style="color: #28a745; margin-bottom: 20px; font-size: 28px;">
+            <h2 style="color: #166534; margin-bottom: 20px; font-size: 26px; font-weight: 700;">
                 Photos Submitted Successfully!
             </h2>
-            <p style="color: #666; margin-bottom: 20px;">
+            <p style="color: #64748b; margin-bottom: 20px; font-size: 15px;">
                 Your images have been received and will be reviewed within 1-2 business hours.
             </p>
             <div class="confirmation-box">
@@ -863,10 +1054,10 @@
                 </div>
                 <p style="margin: 0; font-size: 14px; opacity: 0.9;">Please save this for your records</p>
             </div>
-            <div style="background: #f0f8ff; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: left;">
-                <p style="margin: 5px 0;"><strong>Name:</strong> <span id="modalName"></span></p>
-                <p style="margin: 5px 0;"><strong>Phone:</strong> <span id="modalPhone"></span></p>
-                <p style="margin: 5px 0;"><strong>Images:</strong> <span id="modalImages"></span></p>
+            <div style="background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: left;">
+                <p style="margin: 6px 0; color: #4a5568;"><strong style="color: #2d3748;">Name:</strong> <span id="modalName"></span></p>
+                <p style="margin: 6px 0; color: #4a5568;"><strong style="color: #2d3748;">Phone:</strong> <span id="modalPhone"></span></p>
+                <p style="margin: 6px 0; color: #4a5568;"><strong style="color: #2d3748;">Images:</strong> <span id="modalImages"></span></p>
             </div>
             <button class="btn-ok" onclick="closeSuccessModal()">OK</button>
         </div>
