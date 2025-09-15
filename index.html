@@ -909,6 +909,215 @@
         </div>
     </div>
     
+    <!-- UPLOAD PROGRESS MODAL -->
+    <div class="upload-progress-overlay" id="uploadProgressOverlay">
+        <div class="upload-progress-modal">
+            <div class="upload-icon-animated">
+                <div class="upload-icon-cloud">☁️</div>
+                <div class="upload-arrow">⬆️</div>
+            </div>
+            
+            <h2 class="upload-progress-title">Uploading Your Photos</h2>
+            
+            <p class="upload-progress-message">
+                Please wait while we securely upload your images to our system.
+            </p>
+            
+            <div class="upload-progress-bar-container">
+                <div class="upload-progress-bar" id="uploadProgressBar"></div>
+            </div>
+            
+            <div class="upload-progress-details" id="uploadProgressDetails">
+                Uploading <span id="currentImageCount">0</span> of <span id="totalImageCount">0</span> images
+            </div>
+            
+            <div class="upload-spinner-container">
+                <div class="upload-spinner-dot"></div>
+                <div class="upload-spinner-dot"></div>
+                <div class="upload-spinner-dot"></div>
+            </div>
+            
+            <div class="upload-time-estimate" id="uploadTimeEstimate">
+                Estimated time: calculating...
+            </div>
+            
+            <div class="upload-warning">
+                <span class="upload-warning-icon">⚠️</span>
+                <div class="upload-warning-text">
+                    <strong>Please don't close this page!</strong><br>
+                    Your photos are being uploaded. You'll see a confirmation screen when complete.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- UPLOAD PROGRESS OVERLAY -->
+    <style>
+        .upload-progress-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .upload-progress-overlay.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .upload-progress-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 35px 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.4s ease-out;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        
+        .upload-icon-animated {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            position: relative;
+        }
+        
+        .upload-icon-cloud {
+            font-size: 60px;
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .upload-arrow {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            animation: slideUpArrow 1s ease-in-out infinite;
+        }
+        
+        @keyframes slideUpArrow {
+            0% { transform: translateX(-50%) translateY(10px); opacity: 0; }
+            50% { transform: translateX(-50%) translateY(-5px); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+        }
+        
+        .upload-progress-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a4789;
+            margin-bottom: 15px;
+            letter-spacing: -0.3px;
+        }
+        
+        .upload-progress-message {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .upload-progress-bar-container {
+            background: #f1f5f9;
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #1a4789 0%, #2563eb 100%);
+            border-radius: 20px;
+            width: 0%;
+            animation: progressPulse 2s ease-in-out infinite;
+            transition: width 0.5s ease;
+        }
+        
+        @keyframes progressPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .upload-progress-details {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        
+        .upload-warning {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+        }
+        
+        .upload-warning-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .upload-warning-text {
+            font-size: 13px;
+            color: #92400e;
+            line-height: 1.4;
+        }
+        
+        .upload-time-estimate {
+            font-size: 14px;
+            color: #1a4789;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .upload-spinner-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .upload-spinner-dot {
+            width: 12px;
+            height: 12px;
+            background: #1a4789;
+            border-radius: 50%;
+            animation: spinnerDot 1.4s ease-in-out infinite both;
+        }
+        
+        .upload-spinner-dot:nth-child(1) { animation-delay: -0.32s; }
+        .upload-spinner-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes spinnerDot {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+    
     <!-- SUCCESS MODAL (like your No Loss form) -->
     <style>
         .success-modal-overlay {
@@ -1073,6 +1282,7 @@
         let selectedType = 'HOME';
         let selectedPurpose = 'quote';
         let uploadedImages = [];
+        let isUploading = false; // Track upload status
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -1299,6 +1509,9 @@
             // Store globally for showSuccess to use
             window.submissionData = capturedData;
             
+            // Show upload progress modal
+            showUploadProgress(uploadedImages.length);
+            
             // Get form data
             const formData = new FormData(e.target);
             const data = {
@@ -1320,7 +1533,7 @@
                 submittedAt: new Date().toISOString()
             };
             
-            // Show loading
+            // Show loading on button (but it's behind the modal)
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const spinner = document.getElementById('spinner');
@@ -1331,6 +1544,9 @@
             document.getElementById('imageForm').classList.add('loading');
             
             try {
+                // Simulate progress updates (since we can't get real progress with no-cors)
+                simulateUploadProgress(uploadedImages.length);
+                
                 // Submit to Google Apps Script
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -1341,15 +1557,34 @@
                     body: JSON.stringify(data)
                 });
                 
-                // Wait a moment for the request to send (no-cors doesn't give us response)
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // Wait for simulated progress to complete
+                await new Promise(resolve => {
+                    const checkProgress = setInterval(() => {
+                        const progressBar = document.getElementById('uploadProgressBar');
+                        if (progressBar && parseInt(progressBar.style.width) >= 95) {
+                            clearInterval(checkProgress);
+                            progressBar.style.width = '100%';
+                            resolve();
+                        }
+                    }, 100);
+                });
                 
-                // Show success - force it to run
+                // Small delay before showing success
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Hide upload progress
+                hideUploadProgress();
+                
+                // Show success
                 console.log('Submission sent, showing success screen...');
                 showSuccess();
                 
             } catch (error) {
                 console.error('Error:', error);
+                
+                // Hide upload progress
+                hideUploadProgress();
+                
                 showMessage('Upload failed. Please try again or call us at 336-835-1993', 'error');
                 
                 // Reset button
@@ -1358,6 +1593,94 @@
                 spinner.style.display = 'none';
                 document.getElementById('imageForm').classList.remove('loading');
             }
+        }
+        
+        // Show upload progress modal
+        function showUploadProgress(imageCount) {
+            isUploading = true; // Set upload flag
+            
+            const overlay = document.getElementById('uploadProgressOverlay');
+            const totalCount = document.getElementById('totalImageCount');
+            const currentCount = document.getElementById('currentImageCount');
+            const progressBar = document.getElementById('uploadProgressBar');
+            const timeEstimate = document.getElementById('uploadTimeEstimate');
+            
+            // Reset progress
+            progressBar.style.width = '0%';
+            totalCount.textContent = imageCount;
+            currentCount.textContent = '0';
+            
+            // Calculate estimated time (roughly 2-3 seconds per image)
+            const estimatedSeconds = imageCount * 2.5;
+            if (estimatedSeconds < 60) {
+                timeEstimate.textContent = `Estimated time: ${Math.ceil(estimatedSeconds)} seconds`;
+            } else {
+                const minutes = Math.ceil(estimatedSeconds / 60);
+                timeEstimate.textContent = `Estimated time: ${minutes} minute${minutes > 1 ? 's' : ''}`;
+            }
+            
+            // Show modal
+            overlay.classList.add('show');
+            
+            // Disable scrolling
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Hide upload progress modal
+        function hideUploadProgress() {
+            isUploading = false; // Clear upload flag
+            
+            const overlay = document.getElementById('uploadProgressOverlay');
+            overlay.classList.remove('show');
+            
+            // Re-enable scrolling
+            document.body.style.overflow = '';
+        }
+        
+        // Simulate upload progress
+        function simulateUploadProgress(imageCount) {
+            const progressBar = document.getElementById('uploadProgressBar');
+            const currentCount = document.getElementById('currentImageCount');
+            const timeEstimate = document.getElementById('uploadTimeEstimate');
+            
+            let progress = 0;
+            const increment = 100 / (imageCount * 10); // Divide into smaller steps
+            const baseDelay = 200; // Base delay in ms
+            const variableDelay = 100; // Random variation
+            
+            const updateProgress = () => {
+                if (progress < 95) { // Stop at 95% until real upload completes
+                    progress += increment;
+                    progress = Math.min(progress, 95);
+                    
+                    progressBar.style.width = progress + '%';
+                    
+                    // Update image counter
+                    const imagesUploaded = Math.floor((progress / 100) * imageCount);
+                    currentCount.textContent = imagesUploaded;
+                    
+                    // Update time estimate
+                    const remainingImages = imageCount - imagesUploaded;
+                    const remainingSeconds = remainingImages * 2.5;
+                    if (remainingSeconds > 1) {
+                        if (remainingSeconds < 60) {
+                            timeEstimate.textContent = `About ${Math.ceil(remainingSeconds)} seconds remaining`;
+                        } else {
+                            const minutes = Math.ceil(remainingSeconds / 60);
+                            timeEstimate.textContent = `About ${minutes} minute${minutes > 1 ? 's' : ''} remaining`;
+                        }
+                    } else {
+                        timeEstimate.textContent = 'Almost done...';
+                    }
+                    
+                    // Continue with random delay to simulate network variance
+                    const delay = baseDelay + Math.random() * variableDelay;
+                    setTimeout(updateProgress, delay);
+                }
+            };
+            
+            // Start progress after a short delay
+            setTimeout(updateProgress, 300);
         }
         
         // Generate reference number (matches backend format)
@@ -1401,12 +1724,24 @@
         function closeSuccessModal() {
             document.getElementById('successModalOverlay').classList.remove('show');
             
+            // Ensure upload progress is hidden
+            hideUploadProgress();
+            
             // Reset form and go back to start
             document.getElementById('imageForm').style.display = 'block';
             document.getElementById('imageForm').reset();
             uploadedImages = [];
             displayImages();
             updateImageCounter();
+            
+            // Reset button state
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline';
+            spinner.style.display = 'none';
+            document.getElementById('imageForm').classList.remove('loading');
             
             // Reset to home type
             selectedType = 'HOME';
@@ -1415,6 +1750,15 @@
             });
             toggleSections();
         }
+        
+        // Add warning when user tries to leave during upload
+        window.addEventListener('beforeunload', function(e) {
+            if (isUploading || document.getElementById('uploadProgressOverlay').classList.contains('show')) {
+                e.preventDefault();
+                e.returnValue = 'Your photos are still uploading. If you leave now, your submission will be lost. Are you sure you want to leave?';
+                return e.returnValue;
+            }
+        });
         
         // Show message
         function showMessage(text, type) {
