@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a4789">
+    <title>MyInsurancePhoto.com - Quick Upload</title>
+    
+    <!-- Modern Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 10px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: #1a4789;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header-logo {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+        }
+        
+        /* Upload Section - Prominent */
+        .upload-section {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #1a4789;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a4789;
+            margin-bottom: 15px;
+        }
+        
+        .photo-counter {
+            display: inline-block;
+            background: #1a4789;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        /* Upload Buttons */
+        .upload-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .upload-btn {
+            padding: 20px;
+            background: white;
+            border: 2px solid #1a4789;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a4789;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .upload-btn:active {
+            transform: scale(0.96);
+        }
+        
+        .upload-btn:hover {
+            background: #1a4789;
+            color: white;
+            box-shadow: 0 4px 12px rgba(26,71,137,0.25);
+        }
+        
+        .upload-btn-icon {
+            font-size: 28px;
+        }
+        
+        /* Image Preview */
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f8fafc;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(239,68,68,0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Submit Button - Right after upload */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: #1a4789;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 15px;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            background: #15396e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(26,71,137,0.3);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Contact Information */
+        .contact-section {
+            background: #fafbfc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 6px;
+        }
+        
+        .required {
+            color: #ef4444;
+        }
+        
+        .optional-tag {
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-left: 5px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #1a4789;
+            box-shadow: 0 0 0 3px rgba(26,71,137,0.08);
+        }
+        
+        /* Two column layout for some fields */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #fafbfc;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        /* Hidden elements */
+        .file-input {
+            display: none;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Upload Progress Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 25px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a4789;
+            margin-bottom: 12px;
+        }
+        
+        .modal-text {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar-container {
+            background: #f1f5f9;
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #1a4789 0%, #2563eb 100%);
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .upload-status {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        
+        /* Success Modal */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #166534;
+            margin-bottom: 12px;
+        }
+        
+        .reference-box {
+            background: linear-gradient(135deg, #1a4789 0%, #2563eb 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .reference-number {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 8px 0;
+        }
+        
+        .modal-btn {
+            width: 100%;
+            padding: 16px;
+            background: #1a4789;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .upload-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-preview {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-logo">🏠🚗</div>
+            <h1>MyInsurancePhoto.com</h1>
+            <p>Quick & Secure Photo Upload</p>
+        </div>
+        
+        <form id="imageForm">
+            <div class="main-content">
+                <!-- Photo Upload Section - FIRST & PROMINENT -->
+                <div class="upload-section">
+                    <div class="section-title">
+                        <span>📸</span>
+                        <span>Upload Your Photos</span>
+                        <span class="photo-counter" id="photoCounter">0</span>
+                    </div>
+                    
+                    <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+                    <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="camera">
+                    
+                    <div class="upload-buttons">
+                        <button type="button" class="upload-btn" id="cameraBtn">
+                            <span class="upload-btn-icon">📷</span>
+                            <span>Camera</span>
+                        </button>
+                        <button type="button" class="upload-btn" id="galleryBtn">
+                            <span class="upload-btn-icon">🖼️</span>
+                            <span>Gallery</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Image Preview -->
+                    <div class="image-preview" id="imagePreview"></div>
+                    
+                    <!-- Submit Button RIGHT HERE -->
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span id="btnText">Submit Photos to Agency</span>
+                        <div class="spinner" id="spinner"></div>
+                    </button>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="contact-section">
+                    <div class="section-title" style="font-size: 16px; margin-bottom: 15px;">
+                        <span>👤</span>
+                        <span>Your Information</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            Full Name <span class="required">*</span>
+                        </label>
+                        <input type="text" name="customerName" id="customerName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            Phone Number <span class="required">*</span>
+                        </label>
+                        <input type="tel" name="phone" id="phone" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                Email <span class="optional-tag">(optional)</span>
+                            </label>
+                            <input type="email" name="email" id="email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                ZIP Code <span class="optional-tag">(optional)</span>
+                            </label>
+                            <input type="text" name="zip" id="zip" maxlength="5">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            Address <span class="optional-tag">(optional)</span>
+                        </label>
+                        <input type="text" name="address" id="address">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                Insurance Company <span class="optional-tag">(optional)</span>
+                            </label>
+                            <select name="currentCarrier" id="currentCarrier">
+                                <option value="">Select Company</option>
+                                <option value="Nationwide">Nationwide</option>
+                                <option value="Progressive">Progressive</option>
+                                <option value="National General">National General</option>
+                                <option value="Alamance">Alamance</option>
+                                <option value="Travelers">Travelers</option>
+                                <option value="Foremost">Foremost</option>
+                                <option value="State Farm">State Farm</option>
+                                <option value="Allstate">Allstate</option>
+                                <option value="GEICO">GEICO</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                Policy Number <span class="optional-tag">(optional)</span>
+                            </label>
+                            <input type="text" name="policyNumber" id="policyNumber">
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden fields for generator data -->
+                    <input type="hidden" name="type" id="type">
+                    <input type="hidden" name="purpose" id="purpose">
+                    <input type="hidden" name="city" id="city">
+                    <input type="hidden" name="state" id="state">
+                    <input type="hidden" name="vehicleInfo" id="vehicleInfo">
+                </div>
+            </div>
+        </form>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div style="font-size: 36px; margin: 0 auto 10px; opacity: 0.8;">🏠🚗</div>
+            <strong>Bill Layne Insurance Agency</strong><br>
+            1283 N Bridge St, Elkin NC 28621<br>
+            336-835-1993 | Save@BillLayneInsurance.com
+        </div>
+    </div>
+    
+    <!-- Upload Progress Modal -->
+    <div class="modal-overlay" id="uploadProgress">
+        <div class="modal-content">
+            <div class="upload-icon">
+                <div class="spinner" style="display: block; width: 64px; height: 64px; border-width: 4px;"></div>
+            </div>
+            <h2 class="modal-title">Uploading Your Photos</h2>
+            <p class="modal-text">Please don't close this page...</p>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p class="upload-status" id="uploadStatus">Preparing upload...</p>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <h2 class="success-title">Success!</h2>
+            <p class="modal-text">Your photos have been submitted successfully.</p>
+            <div class="reference-box">
+                <div style="font-size: 13px; opacity: 0.9;">Your Reference Number</div>
+                <div class="reference-number" id="confirmNumber">BLI-000000</div>
+                <div style="font-size: 12px; opacity: 0.85;">Please save this for your records</div>
+            </div>
+            <button class="modal-btn" onclick="closeSuccessModal()">Done</button>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgRcVZgCDznG5bBTLpAxun6enA4OP4k6HQhYHYeyq4nkFNKxBkFg3QVQr5n9p9olAlag/exec';
+        
+        // State
+        let uploadedImages = [];
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            prefillFromURL();
+        });
+        
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Camera button
+            document.getElementById('cameraBtn').addEventListener('click', function() {
+                document.getElementById('cameraInput').click();
+            });
+            
+            // Gallery button
+            document.getElementById('galleryBtn').addEventListener('click', function() {
+                document.getElementById('fileInput').click();
+            });
+            
+            // File inputs
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+            document.getElementById('cameraInput').addEventListener('change', handleFileSelect);
+            
+            // Form submission
+            document.getElementById('imageForm').addEventListener('submit', handleSubmit);
+            
+            // Phone formatting
+            document.getElementById('phone').addEventListener('input', formatPhone);
+            
+            // ZIP formatting
+            document.getElementById('zip').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
+            });
+        }
+        
+        // Prefill from URL parameters (from generator)
+        function prefillFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Fill visible fields
+            if (params.get('customerName')) {
+                document.getElementById('customerName').value = params.get('customerName');
+            }
+            if (params.get('phone')) {
+                document.getElementById('phone').value = params.get('phone');
+            }
+            if (params.get('email')) {
+                document.getElementById('email').value = params.get('email');
+            }
+            if (params.get('address')) {
+                document.getElementById('address').value = params.get('address');
+            }
+            if (params.get('zip')) {
+                document.getElementById('zip').value = params.get('zip');
+            }
+            if (params.get('currentCarrier')) {
+                document.getElementById('currentCarrier').value = params.get('currentCarrier');
+            }
+            if (params.get('policyNumber')) {
+                document.getElementById('policyNumber').value = params.get('policyNumber');
+            }
+            
+            // Fill hidden fields
+            if (params.get('type')) {
+                document.getElementById('type').value = params.get('type');
+            }
+            if (params.get('purpose')) {
+                document.getElementById('purpose').value = params.get('purpose');
+            }
+            if (params.get('city')) {
+                document.getElementById('city').value = params.get('city');
+            }
+            if (params.get('state')) {
+                document.getElementById('state').value = params.get('state');
+            }
+            if (params.get('vehicleInfo')) {
+                document.getElementById('vehicleInfo').value = params.get('vehicleInfo');
+            }
+        }
+        
+        // Handle file selection
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            
+            files.forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File too large. Maximum size is 10MB.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages.push({
+                        data: e.target.result,
+                        type: file.type,
+                        name: file.name
+                    });
+                    displayImages();
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            e.target.value = '';
+        }
+        
+        // Display images
+        function displayImages() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            uploadedImages.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                item.innerHTML = `
+                    <img src="${img.data}" alt="Photo ${index + 1}">
+                    <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
+                `;
+                preview.appendChild(item);
+            });
+            
+            document.getElementById('photoCounter').textContent = uploadedImages.length;
+        }
+        
+        // Remove image
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            displayImages();
+        }
+        
+        // Format phone number
+        function formatPhone() {
+            const input = document.getElementById('phone');
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = `(${value}`;
+                } else if (value.length <= 6) {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                } else {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                }
+            }
+            
+            input.value = value;
+        }
+        
+        // Handle form submission
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            // Validate required fields
+            const customerName = document.getElementById('customerName').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (!customerName || !phone) {
+                alert('Please enter your name and phone number');
+                return;
+            }
+            
+            if (uploadedImages.length === 0) {
+                alert('Please upload at least one photo');
+                return;
+            }
+            
+            // Show upload progress
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            spinner.style.display = 'block';
+            
+            // Show modal
+            const uploadModal = document.getElementById('uploadProgress');
+            uploadModal.style.display = 'flex';
+            document.getElementById('progressBar').style.width = '10%';
+            document.getElementById('uploadStatus').textContent = 'Preparing your photos...';
+            
+            // Wait for modal to be visible
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Generate reference number
+            const referenceNumber = generateReferenceNumber();
+            
+            // Prepare data
+            const formData = new FormData(e.target);
+            const data = {
+                // Required fields
+                customerName: customerName,
+                phone: phone,
+                // Optional fields
+                email: formData.get('email'),
+                address: formData.get('address'),
+                zip: formData.get('zip'),
+                currentCarrier: formData.get('currentCarrier'),
+                policyNumber: formData.get('policyNumber'),
+                // Hidden fields from generator
+                type: formData.get('type') || 'GENERAL',
+                purpose: formData.get('purpose') || 'general',
+                city: formData.get('city'),
+                state: formData.get('state'),
+                vehicleInfo: formData.get('vehicleInfo'),
+                // System fields
+                images: uploadedImages,
+                referenceNumber: referenceNumber,
+                submittedAt: new Date().toISOString()
+            };
+            
+            // Animate progress
+            await new Promise(resolve => setTimeout(resolve, 600));
+            document.getElementById('progressBar').style.width = '30%';
+            document.getElementById('uploadStatus').textContent = 'Compressing images...';
+            
+            await new Promise(resolve => setTimeout(resolve, 800));
+            document.getElementById('progressBar').style.width = '50%';
+            document.getElementById('uploadStatus').textContent = 'Uploading to secure server...';
+            
+            await new Promise(resolve => setTimeout(resolve, 800));
+            document.getElementById('progressBar').style.width = '70%';
+            document.getElementById('uploadStatus').textContent = 'Encrypting your data...';
+            
+            try {
+                // Submit to Google Apps Script
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // Complete progress
+                await new Promise(resolve => setTimeout(resolve, 600));
+                document.getElementById('progressBar').style.width = '90%';
+                document.getElementById('uploadStatus').textContent = 'Finalizing...';
+                
+                await new Promise(resolve => setTimeout(resolve, 600));
+                document.getElementById('progressBar').style.width = '100%';
+                document.getElementById('uploadStatus').textContent = 'Upload complete!';
+                
+                // Wait and show success
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                uploadModal.style.display = 'none';
+                
+                // Update and show success modal
+                document.getElementById('confirmNumber').textContent = referenceNumber;
+                document.getElementById('successModal').style.display = 'flex';
+                
+            } catch (error) {
+                uploadModal.style.display = 'none';
+                alert('Upload failed. Please try again or call 336-835-1993');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                spinner.style.display = 'none';
+            }
+        }
+        
+        // Generate reference number
+        function generateReferenceNumber() {
+            const date = new Date();
+            const year = date.getFullYear().toString().slice(-2);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `BLI-${year}${month}${day}-${random}`;
+        }
+        
+        // Close success modal
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+            // Reset form
+            document.getElementById('imageForm').reset();
+            uploadedImages = [];
+            displayImages();
+            // Refill from URL if present
+            prefillFromURL();
+        }
+    </script>
+</body>
+</html>
