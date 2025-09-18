@@ -205,10 +205,10 @@
             const link = `${CUSTOMER_FORM_URL}?${params.toString()}`;
             
             const firstName = customerName.split(' ')[0];
-            const textTemplate = `Hi ${firstName},\n\nPlease use this secure link to upload the document we requested:\n\n${link}\n\nYour info is pre-filled. Just add the photo(s) and submit. Thanks!\n\nBill Layne Insurance`;
+            const textTemplate = `Hi ${firstName} 👋,\n\nPlease use this secure link to upload the document we requested:\n\n🔗 ${link}\n\nYour info is pre-filled. Just add the photo(s) and submit. Thanks! 🙏\n\n- Bill Layne Insurance`;
             
-            const emailSubject = `Secure Document Upload Request - ${customerName}`;
-            const emailBody = `Dear ${firstName},\n\nPlease use the secure link below to upload the document we requested:\n\n${link}\n\nYour information has been pre-filled for your convenience. Simply add the photo(s) of the document and click submit.\n\nIf you have any questions, please call us at 336-835-1993.\n\nBest regards,\nBill Layne Insurance Agency`;
+            const emailSubject = `📄 Secure Document Upload Request for ${customerName}`;
+            const emailBody = `Hi ${firstName},\n\nPlease use the secure link below to upload the document we requested:\n\n🔗 ${link}\n\nYour information has been pre-filled for your convenience. Simply add the photo(s) of the document and click submit. ✅\n\nIf you have any questions, please give us a call at 📞 336-835-1993.\n\nBest regards,\nBill Layne Insurance Agency`;
 
             generatedData = {
                 link: link,
