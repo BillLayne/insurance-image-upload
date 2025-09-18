@@ -472,7 +472,7 @@
                         </button>
                         <button type="button" class="upload-btn" id="galleryBtn">
                             <span class="upload-btn-icon">🖼️</span>
-                            <span>Gallery</span>
+                            <span>Gallery / Files</span>
                         </button>
                     </div>
                     
@@ -560,6 +560,11 @@
             <strong>Bill Layne Insurance Agency</strong><br>
             1283 N Bridge St, Elkin NC 28621<br>
             336-835-1993 | Save@BillLayneInsurance.com
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                <p style="color: #94a3b8; font-size: 11px;">
+                    🔒 Your privacy is important to us. All documents are transmitted securely and are for internal use only. We will not share your information with third parties without your consent.
+                </p>
+            </div>
         </div>
     </div>
     
@@ -706,10 +711,21 @@
             uploadedImages.forEach((img, index) => {
                 const item = document.createElement('div');
                 item.className = 'preview-item';
-                item.innerHTML = `
-                    <img src="${img.data}" alt="Photo ${index + 1}">
-                    <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
-                `;
+                // Show a generic icon for PDFs
+                if (img.type === 'application/pdf') {
+                    item.innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #f1f5f9; padding: 5px; text-align: center;">
+                            <span style="font-size: 24px;">📄</span>
+                            <span style="font-size: 10px; word-break: break-all;">${img.name}</span>
+                        </div>
+                        <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
+                    `;
+                } else {
+                    item.innerHTML = `
+                        <img src="${img.data}" alt="Photo ${index + 1}">
+                        <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
+                    `;
+                }
                 preview.appendChild(item);
             });
             
@@ -754,7 +770,7 @@
             }
             
             if (uploadedImages.length === 0) {
-                alert('Please upload at least one photo');
+                alert('Please upload at least one photo or document');
                 return;
             }
             
@@ -771,7 +787,7 @@
             const uploadModal = document.getElementById('uploadProgress');
             uploadModal.style.display = 'flex';
             document.getElementById('progressBar').style.width = '10%';
-            document.getElementById('uploadStatus').textContent = 'Preparing your photos...';
+            document.getElementById('uploadStatus').textContent = 'Preparing your files...';
             
             // Wait for modal to be visible
             await new Promise(resolve => setTimeout(resolve, 500));
@@ -805,7 +821,7 @@
             // Animate progress
             await new Promise(resolve => setTimeout(resolve, 600));
             document.getElementById('progressBar').style.width = '30%';
-            document.getElementById('uploadStatus').textContent = 'Compressing images...';
+            document.getElementById('uploadStatus').textContent = 'Compressing files...';
             
             await new Promise(resolve => setTimeout(resolve, 800));
             document.getElementById('progressBar').style.width = '50%';
