@@ -8,7 +8,6 @@
     <meta name="theme-color" content="#1a4789">
     <title>MyInsurancePhoto.com - Quick Upload</title>
     
-    <!-- Modern Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -64,6 +63,31 @@
         /* Main Content */
         .main-content {
             padding: 20px;
+        }
+
+        /* Description Section */
+        .description-section {
+            background: #fffbeb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #f59e0b;
+        }
+
+        .description-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #b45309;
+            margin-bottom: 15px;
+        }
+
+        .description-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #374151;
         }
         
         /* Upload Section - Prominent */
@@ -415,7 +439,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <div class="header-logo">🏠🚗</div>
             <h1>MyInsurancePhoto.com</h1>
@@ -424,7 +447,14 @@
         
         <form id="imageForm">
             <div class="main-content">
-                <!-- Photo Upload Section - FIRST & PROMINENT -->
+                <div class="description-section" id="descriptionSection" style="display: none;">
+                    <div class="description-title">
+                        <span>📝</span>
+                        <span>Description of Request</span>
+                    </div>
+                    <div class="description-text" id="descriptionText"></div>
+                </div>
+
                 <div class="upload-section">
                     <div class="section-title">
                         <span>📸</span>
@@ -446,17 +476,14 @@
                         </button>
                     </div>
                     
-                    <!-- Image Preview -->
                     <div class="image-preview" id="imagePreview"></div>
                     
-                    <!-- Submit Button RIGHT HERE -->
                     <button type="submit" class="submit-btn" id="submitBtn">
                         <span id="btnText">Submit Photos to Agency</span>
                         <div class="spinner" id="spinner"></div>
                     </button>
                 </div>
                 
-                <!-- Contact Information -->
                 <div class="contact-section">
                     <div class="section-title" style="font-size: 16px; margin-bottom: 15px;">
                         <span>👤</span>
@@ -477,20 +504,11 @@
                         <input type="tel" name="phone" id="phone" required>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>
-                                Email <span class="optional-tag">(optional)</span>
-                            </label>
-                            <input type="email" name="email" id="email">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>
-                                ZIP Code <span class="optional-tag">(optional)</span>
-                            </label>
-                            <input type="text" name="zip" id="zip" maxlength="5">
-                        </div>
+                    <div class="form-group">
+                        <label>
+                            Email <span class="optional-tag">(optional)</span>
+                        </label>
+                        <input type="email" name="email" id="email">
                     </div>
                     
                     <div class="form-group">
@@ -528,7 +546,6 @@
                         </div>
                     </div>
                     
-                    <!-- Hidden fields for generator data -->
                     <input type="hidden" name="type" id="type">
                     <input type="hidden" name="purpose" id="purpose">
                     <input type="hidden" name="city" id="city">
@@ -538,7 +555,6 @@
             </div>
         </form>
         
-        <!-- Footer -->
         <div class="footer">
             <div style="font-size: 36px; margin: 0 auto 10px; opacity: 0.8;">🏠🚗</div>
             <strong>Bill Layne Insurance Agency</strong><br>
@@ -547,7 +563,6 @@
         </div>
     </div>
     
-    <!-- Upload Progress Modal -->
     <div class="modal-overlay" id="uploadProgress">
         <div class="modal-content">
             <div class="upload-icon">
@@ -562,7 +577,6 @@
         </div>
     </div>
     
-    <!-- Success Modal -->
     <div class="modal-overlay" id="successModal">
         <div class="modal-content">
             <div class="success-icon">✓</div>
@@ -611,11 +625,6 @@
             
             // Phone formatting
             document.getElementById('phone').addEventListener('input', formatPhone);
-            
-            // ZIP formatting
-            document.getElementById('zip').addEventListener('input', function(e) {
-                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
-            });
         }
         
         // Prefill from URL parameters (from generator)
@@ -635,14 +644,15 @@
             if (params.get('address')) {
                 document.getElementById('address').value = params.get('address');
             }
-            if (params.get('zip')) {
-                document.getElementById('zip').value = params.get('zip');
-            }
             if (params.get('currentCarrier')) {
                 document.getElementById('currentCarrier').value = params.get('currentCarrier');
             }
             if (params.get('policyNumber')) {
                 document.getElementById('policyNumber').value = params.get('policyNumber');
+            }
+            if (params.get('description')) {
+                document.getElementById('descriptionSection').style.display = 'block';
+                document.getElementById('descriptionText').innerText = params.get('description');
             }
             
             // Fill hidden fields
@@ -778,7 +788,6 @@
                 // Optional fields
                 email: formData.get('email'),
                 address: formData.get('address'),
-                zip: formData.get('zip'),
                 currentCarrier: formData.get('currentCarrier'),
                 policyNumber: formData.get('policyNumber'),
                 // Hidden fields from generator
