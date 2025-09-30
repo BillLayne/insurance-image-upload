@@ -1,665 +1,2658 @@
-// ============================================
-// Insurance Image Collection System - UPDATED VERSION
-// VERSION: 2.3 - Enhanced Debugging & Error Handling
-// AUTHOR: Bill Layne Insurance Agency
-// UPDATED: December 2024
-// ============================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Secure photo upload portal for Bill Layne Insurance Agency customers">
+    <meta name="theme-color" content="#2563eb">
+    <title>Photo Upload Portal | Bill Layne Insurance Agency</title>
 
-// Configuration - YOUR ACTUAL VALUES
-const CONFIG = {
-  SPREADSHEET_ID: '180bwnBev519DHv2RRtUFXtiCEmrCBv8nkAreAXamZUo',
-  DRIVE_FOLDER_ID: '1un6kI4LYdGMZ0ACJ4vWhej9GC85XvyEU',
-  EMAIL_TO: 'Docs@BillLayneInsurance.com',
-  EMAIL_CC: 'Save@BillLayneInsurance.com',
-  AGENCY_NAME: 'Bill Layne Insurance Agency',
-  AGENCY_PHONE: '336-835-1993',
-  AGENCY_ADDRESS: '1283 N Bridge St, Elkin NC 28621',
-  AGENCY_WEBSITE: 'www.BillLayneInsurance.com',
-  AGENCY_EMAIL: 'Save@BillLayneInsurance.com',
-  LOGO_URL: 'https://i.imgur.com/uVVShPM.png',
-  MAX_FILE_SIZE: 20 * 1024 * 1024, // 20MB
-  ALLOWED_MIME_TYPES: [
-    'image/jpeg',
-    'image/png',
-    'image/webp',
-    'application/pdf'
-  ]
-};
+    <!-- Image compression library -->
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
 
-// Main function to handle form submissions
-function doPost(e) {
-  try {
-    Logger.log('=== NEW SUBMISSION RECEIVED ===');
-    Logger.log('Raw request received');
-    
-    // Parse the incoming data
-    let data;
-    try {
-      data = JSON.parse(e.postData.contents);
-    } catch (parseError) {
-      Logger.log('Error parsing JSON: ' + parseError.toString());
-      return createErrorResponse('Invalid data format');
-    }
-    
-    Logger.log('Customer: ' + (data.customerName || 'NOT PROVIDED'));
-    Logger.log('Email: ' + (data.email || 'NOT PROVIDED'));
-    Logger.log('Photo category: ' + (data.photoCategory || 'NOT PROVIDED'));
-    Logger.log('Number of images: ' + (data.images ? data.images.length : 0));
-    
-    // Validate submission
-    const validation = validateSubmission(data);
-    if (!validation.valid) {
-      Logger.log('Validation failed: ' + validation.error);
-      return createErrorResponse(validation.error);
-    }
-    
-    // Generate or use reference number
-    const referenceNumber = data.referenceNumber || generateReferenceNumber();
-    Logger.log('Reference number: ' + referenceNumber);
-    
-    // Create folder in Google Drive
-    const folderInfo = createDriveFolder(data, referenceNumber);
-    Logger.log('Folder created: ' + folderInfo.url);
-    
-    // Process and save images
-    const processResult = processImages(data.images, folderInfo.id, referenceNumber, data);
-    Logger.log('Images processed: ' + processResult.savedCount + ' of ' + processResult.totalCount);
-    
-    // Save to spreadsheet
-    saveToSheet(data, referenceNumber, folderInfo.url, processResult);
-    Logger.log('Saved to sheet');
-    
-    // Send notifications
-    sendNotifications(data, referenceNumber, folderInfo.url, processResult);
-    Logger.log('Notifications sent');
-    
-    Logger.log('=== SUBMISSION COMPLETED SUCCESSFULLY ===');
-    
-    // Return success response
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        status: 'success',
-        message: 'Images uploaded successfully',
-        referenceNumber: referenceNumber,
-        imageCount: processResult.savedCount,
-        totalSize: processResult.totalSize,
-        compressionSaved: processResult.compressionSaved
-      }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeaders({
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      });
-      
-  } catch (error) {
-    Logger.log('=== ERROR IN DOPOST ===');
-    Logger.log('Error: ' + error.toString());
-    Logger.log('Stack: ' + error.stack);
-    logError(error, e);
-    
-    return createErrorResponse('Upload failed: ' + error.message);
-  }
-}
-
-// Handle OPTIONS requests (CORS preflight)
-function doOptions() {
-  return ContentService
-    .createTextOutput('')
-    .setMimeType(ContentService.MimeType.TEXT)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Max-Age': '86400'
-    });
-}
-
-// Validate submission
-function validateSubmission(data) {
-  const errors = [];
-  
-  // Customer name is required
-  if (!data.customerName || data.customerName.trim() === '') {
-    errors.push('Customer name is required');
-  }
-  
-  // Email is required
-  if (!data.email || data.email.trim() === '') {
-    errors.push('Email address is required');
-  }
-  
-  // Validate email format
-  if (data.email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-      errors.push('Invalid email format');
-    }
-  }
-  
-  // Photo category - make it optional since it might come from URL params
-  if (!data.photoCategory || data.photoCategory.trim() === '') {
-    Logger.log('Warning: No photo category provided, will use "other"');
-    data.photoCategory = 'other';
-  }
-  
-  // Check images
-  if (!data.images || data.images.length === 0) {
-    errors.push('At least one image is required');
-  }
-  
-  // Validate each image
-  if (data.images && data.images.length > 0) {
-    data.images.forEach(function(img, index) {
-      if (!img || !img.data) {
-        errors.push('Image ' + (index + 1) + ': No data provided');
-      }
-      
-      // Check for suspicious file extensions
-      if (img.name) {
-        const suspiciousPatterns = /\.(exe|scr|bat|cmd|com|pif|msi|jar|app|vbs|js|ws)/i;
-        if (suspiciousPatterns.test(img.name)) {
-          errors.push('File ' + (index + 1) + ': Suspicious file extension detected');
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      }
-    });
-  }
-  
-  if (errors.length > 0) {
-    return { valid: false, error: errors.join('; ') };
-  }
-  
-  return { valid: true };
-}
 
-// Create folder in Google Drive
-function createDriveFolder(data, referenceNumber) {
-  const mainFolder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
-  
-  // Create date-based structure
-  const date = new Date();
-  const year = date.getFullYear().toString();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  
-  // Get or create year folder
-  let yearFolder;
-  const yearFolders = mainFolder.getFoldersByName(year);
-  if (yearFolders.hasNext()) {
-    yearFolder = yearFolders.next();
-  } else {
-    yearFolder = mainFolder.createFolder(year);
-  }
-  
-  // Get or create month folder
-  let monthFolder;
-  const monthName = month + '-' + getMonthName(date.getMonth());
-  const monthFolders = yearFolder.getFoldersByName(monthName);
-  if (monthFolders.hasNext()) {
-    monthFolder = monthFolders.next();
-  } else {
-    monthFolder = yearFolder.createFolder(monthName);
-  }
-  
-  // Create customer folder
-  const safeName = data.customerName.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50);
-  const categoryLabel = data.photoCategory ? ('_' + data.photoCategory.toUpperCase()) : '';
-  const folderName = referenceNumber + categoryLabel + '_' + safeName;
-  const customerFolder = monthFolder.createFolder(folderName);
-  
-  // Create category-based subfolders
-  const categoryFolders = {
-    'home': ['Exterior_Photos', 'Interior_Photos', 'Utility_Photos'],
-    'claims': ['Damage_Photos', 'Context_Photos'],
-    'documents': ['Identification', 'Insurance_Docs', 'Property_Docs'],
-    'other': ['Photos']
-  };
-  
-  const foldersToCreate = categoryFolders[data.photoCategory] || categoryFolders['other'];
-  foldersToCreate.forEach(function(folderName) {
-    try {
-      customerFolder.createFolder(folderName);
-    } catch (e) {
-      Logger.log('Could not create subfolder ' + folderName + ': ' + e.toString());
-    }
-  });
-  
-  // Create info file
-  const infoContent = 'Submission Information\n' +
-    '=======================\n' +
-    'Reference Number: ' + referenceNumber + '\n' +
-    'Submission Date: ' + date.toLocaleString('en-US', {timeZone: 'America/New_York'}) + ' EST\n' +
-    'Processing Status: New\n\n' +
-    'Customer Information\n' +
-    '====================\n' +
-    'Name: ' + data.customerName + '\n' +
-    'Email: ' + (data.email || 'Not provided') + '\n' +
-    'Phone: ' + (data.phone || 'Not provided') + '\n' +
-    'Address: ' + (data.address || 'Not provided') + '\n' +
-    'City: ' + (data.city || 'Not provided') + '\n' +
-    'State: ' + (data.state || 'NC') + '\n' +
-    'ZIP: ' + (data.zip || 'Not provided') + '\n\n' +
-    'Submission Details\n' +
-    '==================\n' +
-    'Photo Category: ' + (data.photoCategory || 'Not specified') + '\n' +
-    'Type: ' + (data.type || 'Not specified') + '\n' +
-    'Purpose: ' + (data.purpose || 'Not specified') + '\n' +
-    'Current Carrier: ' + (data.currentCarrier || 'Not provided') + '\n' +
-    (data.vehicleInfo ? 'Vehicle Info: ' + data.vehicleInfo + '\n' : '') + '\n' +
-    'Files Information\n' +
-    '=================\n' +
-    'Total Files: ' + (data.images ? data.images.length : 0) + '\n' +
-    'Upload Method: Web Form v2.3\n\n' +
-    'Notes\n' +
-    '=====\n' +
-    (data.notes || 'No additional notes provided') + '\n\n' +
-    '---\n' +
-    'Processed by: Image Collection System v2.3\n' +
-    'Agency: ' + CONFIG.AGENCY_NAME;
-  
-  customerFolder.createFile('submission_info.txt', infoContent);
-  
-  return {
-    id: customerFolder.getId(),
-    url: customerFolder.getUrl(),
-    folder: customerFolder
-  };
-}
-
-// Process and save images
-function processImages(images, folderId, referenceNumber, data) {
-  Logger.log('Processing images...');
-  
-  if (!images || images.length === 0) {
-    return {
-      savedCount: 0,
-      totalCount: 0,
-      errors: [],
-      totalSize: 0,
-      compressionSaved: 0
-    };
-  }
-  
-  let savedCount = 0;
-  let totalSize = 0;
-  let originalSize = 0;
-  const errors = [];
-  
-  try {
-    const folder = DriveApp.getFolderById(folderId);
-    
-    // Get subfolders
-    const subfolderMap = {};
-    const subfolders = folder.getFolders();
-    while (subfolders.hasNext()) {
-      const subfolder = subfolders.next();
-      const name = subfolder.getName().toLowerCase();
-      subfolderMap[name] = subfolder;
-    }
-    
-    for (let i = 0; i < images.length; i++) {
-      try {
-        Logger.log('Processing image ' + (i + 1));
-        const imageData = images[i];
-        
-        if (!imageData || !imageData.data) {
-          Logger.log('Image ' + (i + 1) + ' has no data');
-          errors.push('Image ' + (i + 1) + ': No data provided');
-          continue;
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --success-green: #10b981;
+            --success-green-dark: #059669;
+            --bg-gradient: linear-gradient(to bottom right, #eff6ff, #ffffff, #eff6ff);
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
         }
-        
-        // Track original size
-        if (imageData.originalSize) {
-          originalSize += imageData.originalSize;
+
+        html {
+            scroll-behavior: smooth;
         }
-        
-        // Extract base64 data
-        let base64Data;
-        if (imageData.data.includes(',')) {
-          base64Data = imageData.data.split(',')[1];
-        } else {
-          base64Data = imageData.data;
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--slate-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
-        
-        // Decode base64
-        const decoded = Utilities.base64Decode(base64Data);
-        
-        // Determine file type
-        let extension = 'jpg';
-        let mimeType = 'image/jpeg';
-        
-        if (imageData.type) {
-          if (imageData.type.includes('png')) {
-            extension = 'png';
-            mimeType = 'image/png';
-          } else if (imageData.type.includes('webp')) {
-            extension = 'webp';
-            mimeType = 'image/webp';
-          } else if (imageData.type.includes('pdf')) {
-            extension = 'pdf';
-            mimeType = 'application/pdf';
-          }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-bottom: 4px solid var(--primary-blue);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        
-        // Create filename
-        const category = imageData.category ? '_' + imageData.category : '';
-        const filename = referenceNumber + '_' + (i + 1).toString().padStart(2, '0') + category + '.' + extension;
-        
-        // Create blob
-        const blob = Utilities.newBlob(decoded, mimeType, filename);
-        
-        // Determine target folder
-        let targetFolder = folder;
-        if (imageData.category) {
-          const cat = imageData.category.toLowerCase();
-          if (cat === 'exterior' && subfolderMap['exterior_photos']) {
-            targetFolder = subfolderMap['exterior_photos'];
-          } else if (cat === 'interior' && subfolderMap['interior_photos']) {
-            targetFolder = subfolderMap['interior_photos'];
-          } else if (cat === 'utility' && subfolderMap['utility_photos']) {
-            targetFolder = subfolderMap['utility_photos'];
-          } else if (cat === 'damage' && subfolderMap['damage_photos']) {
-            targetFolder = subfolderMap['damage_photos'];
-          } else if (cat === 'context' && subfolderMap['context_photos']) {
-            targetFolder = subfolderMap['context_photos'];
-          } else if (cat === 'identification' && subfolderMap['identification']) {
-            targetFolder = subfolderMap['identification'];
-          } else if (subfolderMap['photos']) {
-            targetFolder = subfolderMap['photos'];
-          }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        
-        // Save to Drive
-        const file = targetFolder.createFile(blob);
-        
-        Logger.log('Image ' + (i + 1) + ' saved: ' + file.getName());
-        totalSize += file.getSize();
-        savedCount++;
-        
-      } catch (imageError) {
-        Logger.log('Error saving image ' + (i + 1) + ': ' + imageError.toString());
-        errors.push('Image ' + (i + 1) + ': ' + imageError.toString());
-      }
-    }
-    
-  } catch (error) {
-    Logger.log('Error accessing folder: ' + error.toString());
-    errors.push('Folder access: ' + error.toString());
-  }
-  
-  const compressionSaved = originalSize > totalSize ? originalSize - totalSize : 0;
-  
-  Logger.log('Saved ' + savedCount + ' of ' + images.length + ' images');
-  
-  return {
-    savedCount: savedCount,
-    totalCount: images.length,
-    errors: errors,
-    totalSize: totalSize,
-    compressionSaved: compressionSaved
-  };
-}
 
-// Save to spreadsheet
-function saveToSheet(data, referenceNumber, folderUrl, processResult) {
-  const spreadsheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-  let sheet = spreadsheet.getSheetByName('Submissions');
-  
-  // Create sheet if it doesn't exist
-  if (!sheet) {
-    sheet = spreadsheet.insertSheet('Submissions');
-    const headers = [
-      'Timestamp',
-      'Reference',
-      'Photo Category',
-      'Customer Name',
-      'Email',
-      'Phone',
-      'Address',
-      'City',
-      'State',
-      'ZIP',
-      'Current Carrier',
-      'Vehicle Info',
-      'Images Count',
-      'Folder URL',
-      'Notes',
-      'Status',
-      'File Size',
-      'Compression Saved'
-    ];
-    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-    sheet.setFrozenRows(1);
-  }
-  
-  const row = [
-    new Date().toLocaleString('en-US', {timeZone: 'America/New_York'}),
-    referenceNumber,
-    data.photoCategory || '',
-    data.customerName || '',
-    data.email || '',
-    data.phone || '',
-    data.address || '',
-    data.city || '',
-    data.state || 'NC',
-    data.zip || '',
-    data.currentCarrier || '',
-    data.vehicleInfo || '',
-    processResult.savedCount + '/' + processResult.totalCount,
-    folderUrl,
-    data.notes || '',
-    'New',
-    formatFileSize(processResult.totalSize),
-    formatFileSize(processResult.compressionSaved)
-  ];
-  
-  sheet.appendRow(row);
-}
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
-// Send notifications
-function sendNotifications(data, referenceNumber, folderUrl, processResult) {
-  // Send to agency
-  const agencySubject = 'New ' + (data.photoCategory || 'Photo') + ' Upload - ' + data.customerName + ' - Ref: ' + referenceNumber;
-  const agencyBody = formatAgencyEmail(data, referenceNumber, folderUrl, processResult);
-  
-  MailApp.sendEmail({
-    to: CONFIG.EMAIL_TO,
-    cc: CONFIG.EMAIL_CC,
-    subject: agencySubject,
-    htmlBody: agencyBody
-  });
-  
-  // Send to customer
-  if (data.email) {
-    const customerSubject = 'Photos Received - ' + CONFIG.AGENCY_NAME + ' - Ref: ' + referenceNumber;
-    const customerBody = formatCustomerEmail(data, referenceNumber, processResult);
-    
-    MailApp.sendEmail({
-      to: data.email,
-      subject: customerSubject,
-      htmlBody: customerBody,
-      replyTo: CONFIG.AGENCY_EMAIL,
-      name: CONFIG.AGENCY_NAME
-    });
-  }
-  
-  Logger.log('Notifications sent');
-}
+        .logo {
+            height: 50px;
+            width: auto;
+        }
 
-// Format agency email
-function formatAgencyEmail(data, referenceNumber, folderUrl, processResult) {
-  const categoryLabels = {
-    'home': 'Home Insurance',
-    'claims': 'Claims/Damage',
-    'documents': 'Documents',
-    'other': 'General'
-  };
-  
-  const statusColor = processResult.savedCount === processResult.totalCount ? '#28a745' : '#ffc107';
-  const statusText = processResult.savedCount === processResult.totalCount ? 
-    'All Files Uploaded Successfully' : 
-    processResult.savedCount + ' of ' + processResult.totalCount + ' Files Uploaded';
-  
-  return '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' +
-    '<body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f4f4f4;">' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#f4f4f4;">' +
-    '<tr><td align="center" style="padding:20px 0;">' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#ffffff;border-radius:10px;">' +
-    '<tr><td style="background:linear-gradient(135deg,#1a5f7a 0%,#457b9d 100%);padding:30px;text-align:center;border-radius:10px 10px 0 0;">' +
-    '<img src="' + CONFIG.LOGO_URL + '" alt="Bill Layne Insurance" style="max-width:150px;margin-bottom:15px;">' +
-    '<h1 style="color:#ffffff;margin:0;font-size:24px;">New ' + (categoryLabels[data.photoCategory] || 'Photo') + ' Upload</h1>' +
-    '<p style="color:#ffffff;margin:10px 0 0 0;">Reference: ' + referenceNumber + '</p>' +
-    '</td></tr>' +
-    '<tr><td style="background:' + statusColor + ';padding:15px;text-align:center;color:#ffffff;font-weight:bold;">' +
-    statusText + '</td></tr>' +
-    '<tr><td style="padding:30px;">' +
-    '<div style="background:#f8f9fa;border-left:4px solid #1a5f7a;padding:15px;margin-bottom:20px;">' +
-    '<h3 style="color:#1a5f7a;margin:0 0 15px 0;">Customer Information</h3>' +
-    '<p style="margin:5px 0;"><strong>Name:</strong> ' + data.customerName + '</p>' +
-    '<p style="margin:5px 0;"><strong>Email:</strong> ' + (data.email || 'Not provided') + '</p>' +
-    '<p style="margin:5px 0;"><strong>Phone:</strong> ' + (data.phone || 'Not provided') + '</p>' +
-    (data.address ? '<p style="margin:5px 0;"><strong>Address:</strong> ' + data.address + 
-      (data.city ? ', ' + data.city : '') + (data.state ? ', ' + data.state : '') + 
-      (data.zip ? ' ' + data.zip : '') + '</p>' : '') +
-    '</div>' +
-    '<div style="background:#e8f4f8;border-left:4px solid #457b9d;padding:15px;margin-bottom:20px;">' +
-    '<h3 style="color:#457b9d;margin:0 0 15px 0;">Submission Details</h3>' +
-    '<p style="margin:5px 0;"><strong>Category:</strong> ' + (categoryLabels[data.photoCategory] || 'Other') + '</p>' +
-    '<p style="margin:5px 0;"><strong>Images:</strong> ' + processResult.savedCount + ' of ' + processResult.totalCount + '</p>' +
-    '<p style="margin:5px 0;"><strong>File Size:</strong> ' + formatFileSize(processResult.totalSize) + '</p>' +
-    (processResult.compressionSaved > 0 ? '<p style="margin:5px 0;color:#28a745;"><strong>Saved:</strong> ' + formatFileSize(processResult.compressionSaved) + '</p>' : '') +
-    '</div>' +
-    '<div style="text-align:center;margin:30px 0;">' +
-    '<a href="' + folderUrl + '" style="display:inline-block;background:linear-gradient(135deg,#1a5f7a 0%,#457b9d 100%);color:#ffffff;padding:15px 40px;text-decoration:none;border-radius:5px;font-weight:bold;">View Images in Drive</a>' +
-    '</div>' +
-    '</td></tr>' +
-    '<tr><td style="background:#333;padding:20px;text-align:center;border-radius:0 0 10px 10px;">' +
-    '<p style="color:#ffffff;margin:0;font-size:12px;">Image Collection System v2.3</p>' +
-    '</td></tr>' +
-    '</table></td></tr></table></body></html>';
-}
+        .header-text {
+            border-left: 2px solid var(--slate-300);
+            padding-left: 1rem;
+        }
 
-// Format customer email
-function formatCustomerEmail(data, referenceNumber, processResult) {
-  return '<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>' +
-    '<body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f4f4f4;">' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#f4f4f4;">' +
-    '<tr><td align="center" style="padding:20px 0;">' +
-    '<table role="presentation" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background:#ffffff;border-radius:10px;">' +
-    '<tr><td style="background:linear-gradient(135deg,#1a5f7a 0%,#457b9d 100%);padding:30px;text-align:center;border-radius:10px 10px 0 0;">' +
-    '<img src="' + CONFIG.LOGO_URL + '" alt="Bill Layne Insurance" style="max-width:150px;margin-bottom:15px;">' +
-    '<h1 style="color:#ffffff;margin:10px 0;font-size:28px;">Photos Received!</h1>' +
-    '</td></tr>' +
-    '<tr><td style="padding:30px;text-align:center;">' +
-    '<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#ffffff;padding:20px;border-radius:10px;margin-bottom:20px;">' +
-    '<p style="margin:0;font-size:14px;">Your Reference Number</p>' +
-    '<p style="margin:10px 0;font-size:24px;font-weight:bold;">' + referenceNumber + '</p>' +
-    '<p style="margin:0;font-size:14px;">Please save this for your records</p>' +
-    '</div>' +
-    '<p style="font-size:16px;color:#333;">Thank you for submitting your photos. We received ' + 
-    processResult.savedCount + ' photo' + (processResult.savedCount > 1 ? 's' : '') + ' and will review them promptly.</p>' +
-    '<div style="background:#f8f9fa;padding:20px;border-radius:10px;margin:20px 0;">' +
-    '<h3 style="color:#1a5f7a;margin:0 0 15px 0;">What Happens Next?</h3>' +
-    '<ol style="text-align:left;margin:0;padding-left:20px;color:#666;">' +
-    '<li style="margin:5px 0;">We\'ll review your photos within 1-2 business hours</li>' +
-    '<li style="margin:5px 0;">Our team will prepare your information</li>' +
-    '<li style="margin:5px 0;">You\'ll hear from us via email or phone</li>' +
-    '</ol></div>' +
-    '<div style="margin:30px 0;">' +
-    '<a href="tel:' + CONFIG.AGENCY_PHONE.replace(/\D/g, '') + '" style="display:inline-block;background:#1a5f7a;color:#ffffff;padding:12px 30px;text-decoration:none;border-radius:8px;font-weight:600;">Call ' + CONFIG.AGENCY_PHONE + '</a>' +
-    '</div>' +
-    '</td></tr>' +
-    '<tr><td style="background:#333;padding:20px;text-align:center;border-radius:0 0 10px 10px;">' +
-    '<p style="color:#ffffff;margin:5px 0;font-size:14px;">' +
-    CONFIG.AGENCY_NAME + '<br>' +
-    CONFIG.AGENCY_ADDRESS + '<br>' +
-    CONFIG.AGENCY_PHONE + ' | ' + CONFIG.AGENCY_EMAIL + '<br>' +
-    '<a href="https://' + CONFIG.AGENCY_WEBSITE + '" style="color:#a8dadc;text-decoration:none;">' + CONFIG.AGENCY_WEBSITE + '</a>' +
-    '</p></td></tr>' +
-    '</table></td></tr></table></body></html>';
-}
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
 
-// Utility functions
-function generateReferenceNumber() {
-  const date = new Date();
-  const year = date.getFullYear().toString().slice(-2);
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-  return 'BLI-' + year + month + day + '-' + random;
-}
+        .header-subtitle {
+            font-size: 0.875rem;
+            color: var(--slate-600);
+        }
 
-function getMonthName(monthIndex) {
-  const months = ['January', 'February', 'March', 'April', 'May', 'June',
-                  'July', 'August', 'September', 'October', 'November', 'December'];
-  return months[monthIndex];
-}
+        .header-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: color 0.2s;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            background: #eff6ff;
+        }
 
-function formatFileSize(bytes) {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-}
+        .header-contact:hover {
+            color: var(--primary-blue-dark);
+            background: #dbeafe;
+        }
 
-function logError(error, request) {
-  try {
-    const spreadsheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
-    let sheet = spreadsheet.getSheetByName('Error Log');
-    
-    if (!sheet) {
-      sheet = spreadsheet.insertSheet('Error Log');
-      const headers = ['Timestamp', 'Error Type', 'Error Message', 'Stack Trace', 'Request Data'];
-      sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-      sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-      sheet.setFrozenRows(1);
-    }
-    
-    let requestData = 'No data';
-    try {
-      if (request && request.postData) {
-        const data = JSON.parse(request.postData.contents);
-        requestData = JSON.stringify({
-          customerName: data.customerName,
-          email: data.email,
-          photoCategory: data.photoCategory,
-          imageCount: data.images ? data.images.length : 0
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            min-height: calc(100vh - 350px);
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Welcome Screen */
+        .hero {
+            background: linear-gradient(to right, var(--primary-blue), #1e40af);
+            color: white;
+            padding: 3rem 2.5rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+            text-align: center;
+        }
+
+        .hero-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-icon svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .welcome-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 2px solid;
+        }
+
+        .benefit-card.quick {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+
+        .benefit-card.secure {
+            background: #eff6ff;
+            border-color: #93c5fd;
+        }
+
+        .benefit-card.mobile {
+            background: #faf5ff;
+            border-color: #d8b4fe;
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-title {
+            font-weight: 600;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .benefit-text {
+            font-size: 0.875rem;
+            color: var(--slate-600);
+        }
+
+        .info-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 1.25rem;
+            border-radius: 0 0.75rem 0.75rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .info-box-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-box-icon {
+            color: #d97706;
+            flex-shrink: 0;
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box-list {
+            color: #92400e;
+            font-size: 0.875rem;
+            list-style: none;
+        }
+
+        .info-box-list li {
+            margin: 0.25rem 0;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .form-label .required {
+            color: #dc2626;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--slate-300);
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            transition: all 0.2s;
+            font-family: inherit;
+            min-height: 50px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
+
+        .form-hint {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--slate-600);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1.25rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            text-decoration: none;
+            min-height: 56px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-blue), #1e40af);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--slate-700);
+            border: 2px solid var(--slate-300);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--slate-50);
+            transform: scale(1.02);
+        }
+
+        .btn-success {
+            background: linear-gradient(to right, var(--success-green), var(--success-green-dark));
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        /* Upload Screen */
+        .greeting-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .greeting-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .greeting-icon {
+            background: #dbeafe;
+            padding: 0.75rem;
+            border-radius: 1rem;
+            flex-shrink: 0;
+        }
+
+        .greeting-icon svg {
+            width: 32px;
+            height: 32px;
+            color: var(--primary-blue);
+        }
+
+        .greeting-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .greeting-text {
+            color: var(--slate-600);
+            font-size: 1.125rem;
+        }
+
+        .progress-card {
+            background: linear-gradient(to right, #eff6ff, #e0e7ff);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 2px solid #bfdbfe;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--slate-800);
+        }
+
+        .progress-count {
+            text-align: right;
+        }
+
+        .progress-count-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: block;
+        }
+
+        .progress-count-label {
+            font-size: 0.875rem;
+            color: var(--slate-600);
+        }
+
+        .progress-message {
+            font-size: 1rem;
+            color: var(--slate-600);
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 1.25rem;
+            background: white;
+            border-radius: 9999px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-blue), #60a5fa);
+            border-radius: 9999px;
+            transition: width 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
+        .progress-percentage {
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        /* Tips Box */
+        .tips-box {
+            background: linear-gradient(to right, #f0fdf4, #dcfce7);
+            border-left: 4px solid var(--success-green);
+            padding: 1.25rem;
+            border-radius: 0 0.75rem 0.75rem 0;
+            margin: 1.5rem 0;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .tips-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--success-green);
+        }
+
+        .tips-title {
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        .tips-list {
+            color: #15803d;
+            font-size: 1rem;
+            list-style: none;
+        }
+
+        .tips-list li {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        /* Photo Checklist */
+        .checklist {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .checklist-header {
+            background: linear-gradient(to right, var(--slate-700), var(--slate-800));
+            padding: 1.5rem 2rem;
+            color: white;
+        }
+
+        .checklist-header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .checklist-header-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .checklist-items {
+            padding: 1.5rem;
+        }
+
+        /* Photo Item */
+        .photo-item {
+            border: 3px solid var(--slate-200);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .photo-item.uploaded {
+            border-color: var(--success-green);
+            background: #f0fdf4;
+        }
+
+        .photo-item:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .photo-content {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .photo-preview {
+            flex-shrink: 0;
+            width: 140px;
+            height: 140px;
+            position: relative;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.75rem;
+            border: 2px solid var(--slate-200);
+        }
+
+        .photo-item.uploaded .photo-preview img {
+            border-color: var(--success-green);
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+        }
+
+        .photo-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--success-green);
+            color: white;
+            border-radius: 50%;
+            padding: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-badge svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .example-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--primary-blue);
+            color: white;
+            font-size: 0.625rem;
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-preview-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--slate-100);
+            border: 2px dashed var(--slate-300);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-preview-placeholder svg {
+            width: 48px;
+            height: 48px;
+            color: var(--slate-400);
+        }
+
+        .photo-details {
+            flex: 1;
+        }
+
+        .photo-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--slate-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .photo-check-icon {
+            background: var(--success-green);
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem;
+        }
+
+        .photo-check-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .photo-description {
+            font-size: 1rem;
+            color: var(--slate-600);
+            margin-bottom: 1.25rem;
+            line-height: 1.6;
+        }
+
+        .photo-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-photo {
+            flex: 1;
+            min-width: 160px;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            min-height: 56px;
+        }
+
+        .btn-take {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+        }
+
+        .btn-take:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .btn-upload {
+            background: white;
+            color: var(--slate-700);
+            border: 3px solid var(--slate-300);
+        }
+
+        .btn-upload:hover {
+            background: var(--slate-50);
+            border-color: var(--primary-blue);
+        }
+
+        .photo-success {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #d1fae5;
+            color: #065f46;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .photo-success svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Delete Button for uploaded photos */
+        .photo-delete {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            cursor: pointer;
+            border-radius: 0.75rem;
+        }
+
+        .photo-delete:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .photo-delete-btn {
+            background: white;
+            color: #dc2626;
+            border: none;
+            border-radius: 50%;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.2s;
+            min-width: 56px;
+            min-height: 56px;
+        }
+
+        .photo-delete:hover .photo-delete-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .photo-delete-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Submit Section */
+        .submit-section {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--primary-blue);
+            margin-top: 1.5rem;
+        }
+
+        .submit-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .submit-info {
+            flex: 1;
+        }
+
+        .submit-status {
+            font-weight: 600;
+            color: var(--slate-700);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 1.125rem;
+        }
+
+        .submit-status.complete {
+            color: var(--success-green);
+        }
+
+        .submit-status svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .submit-hint {
+            font-size: 0.875rem;
+            color: var(--slate-600);
+        }
+
+        .submit-btn {
+            flex-shrink: 0;
+            min-width: 220px;
+            padding: 1.25rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        /* Confirmation Screen */
+        .confirmation-hero {
+            background: linear-gradient(to bottom right, var(--success-green), var(--success-green-dark));
+            color: white;
+            padding: 4rem 2.5rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confirmation-hero::before,
+        .confirmation-hero::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .confirmation-hero::before {
+            width: 256px;
+            height: 256px;
+            top: -128px;
+            right: -128px;
+        }
+
+        .confirmation-hero::after {
+            width: 192px;
+            height: 192px;
+            bottom: -96px;
+            left: -96px;
+        }
+
+        .confirmation-icon {
+            background: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .confirmation-icon svg {
+            width: 60px;
+            height: 60px;
+            color: var(--success-green);
+        }
+
+        .confirmation-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .confirmation-name {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .confirmation-message {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .confirmation-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .next-steps-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .next-steps-icon {
+            background: #dbeafe;
+            padding: 0.75rem;
+            border-radius: 1rem;
+        }
+
+        .next-steps-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--primary-blue);
+        }
+
+        .next-steps-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .steps {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+
+        .step-card.step-1 {
+            background: #eff6ff;
+            border-color: var(--primary-blue);
+        }
+
+        .step-card.step-2 {
+            background: #faf5ff;
+            border-color: #a855f7;
+        }
+
+        .step-card.step-3 {
+            background: #f0fdf4;
+            border-color: var(--success-green);
+        }
+
+        .step-number {
+            background: var(--primary-blue);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .step-card.step-2 .step-number {
+            background: #a855f7;
+        }
+
+        .step-card.step-3 .step-number {
+            background: var(--success-green);
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .step-description {
+            font-size: 0.875rem;
+            color: var(--slate-700);
+        }
+
+        .email-notice {
+            background: linear-gradient(to right, #eef2ff, #ede9fe);
+            border: 2px solid #c7d2fe;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .email-notice-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .email-notice-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #6366f1;
+        }
+
+        .email-notice-title {
+            font-weight: 700;
+            color: #3730a3;
+            margin-bottom: 0.25rem;
+        }
+
+        .email-notice-text {
+            font-size: 0.875rem;
+            color: #4338ca;
+        }
+
+        .contact-section {
+            border-top: 2px solid var(--slate-200);
+            padding-top: 2rem;
+        }
+
+        .contact-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 2px solid;
+        }
+
+        .contact-btn.phone {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: var(--primary-blue);
+        }
+
+        .contact-btn.phone:hover {
+            background: #dbeafe;
+            transform: scale(1.05);
+        }
+
+        .contact-btn.email {
+            background: #faf5ff;
+            border-color: #e9d5ff;
+            color: #7c3aed;
+        }
+
+        .contact-btn.email:hover {
+            background: #f3e8ff;
+            transform: scale(1.05);
+        }
+
+        .contact-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .contact-btn-text {
+            text-align: left;
+        }
+
+        .contact-btn-label {
+            display: block;
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .contact-btn-value {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .return-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            margin: 0 auto;
+            max-width: 200px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--slate-900);
+            color: white;
+            padding: 2rem 1.5rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            height: 40px;
+            width: auto;
+            margin: 0 auto 1rem;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+
+        .footer-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-address {
+            font-size: 0.875rem;
+            color: var(--slate-400);
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-contacts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-contact {
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .footer-contact:hover {
+            color: #60a5fa;
+        }
+
+        .footer-website {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+            transition: color 0.2s;
+        }
+
+        .footer-website:hover {
+            color: #93c5fd;
+        }
+
+        .footer-security {
+            font-size: 0.75rem;
+            color: var(--slate-500);
+            padding-top: 1rem;
+            border-top: 1px solid var(--slate-700);
+            margin-top: 1rem;
+        }
+
+        /* Loading State */
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-text {
+                display: none;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            .header-contact span:not(.mobile-only) {
+                display: none;
+            }
+
+            .mobile-only {
+                display: inline !important;
+            }
+
+            .hero {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 1.875rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .welcome-content {
+                padding: 1.5rem;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+
+            .greeting-title {
+                font-size: 1.5rem;
+            }
+
+            .photo-content {
+                flex-direction: column;
+            }
+
+            .photo-preview {
+                width: 100%;
+                height: 200px;
+            }
+
+            .photo-actions {
+                flex-direction: column;
+            }
+
+            .btn-photo {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .submit-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .submit-info {
+                width: 100%;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+
+            .confirmation-title {
+                font-size: 2rem;
+            }
+
+            .confirmation-name {
+                font-size: 1.25rem;
+            }
+
+            .contact-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-contacts {
+                align-items: center;
+            }
+        }
+
+        @media (min-width: 640px) {
+            .mobile-only {
+                display: none !important;
+            }
+        }
+
+        /* Hidden File Inputs */
+        .file-input {
+            display: none;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 {
+            margin-top: 0.5rem;
+        }
+
+        /* Privacy Note */
+        .privacy-note {
+            font-size: 0.75rem;
+            color: var(--slate-600);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Add Photo Button */
+        .add-photo-btn {
+            background: white;
+            border: 3px dashed var(--primary-blue);
+            color: var(--primary-blue);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .add-photo-btn:hover {
+            background: #eff6ff;
+            border-color: var(--primary-blue-dark);
+            transform: scale(1.02);
+        }
+
+        .add-photo-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Debug Info Box */
+        .debug-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .debug-box h4 {
+            margin-bottom: 0.5rem;
+            color: #92400e;
+        }
+
+        .debug-box pre {
+            background: white;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Agency" class="logo">
+                <div class="header-text">
+                    <div class="header-title">Photo Upload Portal</div>
+                    <div class="header-subtitle">🔒 Secure Document Submission</div>
+                </div>
+            </div>
+            <a href="tel:336-835-1993" class="header-contact">
+                <svg fill="currentColor" viewBox="0 0 20 20" style="width: 24px; height: 24px;">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                </svg>
+                <span>336-835-1993</span>
+                <span class="mobile-only">Call</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="screen active">
+            <div class="hero">
+                <div class="hero-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <h1 class="hero-title">Welcome to Our Photo Upload Portal</h1>
+                <p class="hero-subtitle">We need a few photos to process your insurance request. This secure portal makes it easy to submit everything we need.</p>
+            </div>
+
+            <div class="welcome-content">
+                <div class="benefits">
+                    <div class="benefit-card quick">
+                        <div class="benefit-icon">✓</div>
+                        <div class="benefit-title">Quick & Easy</div>
+                        <div class="benefit-text">Takes less than 5 minutes</div>
+                    </div>
+                    <div class="benefit-card secure">
+                        <div class="benefit-icon">🔒</div>
+                        <div class="benefit-title">100% Secure</div>
+                        <div class="benefit-text">Your data is protected</div>
+                    </div>
+                    <div class="benefit-card mobile">
+                        <div class="benefit-icon">📱</div>
+                        <div class="benefit-title">Mobile Friendly</div>
+                        <div class="benefit-text">Use your phone camera</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-box-header">
+                        <svg class="info-box-icon" style="width: 28px; height: 28px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h3 class="info-box-title">What You'll Need:</h3>
+                            <ul class="info-box-list">
+                                <li>• Your phone camera (or photo gallery)</li>
+                                <li>• About 5 minutes of your time</li>
+                                <li>• Good lighting for clear photos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="welcomeForm" onsubmit="startUpload(event)">
+                    <div class="form-group">
+                        <label for="customerName" class="form-label">
+                            Your Full Name <span class="required">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="customerName"
+                            class="form-input"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerEmail" class="form-label">
+                            Email Address <span class="required">*</span>
+                        </label>
+                        <input
+                            type="email"
+                            id="customerEmail"
+                            class="form-input"
+                            placeholder="john@email.com"
+                            required
+                        >
+                        <div class="form-hint">💡 We'll send you a confirmation email with your reference number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photoCategory" class="form-label">
+                            What type of photos do you need to send? <span class="required">*</span>
+                        </label>
+                        <select
+                            id="photoCategory"
+                            class="form-input"
+                            required
+                            onchange="updateCategoryPreview()"
+                            style="cursor: pointer;"
+                        >
+                            <option value="">-- Select Category --</option>
+                            <option value="home">Home Insurance Photos (8 photos)</option>
+                            <option value="claims">Claims/Damage Photos (6 photos)</option>
+                            <option value="documents">Documents/Identification (6 photos)</option>
+                            <option value="other">Other Photos (3 photos)</option>
+                        </select>
+                        <div class="form-hint" id="categoryHint">📸 Select the type of photos your agent requested</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <svg style="width: 28px; height: 28px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>Start Uploading Photos</span>
+                        <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    <div class="privacy-note">
+                        By continuing, you agree to securely share photos for insurance processing
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Upload Screen -->
+        <div id="uploadScreen" class="screen">
+            <div class="greeting-card">
+                <div class="greeting-header">
+                    <div class="greeting-icon">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="greeting-title">Welcome, <span id="displayName"></span>! 👋</h2>
+                        <p class="greeting-text">Please tap the blue button to take photos, or use "Upload File" to select existing photos.</p>
+                    </div>
+                </div>
+
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <div>
+                            <div class="progress-title">Your Progress</div>
+                            <div class="progress-message" id="progressMessage">Let's get started!</div>
+                        </div>
+                        <div class="progress-count">
+                            <span class="progress-count-number" id="progressCount">0/0</span>
+                            <span class="progress-count-label">Photos</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;">
+                            <span class="progress-percentage" id="progressPercent" style="display: none;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tips-box">
+                <div class="tips-header">
+                    <div class="tips-icon">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="tips-title">📸 Photo Tips for Best Results:</h3>
+                        <ul class="tips-list">
+                            <li><span>•</span><span>Make sure photos are clear and well-lit</span></li>
+                            <li><span>•</span><span>Include the entire item in the frame</span></li>
+                            <li><span>•</span><span>Hold your phone steady when taking photos</span></li>
+                            <li><span>•</span><span>Make sure nothing blocks the view</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <div class="checklist-header">
+                    <div class="checklist-header-title">
+                        <svg style="width: 28px; height: 28px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                        Photos We Need
+                    </div>
+                    <div class="checklist-header-subtitle">Please upload all photos below</div>
+                </div>
+
+                <div class="checklist-items" id="photoItems">
+                    <!-- Photo items will be inserted here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <div class="submit-content">
+                    <div class="submit-info">
+                        <div class="submit-status" id="submitStatus">
+                            Upload all photos to continue
+                        </div>
+                        <div class="submit-hint">Your photos will be securely submitted to our team</div>
+                    </div>
+                    <button id="submitBtn" class="btn btn-success submit-btn" onclick="submitPhotos()" disabled>
+                        <svg style="width: 28px; height: 28px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Submit All Photos</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Screen -->
+        <div id="confirmationScreen" class="screen">
+            <div class="confirmation-hero">
+                <div class="confirmation-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2 class="confirmation-title">All Done! 🎉</h2>
+                <div class="confirmation-name">Thank you, <span id="confirmName"></span>!</div>
+                <div class="confirmation-message">Your photos have been successfully submitted to Bill Layne Insurance</div>
+            </div>
+
+            <div class="confirmation-content">
+                <div class="next-steps-header">
+                    <div class="next-steps-icon">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="next-steps-title">What Happens Next?</h3>
+                </div>
+
+                <div class="steps">
+                    <div class="step-card step-1">
+                        <div class="step-number">1</div>
+                        <div>
+                            <div class="step-title">Review Process</div>
+                            <div class="step-description">Our team will review your photos within 1-2 business days</div>
+                        </div>
+                    </div>
+
+                    <div class="step-card step-2">
+                        <div class="step-number">2</div>
+                        <div>
+                            <div class="step-title">We'll Contact You</div>
+                            <div class="step-description">If we need any additional information, we'll reach out via phone or email</div>
+                        </div>
+                    </div>
+
+                    <div class="step-card step-3">
+                        <div class="step-number">3</div>
+                        <div>
+                            <div class="step-title">Processing Continues</div>
+                            <div class="step-description">We'll move forward with processing your insurance request</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-notice">
+                    <div class="email-notice-header">
+                        <div class="email-notice-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="email-notice-title">📧 Confirmation Email Sent</div>
+                            <div class="email-notice-text">You'll receive a confirmation email shortly with a reference number. Please keep it for your records.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-section">
+                    <h3 class="contact-title">Questions or Need Help?</h3>
+                    <div class="contact-buttons">
+                        <a href="tel:336-835-1993" class="contact-btn phone">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                            </svg>
+                            <div class="contact-btn-text">
+                                <span class="contact-btn-label">Call Us</span>
+                                <span class="contact-btn-value">336-835-1993</span>
+                            </div>
+                        </a>
+
+                        <a href="mailto:Save@BillLayneInsurance.com" class="contact-btn email">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <div class="contact-btn-text">
+                                <span class="contact-btn-label">Email Us</span>
+                                <span class="contact-btn-value">Save@BillLayneInsurance.com</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <button onclick="returnToStart()" class="btn btn-secondary return-btn">
+                        <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        <span>Return to Home</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Agency" class="footer-logo">
+        <h3 class="footer-title">Bill Layne Insurance Agency</h3>
+        <div class="footer-address">1283 N Bridge St, Elkin NC 28621</div>
+        <div class="footer-contacts">
+            <a href="tel:336-835-1993" class="footer-contact">📞 336-835-1993</a>
+            <a href="mailto:Save@BillLayneInsurance.com" class="footer-contact">✉️ Save@BillLayneInsurance.com</a>
+        </div>
+        <a href="https://www.BillLayneInsurance.com" target="_blank" rel="noopener noreferrer" class="footer-website">
+            www.BillLayneInsurance.com
+        </a>
+        <div class="footer-security">🔒 Your photos are securely transmitted and stored</div>
+    </footer>
+
+    <script>
+        // ===================================================================
+        // CONFIGURATION - UPDATE YOUR GOOGLE APPS SCRIPT URL HERE
+        // ===================================================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgRcVZgCDznG5bBTLpAxun6enA4OP4k6HQhYHYeyq4nkFNKxBkFg3QVQr5n9p9olAlag/exec';
+
+        // ===================================================================
+        // PHOTO REQUIREMENTS BY CATEGORY
+        // ===================================================================
+        const PHOTO_CATEGORIES = {
+            home: [
+                {
+                    id: 'front-exterior',
+                    title: 'Front Exterior of Home',
+                    description: 'A clear view of the entire front of the house, including the roof.',
+                    category: 'exterior'
+                },
+                {
+                    id: 'rear-exterior',
+                    title: 'Rear Exterior of Home',
+                    description: 'A clear view of the entire back of the house.',
+                    category: 'exterior'
+                },
+                {
+                    id: 'left-side',
+                    title: 'Left Side of Home',
+                    description: 'A clear view of the left side of the house.',
+                    category: 'exterior'
+                },
+                {
+                    id: 'right-side',
+                    title: 'Right Side of Home',
+                    description: 'A clear view of the right side of the house.',
+                    category: 'exterior'
+                },
+                {
+                    id: 'water-heater',
+                    title: 'Water Heater',
+                    description: 'Show the entire unit, including pipes. Ensure the label is visible.',
+                    category: 'interior'
+                },
+                {
+                    id: 'hvac-system',
+                    title: 'HVAC System',
+                    description: 'A photo of your primary heating and cooling unit.',
+                    category: 'interior'
+                },
+                {
+                    id: 'electrical-panel',
+                    title: 'Electrical Panel',
+                    description: 'Open the panel door and show all circuit breakers clearly.',
+                    category: 'utility'
+                },
+                {
+                    id: 'kitchen',
+                    title: 'Kitchen',
+                    description: 'A wide view showing all major appliances.',
+                    category: 'interior'
+                }
+            ],
+            claims: [
+                {
+                    id: 'damage-overview',
+                    title: 'Overall Damage View',
+                    description: 'A wide shot showing the full extent of the damage.',
+                    category: 'damage'
+                },
+                {
+                    id: 'damage-closeup',
+                    title: 'Close-up of Damage',
+                    description: 'A detailed close-up photo showing the specific damage.',
+                    category: 'damage'
+                },
+                {
+                    id: 'damage-angle-1',
+                    title: 'Damage - Angle 1',
+                    description: 'Photo of the damage from the first angle.',
+                    category: 'damage'
+                },
+                {
+                    id: 'damage-angle-2',
+                    title: 'Damage - Angle 2',
+                    description: 'Photo of the damage from a different angle.',
+                    category: 'damage'
+                },
+                {
+                    id: 'surrounding-area',
+                    title: 'Surrounding Area',
+                    description: 'Show the area around the damage for context.',
+                    category: 'context'
+                },
+                {
+                    id: 'affected-items',
+                    title: 'Affected Items/Property',
+                    description: 'Photos of any items or property that were damaged.',
+                    category: 'damage'
+                }
+            ],
+            documents: [
+                {
+                    id: 'drivers-license',
+                    title: 'Driver\'s License',
+                    description: 'Clear photo of your driver\'s license (front side).',
+                    category: 'identification'
+                },
+                {
+                    id: 'insurance-card',
+                    title: 'Current Insurance Card',
+                    description: 'Photo of your current insurance card (if applicable).',
+                    category: 'insurance'
+                },
+                {
+                    id: 'vehicle-registration',
+                    title: 'Vehicle Registration',
+                    description: 'Photo of your vehicle registration document.',
+                    category: 'vehicle'
+                },
+                {
+                    id: 'title-deed',
+                    title: 'Property Title/Deed',
+                    description: 'Photo of property title or deed document.',
+                    category: 'property'
+                },
+                {
+                    id: 'mortgage-statement',
+                    title: 'Mortgage Statement',
+                    description: 'Recent mortgage statement showing lender information.',
+                    category: 'property'
+                },
+                {
+                    id: 'additional-document',
+                    title: 'Additional Document',
+                    description: 'Any other document requested by your agent.',
+                    category: 'general'
+                }
+            ],
+            other: [
+                {
+                    id: 'custom-photo-1',
+                    title: 'Photo 1',
+                    description: 'Please take the photo as described by your agent.',
+                    category: 'general'
+                },
+                {
+                    id: 'custom-photo-2',
+                    title: 'Photo 2',
+                    description: 'Please take the photo as described by your agent.',
+                    category: 'general'
+                },
+                {
+                    id: 'custom-photo-3',
+                    title: 'Photo 3',
+                    description: 'Please take the photo as described by your agent.',
+                    category: 'general'
+                }
+            ]
+        };
+
+        const DEFAULT_PHOTO_REQUIREMENTS = PHOTO_CATEGORIES.home;
+
+        // Application state
+        let state = {
+            customerName: '',
+            phone: '',
+            email: '',
+            address: '',
+            city: '',
+            state: 'NC',
+            zip: '',
+            currentCarrier: '',
+            type: 'HOME',
+            purpose: '',
+            selection: '',
+            vehicleInfo: '',
+            photoCategory: '',
+            photos: {},
+            photoRequirements: [],
+            customPhotoCounter: 0,
+            referenceNumber: generateReferenceNumber(),
+            submittedAt: null,
+            deviceInfo: getDeviceInfo()
+        };
+
+        // Initialize the application
+        function init() {
+            console.log('🚀 Initializing photo upload portal v2.3');
+            
+            // Read URL parameters first
+            prefillFromURL();
+
+            // Set up photo requirements based on URL or use defaults
+            setupPhotoRequirements();
+
+            // Render photo items
+            renderPhotoItems();
+
+            // Update progress
+            updateProgress();
+            
+            console.log('✅ Initialization complete');
+        }
+
+        // Generate reference number
+        function generateReferenceNumber() {
+            const date = new Date();
+            const year = date.getFullYear().toString().slice(-2);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `BLI-${year}${month}${day}-${random}`;
+        }
+
+        // Get device information
+        function getDeviceInfo() {
+            return {
+                platform: navigator.platform || 'Unknown',
+                userAgent: navigator.userAgent,
+                screenResolution: `${window.screen.width}x${window.screen.height}`,
+                language: navigator.language
+            };
+        }
+
+        // Pre-fill form from URL parameters
+        function prefillFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Customer info
+            const customerName = urlParams.get('customerName') || urlParams.get('name');
+            if (customerName) {
+                document.getElementById('customerName').value = decodeURIComponent(customerName);
+                state.customerName = decodeURIComponent(customerName);
+            }
+
+            // Phone
+            const phone = urlParams.get('phone');
+            if (phone) {
+                state.phone = decodeURIComponent(phone);
+            }
+
+            // Email
+            const email = urlParams.get('email');
+            if (email) {
+                state.email = decodeURIComponent(email);
+                const emailField = document.getElementById('customerEmail');
+                if (emailField) {
+                    emailField.value = decodeURIComponent(email);
+                }
+            }
+
+            // Address
+            const address = urlParams.get('address');
+            if (address) {
+                state.address = decodeURIComponent(address);
+            }
+
+            // City
+            const city = urlParams.get('city');
+            if (city) {
+                state.city = decodeURIComponent(city);
+            }
+
+            // State
+            const stateParam = urlParams.get('state');
+            if (stateParam) {
+                state.state = decodeURIComponent(stateParam);
+            }
+
+            // ZIP
+            const zip = urlParams.get('zip');
+            if (zip) {
+                state.zip = decodeURIComponent(zip);
+            }
+
+            // Current Carrier
+            const currentCarrier = urlParams.get('currentCarrier') || urlParams.get('carrier');
+            if (currentCarrier) {
+                state.currentCarrier = decodeURIComponent(currentCarrier);
+            }
+
+            // Type
+            const type = urlParams.get('type');
+            if (type) {
+                state.type = decodeURIComponent(type).toUpperCase();
+            }
+
+            // Purpose
+            const purpose = urlParams.get('purpose');
+            if (purpose) {
+                state.purpose = decodeURIComponent(purpose);
+            }
+
+            // Selection (alternative to purpose)
+            const selection = urlParams.get('selection');
+            if (selection) {
+                state.selection = decodeURIComponent(selection);
+            }
+
+            // Vehicle info
+            const vehicleInfo = urlParams.get('vehicleInfo');
+            if (vehicleInfo) {
+                state.vehicleInfo = decodeURIComponent(vehicleInfo);
+            }
+
+            // Notes
+            const notes = urlParams.get('notes');
+            if (notes) {
+                state.notes = decodeURIComponent(notes);
+            }
+            
+            console.log('📋 Pre-filled from URL:', {
+                name: state.customerName,
+                email: state.email,
+                category: state.photoCategory
+            });
+        }
+
+        // Setup photo requirements from URL or use defaults
+        function setupPhotoRequirements() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const photosList = urlParams.get('photos');
+            const categoryParam = urlParams.get('category') || urlParams.get('photoCategory');
+
+            // Check if category is specified in URL
+            if (categoryParam && PHOTO_CATEGORIES[categoryParam.toLowerCase()]) {
+                state.photoCategory = categoryParam.toLowerCase();
+                state.photoRequirements = PHOTO_CATEGORIES[state.photoCategory];
+                // Pre-select in dropdown if present
+                const categorySelect = document.getElementById('photoCategory');
+                if (categorySelect) {
+                    categorySelect.value = state.photoCategory;
+                }
+                console.log('📸 Category from URL:', state.photoCategory);
+            } else if (photosList) {
+                // Parse photos from URL (comma-separated list)
+                const photoNames = photosList.split(',').map(p => decodeURIComponent(p.trim()));
+
+                state.photoRequirements = photoNames.map((name, index) => {
+                    // Create a unique ID from the photo name
+                    const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+                    // Determine category and description based on name
+                    let description = `Please take a clear photo of: ${name}`;
+                    let category = 'general';
+
+                    // Smart descriptions based on common photo types
+                    if (name.toLowerCase().includes('front')) {
+                        description = 'A clear view of the entire front, including the roof if visible.';
+                        category = 'exterior';
+                    } else if (name.toLowerCase().includes('back') || name.toLowerCase().includes('rear')) {
+                        description = 'A clear view of the entire back area.';
+                        category = 'exterior';
+                    } else if (name.toLowerCase().includes('side')) {
+                        description = 'A clear view of the side area.';
+                        category = 'exterior';
+                    } else if (name.toLowerCase().includes('water') || name.toLowerCase().includes('heater')) {
+                        description = 'Show the entire unit, including pipes and connections. Make sure the label is visible.';
+                        category = 'utility';
+                    } else if (name.toLowerCase().includes('hvac') || name.toLowerCase().includes('heating') || name.toLowerCase().includes('cooling')) {
+                        description = 'A photo of the entire unit. Include the model label if possible.';
+                        category = 'utility';
+                    } else if (name.toLowerCase().includes('kitchen')) {
+                        description = 'A wide-angle shot showing all major appliances.';
+                        category = 'interior';
+                    } else if (name.toLowerCase().includes('bathroom')) {
+                        description = 'A wide-angle shot showing the vanity, toilet, and tub/shower.';
+                        category = 'interior';
+                    } else if (name.toLowerCase().includes('electrical') || name.toLowerCase().includes('panel')) {
+                        description = 'A clear photo with the panel door open, showing all circuit breakers.';
+                        category = 'utility';
+                    } else if (name.toLowerCase().includes('crawl')) {
+                        description = 'From the opening, take a photo showing as much of the area as possible.';
+                        category: 'structural';
+                    } else if (name.toLowerCase().includes('roof')) {
+                        description = 'A photo showing the roof condition. Take from the ground or inside the attic.';
+                        category = 'exterior';
+                    }
+
+                    return {
+                        id: id,
+                        title: name,
+                        description: description,
+                        category: category
+                    };
+                });
+                console.log('📸 Custom photos from URL:', state.photoRequirements.length);
+            } else {
+                // Use default requirements (home)
+                state.photoRequirements = DEFAULT_PHOTO_REQUIREMENTS;
+                console.log('📸 Using default photo requirements');
+            }
+        }
+
+        // Update category preview hint
+        function updateCategoryPreview() {
+            const categorySelect = document.getElementById('photoCategory');
+            const categoryHint = document.getElementById('categoryHint');
+            const selectedCategory = categorySelect.value;
+
+            if (selectedCategory && PHOTO_CATEGORIES[selectedCategory]) {
+                const photoCount = PHOTO_CATEGORIES[selectedCategory].length;
+                const categoryDescriptions = {
+                    home: `You'll need to upload ${photoCount} photos of your home including exterior views, water heater, HVAC, and more.`,
+                    claims: `You'll need to upload ${photoCount} photos showing the damage from multiple angles and the surrounding area.`,
+                    documents: `You'll need to upload ${photoCount} document photos including ID, insurance cards, and property documents.`,
+                    other: `You'll need to upload ${photoCount} photos as specified by your agent.`
+                };
+                categoryHint.textContent = '📸 ' + categoryDescriptions[selectedCategory];
+            } else {
+                categoryHint.textContent = '📸 Select the type of photos your agent requested';
+            }
+        }
+
+        // Navigate to upload screen
+        function startUpload(event) {
+            event.preventDefault();
+            
+            console.log('▶️ Starting upload process');
+            
+            state.customerName = document.getElementById('customerName').value;
+            state.email = document.getElementById('customerEmail').value;
+            state.photoCategory = document.getElementById('photoCategory').value;
+            state.submittedAt = new Date().toISOString();
+
+            console.log('📝 Form data:', {
+                name: state.customerName,
+                email: state.email,
+                category: state.photoCategory
+            });
+
+            // Set photo requirements based on selected category
+            if (state.photoCategory && PHOTO_CATEGORIES[state.photoCategory]) {
+                state.photoRequirements = PHOTO_CATEGORIES[state.photoCategory];
+                // Clear any previous photos since category changed
+                state.photos = {};
+            }
+
+            document.getElementById('displayName').textContent = state.customerName.split(' ')[0];
+
+            // Re-render photo items with selected category
+            renderPhotoItems();
+            updateProgress();
+
+            showScreen('uploadScreen');
+        }
+
+        // Render photo items
+        function renderPhotoItems() {
+            const container = document.getElementById('photoItems');
+            container.innerHTML = state.photoRequirements.map(photo => `
+                <div class="photo-item" id="item-${photo.id}" data-photo-id="${photo.id}">
+                    <div class="photo-content">
+                        <div class="photo-preview" id="preview-${photo.id}">
+                            <div class="photo-preview-placeholder">
+                                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="photo-details">
+                            <div class="photo-title" id="title-${photo.id}">
+                                ${photo.title}
+                            </div>
+                            <div class="photo-description">${photo.description}</div>
+                            <div class="photo-actions">
+                                <input type="file" id="camera-${photo.id}" class="file-input" accept="image/*" capture="environment" onchange="handleFileSelect('${photo.id}', this.files[0])">
+                                <input type="file" id="upload-${photo.id}" class="file-input" accept="image/*" onchange="handleFileSelect('${photo.id}', this.files[0])">
+
+                                <button class="btn btn-take btn-photo" onclick="document.getElementById('camera-${photo.id}').click()">
+                                    <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    Take Photo
+                                </button>
+
+                                <button class="btn btn-upload btn-photo" onclick="document.getElementById('upload-${photo.id}').click()">
+                                    <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    Upload File
+                                </button>
+                            </div>
+                            <div id="success-${photo.id}" class="photo-success hidden">
+                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                ✓ Photo uploaded! Tap image to replace if needed.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add "Add Another Photo" button if category is "other"
+            if (state.photoCategory === 'other') {
+                container.innerHTML += `
+                    <button class="btn add-photo-btn" onclick="addAnotherPhoto()">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add Another Photo
+                    </button>
+                `;
+            }
+        }
+
+        // Add another photo slot (for "other" category)
+        function addAnotherPhoto() {
+            state.customPhotoCounter++;
+            const newPhotoId = `custom-photo-${state.customPhotoCounter}-${Date.now()}`;
+            const newPhoto = {
+                id: newPhotoId,
+                title: `Additional Photo ${state.customPhotoCounter}`,
+                description: 'Please take the photo as described by your agent.',
+                category: 'general'
+            };
+
+            // Add to requirements
+            state.photoRequirements.push(newPhoto);
+
+            // Re-render to show the new photo slot
+            renderPhotoItems();
+            updateProgress();
+
+            // Scroll to the new item
+            setTimeout(() => {
+                const newItem = document.getElementById(`item-${newPhotoId}`);
+                if (newItem) {
+                    newItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+
+        // Handle file selection with compression
+        async function handleFileSelect(photoId, file) {
+            if (!file) return;
+
+            console.log(`📷 Processing photo: ${photoId}`);
+
+            // Show processing indicator
+            const successEl = document.getElementById(`success-${photoId}`);
+            successEl.textContent = '⏳ Processing photo...';
+            successEl.classList.remove('hidden');
+
+            try {
+                // Compress image before storing
+                const compressedFile = await compressImage(file);
+
+                // Store the compressed file
+                const photoData = state.photoRequirements.find(p => p.id === photoId);
+                state.photos[photoId] = {
+                    file: compressedFile,
+                    name: file.name,
+                    type: compressedFile.type,
+                    originalSize: file.size,
+                    compressedSize: compressedFile.size,
+                    category: photoData ? photoData.category : 'general',
+                    compressed: file.size > compressedFile.size
+                };
+
+                console.log(`✅ Photo processed: ${formatFileSize(file.size)} → ${formatFileSize(compressedFile.size)}`);
+
+                // Create preview URL
+                const previewUrl = URL.createObjectURL(compressedFile);
+
+                // Update UI
+                const previewEl = document.getElementById(`preview-${photoId}`);
+                previewEl.innerHTML = `
+                    <img src="${previewUrl}" alt="Uploaded photo">
+                    <div class="photo-badge">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div class="photo-delete" onclick="deletePhoto('${photoId}')">
+                        <button class="photo-delete-btn">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                // Add checkmark to title
+                const titleEl = document.getElementById(`title-${photoId}`);
+                if (!titleEl.querySelector('.photo-check-icon')) {
+                    titleEl.innerHTML = `
+                        <div class="photo-check-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        ${titleEl.textContent}
+                    `;
+                }
+
+                // Show success message
+                const compressionInfo = state.photos[photoId].compressed ?
+                    ` (Reduced from ${formatFileSize(file.size)} to ${formatFileSize(compressedFile.size)})` : '';
+                successEl.innerHTML = `
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    ✓ Photo uploaded${compressionInfo}! Tap image to replace if needed.
+                `;
+                successEl.classList.remove('hidden');
+
+                // Update item styling
+                document.getElementById(`item-${photoId}`).classList.add('uploaded');
+
+                // Update progress
+                updateProgress();
+
+            } catch (error) {
+                console.error('❌ Error processing photo:', error);
+                successEl.textContent = '❌ Error processing photo. Please try again.';
+                successEl.style.background = '#fee2e2';
+                successEl.style.color = '#991b1b';
+            }
+        }
+
+        // Compress image
+        async function compressImage(file) {
+            // Skip if not an image
+            if (!file.type.startsWith('image/')) {
+                return file;
+            }
+
+            // Skip if already small
+            if (file.size < 500000) { // Less than 500KB
+                return file;
+            }
+
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true,
+                fileType: file.type
+            };
+
+            try {
+                const compressed = await imageCompression(file, options);
+                console.log('🗜️ Compressed:', file.size, '->', compressed.size);
+                return compressed;
+            } catch (error) {
+                console.error('⚠️ Compression failed, using original:', error);
+                return file;
+            }
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 10) / 10 + ' ' + sizes[i];
+        }
+
+        // Delete photo
+        function deletePhoto(photoId) {
+            event.stopPropagation();
+
+            console.log(`🗑️ Deleting photo: ${photoId}`);
+
+            // Remove from state
+            if (state.photos[photoId]) {
+                URL.revokeObjectURL(URL.createObjectURL(state.photos[photoId].file));
+                delete state.photos[photoId];
+            }
+
+            // Find original photo data
+            const photoData = state.photoRequirements.find(p => p.id === photoId);
+
+            // Reset preview
+            const previewEl = document.getElementById(`preview-${photoId}`);
+            previewEl.innerHTML = `
+                <div class="photo-preview-placeholder">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+            `;
+
+            // Remove checkmark from title
+            const titleEl = document.getElementById(`title-${photoId}`);
+            titleEl.innerHTML = photoData ? photoData.title : 'Photo';
+
+            // Hide success message
+            document.getElementById(`success-${photoId}`).classList.add('hidden');
+
+            // Update item styling
+            document.getElementById(`item-${photoId}`).classList.remove('uploaded');
+
+            // Update progress
+            updateProgress();
+        }
+
+        // Update progress
+        function updateProgress() {
+            const completed = Object.keys(state.photos).length;
+            const total = state.photoRequirements.length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            // Update counter
+            document.getElementById('progressCount').textContent = `${completed}/${total}`;
+
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${percentage}%`;
+
+            // Update percentage text
+            const percentEl = document.getElementById('progressPercent');
+            if (percentage > 15) {
+                percentEl.textContent = `${percentage}%`;
+                percentEl.style.display = 'inline';
+            } else {
+                percentEl.style.display = 'none';
+            }
+
+            // Update message
+            const messageEl = document.getElementById('progressMessage');
+            if (completed === 0) {
+                messageEl.textContent = "Let's get started!";
+            } else if (completed < total) {
+                messageEl.textContent = `Great job! You're ${percentage}% done`;
+            } else {
+                messageEl.textContent = "Perfect! All photos uploaded ✓";
+            }
+
+            // Update submit button
+            const submitBtn = document.getElementById('submitBtn');
+            const submitStatus = document.getElementById('submitStatus');
+
+            if (completed === total && total > 0) {
+                submitBtn.disabled = false;
+                submitStatus.innerHTML = `
+                    <svg style="width: 24px; height: 24px;" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    All photos ready to submit!
+                `;
+                submitStatus.classList.add('complete');
+            } else {
+                submitBtn.disabled = true;
+                const remaining = total - completed;
+                submitStatus.innerHTML = `Upload ${remaining} more photo${remaining === 1 ? '' : 's'} to continue`;
+                submitStatus.classList.remove('complete');
+            }
+        }
+
+        // Submit photos to Google Apps Script
+        async function submitPhotos() {
+            const submitBtn = document.getElementById('submitBtn');
+            const originalContent = submitBtn.innerHTML;
+
+            console.log('🚀 Starting submission...');
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Submitting...</span>
+                </div>
+            `;
+
+            try {
+                // Convert photos to base64
+                console.log('📦 Converting images to base64...');
+                const images = [];
+                for (const [id, photoData] of Object.entries(state.photos)) {
+                    const base64 = await fileToBase64(photoData.file);
+                    images.push({
+                        name: photoData.name,
+                        type: photoData.type,
+                        data: base64,
+                        category: photoData.category,
+                        originalSize: photoData.originalSize,
+                        compressed: photoData.compressed
+                    });
+                }
+
+                // Prepare submission data - CRITICAL: Must match Google Apps Script exactly
+                const submissionData = {
+                    customerName: state.customerName,
+                    phone: state.phone || '',
+                    email: state.email,
+                    address: state.address || '',
+                    city: state.city || '',
+                    state: state.state || 'NC',
+                    zip: state.zip || '',
+                    photoCategory: state.photoCategory || 'other', // ✅ CRITICAL: Always include
+                    policyNumber: state.policyNumber || '',
+                    currentCarrier: state.currentCarrier || '',
+                    type: state.type || 'HOME',
+                    purpose: state.purpose || state.selection || '',
+                    selection: state.selection || '',
+                    vehicleInfo: state.vehicleInfo || '',
+                    referenceNumber: state.referenceNumber,
+                    images: images,
+                    deviceInfo: state.deviceInfo,
+                    submittedAt: state.submittedAt,
+                    notes: state.notes || 'Submitted via photo upload portal v2.3'
+                };
+
+                console.log('📤 Submission data:', {
+                    ...submissionData,
+                    images: `${images.length} photos`
+                });
+
+                // Submit to Google Apps Script
+                console.log('🌐 Sending to:', GOOGLE_SCRIPT_URL);
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(submissionData),
+                    // Don't use no-cors - we need to read the response
+                    mode: 'cors'
+                });
+
+                console.log('📥 Response status:', response.status);
+
+                // Try to parse response
+                let result;
+                try {
+                    result = await response.json();
+                    console.log('📋 Response data:', result);
+                } catch (e) {
+                    console.warn('⚠️ Could not parse JSON response:', e);
+                    // If we can't parse, but status is OK, assume success
+                    if (response.ok) {
+                        result = { status: 'success' };
+                    } else {
+                        throw new Error('Upload failed with status: ' + response.status);
+                    }
+                }
+
+                // Check if successful
+                if (result.status === 'success' || response.ok) {
+                    console.log('✅ Submission successful!');
+                    // Show confirmation screen
+                    document.getElementById('confirmName').textContent = state.customerName.split(' ')[0];
+                    showScreen('confirmationScreen');
+                } else {
+                    throw new Error(result.message || 'Upload failed');
+                }
+
+            } catch (error) {
+                console.error('❌ Upload error:', error);
+                alert(`There was an error submitting your photos:\n\n${error.message}\n\nPlease try again or call us at 336-835-1993`);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalContent;
+            }
+        }
+
+        // Convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Show specific screen
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Return to start
+        function returnToStart() {
+            // Reset state
+            state = {
+                customerName: '',
+                phone: '',
+                email: '',
+                address: '',
+                city: '',
+                zip: '',
+                type: 'HOME',
+                purpose: '',
+                selection: '',
+                photos: {},
+                photoRequirements: [],
+                photoCategory: '',
+                referenceNumber: generateReferenceNumber(),
+                submittedAt: null,
+                deviceInfo: getDeviceInfo()
+            };
+
+            // Reset form
+            document.getElementById('welcomeForm').reset();
+
+            // Re-initialize
+            init();
+
+            // Show welcome screen
+            showScreen('welcomeScreen');
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('=== Photo Upload Portal v2.3 ===');
+            init();
         });
-      }
-    } catch (e) {
-      requestData = 'Error parsing request';
-    }
-    
-    sheet.appendRow([
-      new Date().toLocaleString('en-US', {timeZone: 'America/New_York'}),
-      error.name || 'Unknown Error',
-      error.message || error.toString(),
-      error.stack || 'No stack trace',
-      requestData
-    ]);
-    
-  } catch (logError) {
-    Logger.log('Failed to log error: ' + logError.toString());
-  }
-}
-
-function createErrorResponse(message) {
-  return ContentService
-    .createTextOutput(JSON.stringify({
-      status: 'error',
-      message: message
-    }))
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    });
-}
-
-function doGet() {
-  return ContentService
-    .createTextOutput('Image Collection System v2.3 Active - ' + new Date().toISOString())
-    .setMimeType(ContentService.MimeType.TEXT);
-}
+    </script>
+</body>
+</html>
