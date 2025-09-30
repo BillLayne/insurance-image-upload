@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a5f7a">
+    <title>Photo Upload Link Generator - Bill Layne Insurance</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a5f7a;
+            --secondary: #457b9d;
+            --accent: #a8dadc;
+            --background: #f8f9fa;
+            --text: #2c3e50;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #e1f5f9 100%);
+            min-height: 100vh;
+            padding: 10px;
+            color: var(--text);
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 10px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 20px;
+            border-radius: var(--radius);
+        }
+        
+        .instructions h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+            font-size: 13px;
+            color: #78350f;
+            line-height: 1.6;
+        }
+        
+        /* Form Container */
+        .form-content {
+            padding: 20px;
+        }
+        
+        /* Section Headers */
+        .section-header {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 20px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Type Selection */
+        .type-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .type-btn {
+            padding: 15px;
+            border: 2px solid var(--accent);
+            background: white;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .type-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        
+        .type-btn-icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .type-btn-label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Purpose Selection */
+        .purpose-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .purpose-btn {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .purpose-btn.active {
+            border-color: var(--primary);
+            background: #eff6ff;
+            color: var(--primary);
+        }
+        
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        
+        .required {
+            color: var(--danger);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 95, 122, 0.1);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        /* Checkbox Grid */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: var(--background);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            min-height: 44px;
+        }
+        
+        .checkbox-item:hover {
+            background: #e0f2fe;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .checkbox-item span {
+            flex: 1;
+            line-height: 1.3;
+        }
+        
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(26, 95, 122, 0.2);
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+            margin-top: 10px;
+        }
+        
+        /* Output Section */
+        .output-section {
+            display: none;
+            padding: 20px;
+            background: var(--background);
+            border-top: 2px solid #e5e7eb;
+        }
+        
+        .output-section.show {
+            display: block;
+        }
+        
+        .output-box {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .output-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .output-content {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text);
+            word-break: break-word;
+            white-space: pre-wrap;
+            padding-right: 60px;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .copy-btn.copied {
+            background: var(--success);
+        }
+        
+        /* Action Buttons */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .action-btn.green {
+            background: var(--success);
+            color: white;
+        }
+        
+        .action-btn.blue {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .action-btn.yellow {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .action-btn.gray {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* QR Code */
+        .qr-section {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: var(--radius);
+            margin-top: 15px;
+        }
+        
+        .qr-section img {
+            max-width: 200px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .qr-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        
+        .qr-hint {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+        
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: var(--success);
+            color: white;
+            padding: 12px;
+            border-radius: var(--radius);
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .purpose-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .output-content {
+                padding-right: 0;
+                margin-bottom: 40px;
+            }
+            
+            .copy-btn {
+                position: static;
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Photo Upload Link Generator</h1>
+            <p>Bill Layne Insurance Agency - Agent Tool</p>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <h3>How to Use:</h3>
+            <ol>
+                <li>Select upload type (Home/Vehicle/Forms/Claim)</li>
+                <li>Choose the purpose (Quote, Add Coverage, etc.)</li>
+                <li>Fill in customer information</li>
+                <li>Click "Generate Link" to create pre-filled upload link</li>
+                <li>Copy and send via text, email, or Agency Matrix</li>
+            </ol>
+        </div>
+        
+        <!-- Form -->
+        <form id="linkGeneratorForm" class="form-content">
+            <!-- Type Selection -->
+            <div class="section-header">
+                Upload Type
+            </div>
+            <div class="type-selector">
+                <div class="type-btn active" data-type="home">
+                    <span class="type-btn-icon">🏠</span>
+                    <span class="type-btn-label">Home</span>
+                </div>
+                <div class="type-btn" data-type="vehicle">
+                    <span class="type-btn-icon">🚗</span>
+                    <span class="type-btn-label">Vehicle</span>
+                </div>
+                <div class="type-btn" data-type="forms">
+                    <span class="type-btn-icon">📄</span>
+                    <span class="type-btn-label">Forms</span>
+                </div>
+                <div class="type-btn" data-type="claim">
+                    <span class="type-btn-icon">🚨</span>
+                    <span class="type-btn-label">Claim</span>
+                </div>
+            </div>
+            
+            <!-- Purpose Selection -->
+            <div class="section-header">
+                Purpose
+            </div>
+            <div class="purpose-grid">
+                <div class="purpose-btn active" data-purpose="quote">Quote</div>
+                <div class="purpose-btn" data-purpose="add">Add Coverage</div>
+                <div class="purpose-btn" data-purpose="review">Policy Review</div>
+                <div class="purpose-btn" data-purpose="claim">Claim Docs</div>
+            </div>
+            
+            <!-- Customer Info -->
+            <div class="section-header">
+                Customer Information
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    Customer Name <span class="required">*</span>
+                </label>
+                <input type="text" id="customerName" class="form-input" placeholder="John Smith" required>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">
+                        Phone <span class="required">*</span>
+                    </label>
+                    <input type="tel" id="phone" class="form-input" placeholder="(336) 555-1234" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email (Optional)</label>
+                    <input type="email" id="email" class="form-input" placeholder="john@email.com">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Current Insurance Carrier (Optional)</label>
+                <input type="text" id="currentCarrier" class="form-input" placeholder="State Farm, Allstate, etc.">
+            </div>
+            
+            <!-- Property Fields -->
+            <div id="propertyFields">
+                <div class="section-header">
+                    Property Address (Optional)
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Street Address</label>
+                    <input type="text" id="address" class="form-input" placeholder="123 Main Street">
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input type="text" id="city" class="form-input" placeholder="Elkin">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ZIP</label>
+                        <input type="text" id="zip" class="form-input" placeholder="28621" maxlength="5">
+                    </div>
+                </div>
+                
+                <!-- Photo Requirements -->
+                <div class="section-header">
+                    Photos Needed
+                </div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Front of Home" checked>
+                        <span>Front of Home</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Back of Home" checked>
+                        <span>Back of Home</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Sides of Home">
+                        <span>Sides of Home</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Hot Water Heater">
+                        <span>Hot Water Heater</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="HVAC Unit">
+                        <span>HVAC Unit</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Kitchen">
+                        <span>Kitchen</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Primary Bathroom">
+                        <span>Primary Bathroom</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Crawlspace from door opening">
+                        <span>Crawlspace (from door)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Underneath kitchen and bathrooms">
+                        <span>Under kitchen/bathrooms</span>
+                    </label>
+                </div>
+                
+                <div class="form-group" style="margin-top: 12px;">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="otherPhotosCheck" value="Other">
+                        <span style="font-weight: 600;">Other (specify):</span>
+                    </label>
+                    <input type="text" id="otherPhotos" class="form-input" placeholder="e.g., Roof from attic, Electrical panel, Pool area" style="margin-top: 8px;">
+                </div>
+            </div>
+            
+            <!-- Vehicle Fields -->
+            <div id="vehicleFields" class="hidden">
+                <div class="section-header">
+                    Vehicle Information (Optional)
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Vehicle Details</label>
+                    <input type="text" id="vehicleInfo" class="form-input" placeholder="2024 Toyota Camry or VIN">
+                </div>
+            </div>
+            
+            <!-- Submit Buttons -->
+            <button type="submit" class="btn btn-primary">
+                Generate Link
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                Clear Form
+            </button>
+        </form>
+        
+        <!-- Output Section -->
+        <div id="outputSection" class="output-section">
+            <!-- Direct Link -->
+            <div class="output-box">
+                <span class="output-label">DIRECT UPLOAD LINK</span>
+                <div class="output-content" id="generatedLink"></div>
+                <button class="copy-btn" onclick="copyToClipboard('generatedLink', this)">Copy</button>
+            </div>
+            
+            <!-- Text Message Template -->
+            <div class="output-box">
+                <span class="output-label">TEXT MESSAGE TEMPLATE</span>
+                <div class="output-content" id="textTemplate"></div>
+                <button class="copy-btn" onclick="copyToClipboard('textTemplate', this)">Copy</button>
+            </div>
+            
+            <!-- Email Template -->
+            <div class="output-box">
+                <span class="output-label">EMAIL TEMPLATE</span>
+                <div class="output-content" id="emailTemplate"></div>
+                <button class="copy-btn" onclick="copyToClipboard('emailTemplate', this)">Copy</button>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-grid">
+                <button class="action-btn green" onclick="copyAndOpenMatrix()">
+                    Copy Text & Open Matrix
+                </button>
+                <button class="action-btn blue" onclick="sendEmail()">
+                    Send Email (Gmail)
+                </button>
+                <button class="action-btn yellow" onclick="openMatrix()">
+                    Open Agency Matrix
+                </button>
+                <button class="action-btn gray" onclick="testLink()">
+                    Test Link
+                </button>
+            </div>
+            
+            <!-- QR Code -->
+            <div class="qr-section">
+                <div class="qr-label">QR Code (for in-person)</div>
+                <img id="qrCode" src="" alt="QR Code">
+                <div class="qr-hint">Customer can scan to open upload form</div>
+            </div>
+            
+            <!-- Success Message -->
+            <div id="successMessage" class="success-message"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration - UPDATE THIS URL TO YOUR ACTUAL UPLOAD PAGE
+        // Example: 'https://yourdomain.com/index.html' or your deployed GitHub Pages URL
+        const BASE_URL = 'https://yourdomain.com/index.html';
+        
+        // State
+        let selectedType = 'home';
+        let selectedPurpose = 'quote';
+        let generatedData = {};
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // Type buttons
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedType = this.dataset.type;
+                    toggleFields();
+                });
+            });
+            
+            // Purpose buttons
+            document.querySelectorAll('.purpose-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.purpose-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedPurpose = this.dataset.purpose;
+                });
+            });
+            
+            // Phone formatting
+            document.getElementById('phone').addEventListener('input', formatPhone);
+            
+            // ZIP formatting
+            document.getElementById('zip').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
+            });
+            
+            // Form submission
+            document.getElementById('linkGeneratorForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                generateLink();
+            });
+        }
+        
+        function toggleFields() {
+            const propertyFields = document.getElementById('propertyFields');
+            const vehicleFields = document.getElementById('vehicleFields');
+            
+            if (selectedType === 'home' || selectedType === 'forms') {
+                propertyFields.classList.remove('hidden');
+                vehicleFields.classList.add('hidden');
+            } else {
+                propertyFields.classList.add('hidden');
+                vehicleFields.classList.remove('hidden');
+            }
+        }
+        
+        function formatPhone() {
+            const input = document.getElementById('phone');
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = `(${value}`;
+                } else if (value.length <= 6) {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                } else {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                }
+            }
+            
+            input.value = value;
+        }
+        
+        function generateLink() {
+            // Get form values
+            const customerName = document.getElementById('customerName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const currentCarrier = document.getElementById('currentCarrier').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const zip = document.getElementById('zip').value;
+            const vehicleInfo = document.getElementById('vehicleInfo').value;
+
+            // Get photo requirements (for home)
+            let photoRequirements = [];
+            if (selectedType === 'home') {
+                document.querySelectorAll('.photo-checkbox:checked').forEach(checkbox => {
+                    photoRequirements.push(checkbox.value);
+                });
+
+                // Add "Other" if checked and has text
+                const otherCheck = document.getElementById('otherPhotosCheck');
+                const otherText = document.getElementById('otherPhotos').value;
+                if (otherCheck.checked && otherText.trim()) {
+                    photoRequirements.push('Other: ' + otherText.trim());
+                } else if (otherText.trim()) {
+                    photoRequirements.push('Other: ' + otherText.trim());
+                }
+            }
+
+            // Map type to photo category
+            const categoryMapping = {
+                'home': 'home',
+                'vehicle': 'other',
+                'forms': 'documents',
+                'claim': 'claims'
+            };
+            const photoCategory = categoryMapping[selectedType] || 'other';
+
+            // Build URL parameters
+            const params = new URLSearchParams();
+            params.append('customerName', customerName);
+            params.append('phone', phone);
+            if (email) params.append('email', email);
+            if (currentCarrier) params.append('currentCarrier', currentCarrier);
+            if (address) params.append('address', address);
+            if (city) params.append('city', city);
+            if (zip) params.append('zip', zip);
+            if (vehicleInfo) params.append('vehicleInfo', vehicleInfo);
+
+            // Add type and purpose
+            params.append('type', selectedType.toUpperCase());
+            params.append('purpose', selectedPurpose);
+
+            // Add photo category
+            params.append('category', photoCategory);
+
+            // Add photo requirements as comma-separated list (if custom photos specified for home)
+            if (photoRequirements.length > 0 && selectedType === 'home') {
+                params.append('photos', photoRequirements.join(','));
+            }
+
+            // Generate link
+            const link = `${BASE_URL}?${params.toString()}`;
+
+            // Store data
+            generatedData = {
+                link: link,
+                name: customerName,
+                firstName: customerName.split(' ')[0],
+                phone: phone,
+                phoneClean: phone.replace(/\D/g, ''),
+                email: email,
+                type: selectedType,
+                purpose: selectedPurpose,
+                photoRequirements: photoRequirements
+            };
+
+            // Display outputs
+            displayOutputs();
+
+            // Show output section
+            document.getElementById('outputSection').classList.add('show');
+
+            // Generate QR code
+            generateQRCode();
+
+            // Scroll to output
+            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function displayOutputs() {
+            // Display link
+            document.getElementById('generatedLink').textContent = generatedData.link;
+
+            // Generate text template
+            const itemType = selectedType === 'home' ? 'home' : selectedType === 'vehicle' ? 'vehicle' : selectedType === 'claim' ? 'claim' : 'documents';
+            const purposeText = {
+                'quote': 'quote',
+                'add': 'coverage addition',
+                'review': 'policy review',
+                'claim': 'claim'
+            }[selectedPurpose];
+
+            // Build photo requirements list for text based on category
+            let photoListText = '';
+            if (selectedType === 'home') {
+                if (generatedData.photoRequirements.length > 0) {
+                    photoListText = '\n\nPhotos needed:\n' + generatedData.photoRequirements.map(item => '• ' + item).join('\n');
+                } else {
+                    photoListText = '\n\nWe\'ll show you which photos to take (front, back, water heater, HVAC, etc.)';
+                }
+            } else if (selectedType === 'claim') {
+                photoListText = '\n\nWe\'ll guide you through taking damage photos from multiple angles';
+            } else if (selectedType === 'forms') {
+                photoListText = '\n\nWe\'ll show you which documents to upload (ID, insurance cards, etc.)';
+            } else if (selectedType === 'vehicle') {
+                photoListText = '\n\nJust upload photos as needed for your vehicle';
+            }
+
+            const textTemplate = `Hi ${generatedData.firstName},
+
+Please upload photos of your ${itemType} for your ${purposeText}:
+
+${generatedData.link}
+
+Your info is pre-filled. Just add photos & submit!${photoListText}
+
+Takes 2 minutes. Questions? Call 336-835-1993
+
+Bill Layne Insurance`;
+
+            document.getElementById('textTemplate').textContent = textTemplate;
+            
+            // Generate email template
+            const emailSubject = `Upload ${itemType.charAt(0).toUpperCase() + itemType.slice(1)} Photos - Bill Layne Insurance`;
+
+            // Build photo requirements list for email based on category
+            let photoListEmail = '';
+            if (selectedType === 'home' && generatedData.photoRequirements.length > 0) {
+                photoListEmail = `Photos needed:\n${generatedData.photoRequirements.map(item => '• ' + item).join('\n')}`;
+            } else if (selectedType === 'home') {
+                photoListEmail = `What photos to include:
+• Front exterior (including roof)
+• Rear exterior
+• Left and right sides
+• Water heater (with label visible)
+• HVAC system
+• Electrical panel
+• Kitchen overview`;
+            } else if (selectedType === 'claim') {
+                photoListEmail = `What photos to include:
+• Overall damage view (wide shot)
+• Close-up of specific damage
+• Multiple angles of damage
+• Surrounding area for context
+• Any affected items or property
+• Additional angles as needed`;
+            } else if (selectedType === 'forms') {
+                photoListEmail = `What documents to include:
+• Driver's license (front)
+• Current insurance card
+• Vehicle registration
+• Property title/deed (if applicable)
+• Mortgage statement (if applicable)
+• Any other requested documents`;
+            } else if (selectedType === 'vehicle') {
+                photoListEmail = `What photos to include:
+• All 4 sides of vehicle
+• VIN number (clearly visible)
+• Odometer reading
+• Any existing damage
+• License plate`;
+            } else {
+                photoListEmail = `Tips:
+• Ensure documents are clear and readable
+• Good lighting is essential
+• Capture entire document in frame`;
+            }
+            
+            const emailBody = `Dear ${generatedData.name},
+
+Thank you for choosing Bill Layne Insurance Agency for your ${purposeText}.
+
+Please click the link below to upload photos of your ${itemType}:
+
+${generatedData.link}
+
+Your information has been pre-filled for convenience. Simply:
+1. Review your information
+2. Upload your photos (4-8 recommended)
+3. Click submit
+
+The process takes less than 2 minutes on your phone.
+
+${photoListEmail}
+
+If you have any questions, please call us at 336-835-1993.
+
+Best regards,
+Bill Layne Insurance Agency
+1283 N Bridge St, Elkin NC 28621
+336-835-1993
+Save@BillLayneInsurance.com
+www.BillLayneInsurance.com`;
+            
+            document.getElementById('emailTemplate').textContent = emailBody;
+            
+            // Store email data
+            generatedData.emailSubject = emailSubject;
+            generatedData.emailBody = emailBody;
+        }
+        
+        function copyToClipboard(elementId, button) {
+            const text = document.getElementById(elementId).textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Update button
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                showMessage('Failed to copy. Please try again.', false);
+            });
+        }
+        
+        function copyAndOpenMatrix() {
+            const textTemplate = document.getElementById('textTemplate').textContent;
+            
+            navigator.clipboard.writeText(textTemplate).then(() => {
+                showMessage('Text copied! Opening Agency Matrix...', true);
+                
+                // Open Agency Matrix with phone search
+                setTimeout(() => {
+                    const url = `https://agents.agencymatrix.com/#/customer/search?selection=Phone&query=${generatedData.phoneClean}`;
+                    window.open(url, '_blank');
+                }, 500);
+            });
+        }
+        
+        function openMatrix() {
+            const url = `https://agents.agencymatrix.com/#/customer/search?selection=Phone&query=${generatedData.phoneClean}`;
+            window.open(url, '_blank');
+        }
+        
+        function sendEmail() {
+            if (!generatedData.email) {
+                showMessage('Please enter customer email address first', false);
+                return;
+            }
+            
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(generatedData.email)}&su=${encodeURIComponent(generatedData.emailSubject)}&body=${encodeURIComponent(generatedData.emailBody)}`;
+            
+            window.open(gmailUrl, '_blank');
+            showMessage('Opening Gmail...', true);
+        }
+        
+        function testLink() {
+            window.open(generatedData.link, '_blank');
+        }
+        
+        function generateQRCode() {
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(generatedData.link)}`;
+            document.getElementById('qrCode').src = qrUrl;
+        }
+        
+        function showMessage(text, isSuccess) {
+            const message = document.getElementById('successMessage');
+            message.textContent = text;
+            message.style.background = isSuccess ? 'var(--success)' : 'var(--danger)';
+            message.classList.add('show');
+            
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 3000);
+        }
+        
+        function clearForm() {
+            document.getElementById('linkGeneratorForm').reset();
+            document.getElementById('outputSection').classList.remove('show');
+            generatedData = {};
+            
+            // Reset selections
+            selectedType = 'home';
+            selectedPurpose = 'quote';
+            
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.type === 'home') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            document.querySelectorAll('.purpose-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.purpose === 'quote') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            toggleFields();
+        }
+    </script>
+</body>
+</html>
