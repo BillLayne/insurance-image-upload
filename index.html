@@ -2,2228 +2,1634 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Secure photo upload portal for Bill Layne Insurance Agency customers">
-    <meta name="theme-color" content="#2563eb">
-    <title>Photo Upload Portal | Bill Layne Insurance Agency</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a5f7a">
+    <title>MyInsurancePhoto.com - Bill Layne Insurance</title>
+    
+    <!-- Modern Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Reset and Base Styles */
+        :root {
+            --primary: #1a5f7a;
+            --secondary: #457b9d;
+            --accent: #a8dadc;
+            --background: #f8f9fa;
+            --text: #2c3e50;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        :root {
-            --primary-blue: #2563eb;
-            --primary-blue-dark: #1e40af;
-            --success-green: #10b981;
-            --success-green-dark: #059669;
-            --bg-gradient: linear-gradient(to bottom right, #eff6ff, #ffffff, #eff6ff);
-            --slate-50: #f8fafc;
-            --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0;
-            --slate-300: #cbd5e1;
-            --slate-600: #475569;
-            --slate-700: #334155;
-            --slate-800: #1e293b;
-            --slate-900: #0f172a;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--slate-800);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #e1f5f9 100%);
+            min-height: 100vh;
+            padding: 10px;
+            color: var(--text);
         }
-
-        /* Header */
-        .header {
-            background: white;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-bottom: 4px solid var(--primary-blue);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo {
-            height: 50px;
-            width: auto;
-        }
-
-        .header-text {
-            border-left: 2px solid var(--slate-300);
-            padding-left: 1rem;
-        }
-
-        .header-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--slate-900);
-            margin-bottom: 0.25rem;
-        }
-
-        .header-subtitle {
-            font-size: 0.875rem;
-            color: var(--slate-600);
-        }
-
-        .header-contact {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--primary-blue);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: color 0.2s;
-        }
-
-        .header-contact:hover {
-            color: var(--primary-blue-dark);
-        }
-
-        /* Container */
+        
         .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            min-height: calc(100vh - 350px);
-        }
-
-        /* Screens */
-        .screen {
-            display: none;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Welcome Screen */
-        .hero {
-            background: linear-gradient(to right, var(--primary-blue), #1e40af);
-            color: white;
-            padding: 3rem 2.5rem;
-            border-radius: 1.5rem 1.5rem 0 0;
-            text-align: center;
-        }
-
-        .hero-icon {
-            background: rgba(255, 255, 255, 0.2);
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .hero-icon svg {
-            width: 48px;
-            height: 48px;
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.125rem;
-            color: rgba(255, 255, 255, 0.9);
             max-width: 600px;
             margin: 0 auto;
-        }
-
-        .welcome-content {
             background: white;
-            padding: 2.5rem;
-            border-radius: 0 0 1.5rem 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 10px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-
-        .benefits {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .benefit-card {
-            text-align: center;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 2px solid;
-        }
-
-        .benefit-card.quick {
-            background: #f0fdf4;
-            border-color: #86efac;
-        }
-
-        .benefit-card.secure {
-            background: #eff6ff;
-            border-color: #93c5fd;
-        }
-
-        .benefit-card.mobile {
-            background: #faf5ff;
-            border-color: #d8b4fe;
-        }
-
-        .benefit-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .benefit-title {
-            font-weight: 600;
-            color: var(--slate-900);
-            margin-bottom: 0.25rem;
-        }
-
-        .benefit-text {
-            font-size: 0.875rem;
-            color: var(--slate-600);
-        }
-
-        .info-box {
-            background: #fffbeb;
-            border-left: 4px solid #f59e0b;
-            padding: 1.25rem;
-            border-radius: 0 0.75rem 0.75rem 0;
-            margin-bottom: 2rem;
-        }
-
-        .info-box-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-        }
-
-        .info-box-icon {
-            color: #d97706;
-            flex-shrink: 0;
-        }
-
-        .info-box-title {
-            font-weight: 600;
-            color: #78350f;
-            margin-bottom: 0.5rem;
-        }
-
-        .info-box-list {
-            color: #92400e;
-            font-size: 0.875rem;
-            list-style: none;
-        }
-
-        .info-box-list li {
-            margin: 0.25rem 0;
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            color: var(--slate-700);
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-        }
-
-        .form-label .required {
-            color: #dc2626;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            border: 2px solid var(--slate-300);
-            border-radius: 0.75rem;
-            font-size: 1rem;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .form-hint {
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--slate-600);
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-            text-decoration: none;
-            min-height: 44px;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background: linear-gradient(to right, var(--primary-blue), #1e40af);
+        
+        /* Header - Enhanced with brand colors */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+            padding: 20px;
+            text-align: center;
         }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.3);
+        
+        .header-logo {
+            font-size: 32px;
+            margin-bottom: 10px;
         }
-
-        .btn-primary:active:not(:disabled) {
+        
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        /* Quick Action Bar */
+        .quick-action-bar {
+            background: linear-gradient(135deg, #f0f9ff 0%, var(--accent) 10%);
+            padding: 15px;
+            border-bottom: 1px solid rgba(69, 123, 157, 0.1);
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 12px;
+            border: 2px solid var(--accent);
+            background: white;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+        }
+        
+        .action-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+        
+        .action-btn:active {
             transform: scale(0.98);
         }
-
-        .btn-full {
-            width: 100%;
+        
+        /* Main Content Area */
+        .main-content {
+            padding: 20px;
         }
-
-        .btn-secondary {
-            background: white;
-            color: var(--slate-700);
-            border: 2px solid var(--slate-300);
+        
+        /* Priority Section - Photo Upload */
+        .priority-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border: 2px solid var(--warning);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
         }
-
-        .btn-secondary:hover:not(:disabled) {
-            background: var(--slate-50);
-            transform: scale(1.02);
-        }
-
-        .btn-success {
-            background: linear-gradient(to right, var(--success-green), var(--success-green-dark));
-            color: white;
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-success:hover:not(:disabled) {
-            transform: scale(1.05);
-        }
-
-        /* Upload Screen */
-        .greeting-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            border-top: 4px solid var(--primary-blue);
-            margin-bottom: 1.5rem;
-        }
-
-        .greeting-header {
+        
+        .priority-title {
             display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .greeting-icon {
-            background: #dbeafe;
-            padding: 0.75rem;
-            border-radius: 1rem;
-            flex-shrink: 0;
-        }
-
-        .greeting-icon svg {
-            width: 32px;
-            height: 32px;
-            color: var(--primary-blue);
-        }
-
-        .greeting-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--slate-900);
-            margin-bottom: 0.5rem;
-        }
-
-        .greeting-text {
-            color: var(--slate-600);
-        }
-
-        .progress-card {
-            background: linear-gradient(to right, #eff6ff, #e0e7ff);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 2px solid #bfdbfe;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 15px;
         }
-
-        .progress-title {
-            font-size: 1.125rem;
+        
+        /* Category Selection */
+        .photo-categories {
+            background: white;
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        
+        .category-tag {
+            padding: 10px;
+            background: var(--background);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-size: 12px;
             font-weight: 600;
-            color: var(--slate-800);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text);
         }
-
-        .progress-count {
-            text-align: right;
-        }
-
-        .progress-count-number {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-            display: block;
-        }
-
-        .progress-count-label {
-            font-size: 0.75rem;
-            color: var(--slate-600);
-        }
-
-        .progress-message {
-            font-size: 0.875rem;
-            color: var(--slate-600);
-            margin-bottom: 0.75rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 1rem;
-            background: white;
-            border-radius: 9999px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, var(--primary-blue), #60a5fa);
-            border-radius: 9999px;
-            transition: width 0.5s ease-out;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 0.5rem;
-        }
-
-        .progress-percentage {
+        
+        .category-tag.active {
+            background: var(--primary);
             color: white;
-            font-size: 0.75rem;
-            font-weight: 700;
+            border-color: var(--primary);
         }
-
-        /* Tips Box */
-        .tips-box {
-            background: linear-gradient(to right, #f0fdf4, #dcfce7);
-            border-left: 4px solid var(--success-green);
-            padding: 1.25rem;
-            border-radius: 0 0.75rem 0.75rem 0;
-            margin: 1.5rem 0;
+        
+        /* Upload Box */
+        .upload-box {
+            background: white;
+            border: 3px dashed var(--primary);
+            border-radius: var(--radius);
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
-
-        .tips-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
+        
+        .upload-box:hover {
+            background: linear-gradient(135deg, #f0f9ff 0%, rgba(168, 218, 220, 0.1) 100%);
+            border-color: var(--secondary);
         }
-
-        .tips-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--success-green);
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
         }
-
-        .tips-title {
+        
+        .upload-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .upload-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
             font-weight: 600;
-            color: #166534;
-            margin-bottom: 0.75rem;
-        }
-
-        .tips-list {
-            color: #15803d;
-            font-size: 0.875rem;
-            list-style: none;
-        }
-
-        .tips-list li {
-            margin: 0.5rem 0;
+            cursor: pointer;
             display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-
-        /* Photo Checklist */
-        .checklist {
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
-
-        .checklist-header {
-            background: linear-gradient(to right, var(--slate-700), var(--slate-800));
-            padding: 1.5rem 2rem;
-            color: white;
-        }
-
-        .checklist-header-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.25rem;
+            gap: 5px;
+            transition: transform 0.2s ease;
         }
-
-        .checklist-header-subtitle {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.8);
+        
+        .upload-btn:active {
+            transform: scale(0.96);
         }
-
-        .checklist-items {
-            padding: 1.5rem;
+        
+        /* Image Preview with Categories */
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
         }
-
-        /* Photo Item */
-        .photo-item {
-            border: 2px solid var(--slate-200);
-            border-radius: 1rem;
-            padding: 1.25rem;
-            margin-bottom: 1.25rem;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .photo-item.uploaded {
-            border-color: var(--success-green);
-            background: #f0fdf4;
-        }
-
-        .photo-item:hover {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .photo-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .photo-content {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .photo-preview {
-            flex-shrink: 0;
-            width: 120px;
-            height: 120px;
+        
+        .preview-item {
             position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--background);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        .photo-preview img {
+        
+        .preview-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 0.75rem;
-            border: 2px solid var(--slate-200);
         }
-
-        .photo-item.uploaded .photo-preview img {
-            border-color: var(--success-green);
-            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
-        }
-
-        .photo-badge {
+        
+        .preview-item .category-label {
             position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--success-green);
+            bottom: 2px;
+            left: 2px;
+            right: 2px;
+            background: rgba(26, 95, 122, 0.9);
             color: white;
-            border-radius: 50%;
-            padding: 0.375rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            text-align: center;
         }
-
-        .photo-badge svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .example-badge {
+        
+        .preview-item .remove-btn {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--primary-blue);
+            top: 2px;
+            right: 2px;
+            background: rgba(239,68,68,0.9);
             color: white;
-            font-size: 0.625rem;
-            font-weight: 700;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .photo-preview-placeholder {
-            width: 100%;
-            height: 100%;
-            background: var(--slate-100);
-            border: 2px dashed var(--slate-300);
-            border-radius: 0.75rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .photo-preview-placeholder svg {
-            width: 48px;
-            height: 48px;
-            color: var(--slate-400);
-        }
-
-        .photo-preview-example {
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .photo-preview-example::after {
-            content: '👁️ View Example';
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.875rem;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .photo-preview-example:hover::after {
-            opacity: 1;
-        }
-
-        .photo-details {
-            flex: 1;
-        }
-
-        .photo-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 700;
-            font-size: 1.125rem;
-            color: var(--slate-900);
-            margin-bottom: 0.5rem;
-        }
-
-        .photo-check-icon {
-            background: var(--success-green);
-            color: white;
-            border-radius: 50%;
-            padding: 0.125rem;
-        }
-
-        .photo-check-icon svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .photo-description {
-            font-size: 0.875rem;
-            color: var(--slate-600);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .photo-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .btn-photo {
-            flex: 1;
-            min-width: 140px;
-            padding: 0.75rem 1.25rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .btn-take {
-            background: white;
-            color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
-        }
-
-        .btn-take:hover {
-            background: #eff6ff;
-        }
-
-        .btn-upload {
-            background: white;
-            color: var(--slate-700);
-            border: 2px solid var(--slate-300);
-        }
-
-        .btn-upload:hover {
-            background: var(--slate-50);
-        }
-
-        .btn-example {
-            background: #faf5ff;
-            color: #7c3aed;
-            border: 2px solid #c4b5fd;
-        }
-
-        .btn-example:hover {
-            background: #f3e8ff;
-        }
-
-        .photo-success {
-            margin-top: 0.75rem;
-            padding: 0.75rem;
-            background: #d1fae5;
-            color: #065f46;
-            font-size: 0.875rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .photo-success svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-        }
-
-        /* Delete Button for uploaded photos */
-        .photo-delete {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-            cursor: pointer;
-            border-radius: 0.75rem;
-        }
-
-        .photo-delete:hover {
-            background: rgba(0, 0, 0, 0.6);
-        }
-
-        .photo-delete-btn {
-            background: white;
-            color: #dc2626;
             border: none;
             border-radius: 50%;
-            padding: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            width: 22px;
+            height: 22px;
+            font-size: 14px;
             cursor: pointer;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .photo-delete:hover .photo-delete-btn {
-            opacity: 1;
-            transform: scale(1);
+        
+        /* Section Styling */
+        .section {
+            margin-bottom: 15px;
+            border: 1px solid rgba(69, 123, 157, 0.2);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: white;
         }
-
-        .photo-delete-btn svg {
-            width: 24px;
-            height: 24px;
+        
+        .section-header {
+            background: linear-gradient(135deg, var(--background) 0%, rgba(168, 218, 220, 0.2) 100%);
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: var(--text);
+            transition: background 0.2s ease;
         }
-
-        /* Submit Section */
+        
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(168, 218, 220, 0.2) 0%, rgba(168, 218, 220, 0.3) 100%);
+        }
+        
+        .section-header.active {
+            background: linear-gradient(135deg, rgba(26, 95, 122, 0.1) 0%, rgba(69, 123, 157, 0.1) 100%);
+            color: var(--primary);
+        }
+        
+        .section-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        
+        .section-arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            color: var(--secondary);
+        }
+        
+        .section.expanded .section-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .section-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .section.expanded .section-content {
+            padding: 15px;
+            max-height: 800px;
+        }
+        
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        
+        .required {
+            color: var(--danger);
+        }
+        
+        .optional-tag {
+            font-size: 11px;
+            color: var(--secondary);
+            font-weight: 400;
+            margin-left: 5px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid rgba(69, 123, 157, 0.2);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 95, 122, 0.08);
+        }
+        
+        /* Submit Button */
         .submit-section {
             position: sticky;
             bottom: 0;
             background: white;
-            padding: 1.5rem 2rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
-            border-top: 4px solid var(--primary-blue);
-            margin-top: 1.5rem;
+            padding: 15px 20px;
+            border-top: 2px solid rgba(69, 123, 157, 0.1);
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
         }
-
-        .submit-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1.5rem;
-        }
-
-        .submit-info {
-            flex: 1;
-        }
-
-        .submit-status {
-            font-weight: 600;
-            color: var(--slate-700);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .submit-status.complete {
-            color: var(--success-green);
-        }
-
-        .submit-status svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .submit-hint {
-            font-size: 0.75rem;
-            color: var(--slate-600);
-        }
-
+        
         .submit-btn {
-            flex-shrink: 0;
-            min-width: 200px;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            padding: 1rem;
-            overflow-y: auto;
-            animation: fadeIn 0.3s;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            max-width: 800px;
             width: 100%;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #fee2e2;
-            color: #dc2626;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
             border: none;
-            border-radius: 50%;
-            padding: 0.5rem;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            z-index: 10;
-        }
-
-        .modal-close:hover {
-            background: #fecaca;
-            transform: scale(1.1);
-        }
-
-        .modal-close svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--slate-900);
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-description {
-            color: var(--slate-600);
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-image-container {
-            background: var(--slate-100);
-            border-radius: 1rem;
-            padding: 0.5rem;
-        }
-
-        .modal-image {
-            width: 100%;
-            height: auto;
-            max-height: 60vh;
-            object-fit: contain;
-            border-radius: 0.5rem;
-        }
-
-        .modal-hint {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.875rem;
-            color: var(--slate-600);
-            font-style: italic;
-        }
-
-        /* Confirmation Screen */
-        .confirmation-hero {
-            background: linear-gradient(to bottom right, var(--success-green), var(--success-green-dark));
-            color: white;
-            padding: 4rem 2.5rem;
-            border-radius: 1.5rem 1.5rem 0 0;
-            text-align: center;
+            transition: all 0.2s ease;
             position: relative;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(26, 95, 122, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Upload Progress Bar */
+        .upload-progress {
+            margin-top: 10px;
+            background: var(--background);
+            border-radius: 20px;
+            height: 8px;
             overflow: hidden;
+            display: none;
         }
-
-        .confirmation-hero::before,
-        .confirmation-hero::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
+        
+        .upload-progress.active {
+            display: block;
         }
-
-        .confirmation-hero::before {
-            width: 256px;
-            height: 256px;
-            top: -128px;
-            right: -128px;
+        
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.5s ease;
         }
-
-        .confirmation-hero::after {
-            width: 192px;
-            height: 192px;
-            bottom: -96px;
-            left: -96px;
-        }
-
-        .confirmation-icon {
-            background: white;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-            animation: bounce 2s infinite;
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .confirmation-icon svg {
-            width: 60px;
-            height: 60px;
-            color: var(--success-green);
-        }
-
-        .confirmation-title {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .confirmation-name {
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .confirmation-message {
-            font-size: 1.125rem;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .confirmation-content {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 0 0 1.5rem 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-        }
-
-        .next-steps-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .next-steps-icon {
-            background: #dbeafe;
-            padding: 0.75rem;
-            border-radius: 1rem;
-        }
-
-        .next-steps-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--primary-blue);
-        }
-
-        .next-steps-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--slate-900);
-        }
-
-        .steps {
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-
-        .step-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1.25rem;
-            border-radius: 1rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid;
-        }
-
-        .step-card.step-1 {
-            background: #eff6ff;
-            border-color: var(--primary-blue);
-        }
-
-        .step-card.step-2 {
-            background: #faf5ff;
-            border-color: #a855f7;
-        }
-
-        .step-card.step-3 {
-            background: #f0fdf4;
-            border-color: var(--success-green);
-        }
-
-        .step-number {
-            background: var(--primary-blue);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.875rem;
-            flex-shrink: 0;
-        }
-
-        .step-card.step-2 .step-number {
-            background: #a855f7;
-        }
-
-        .step-card.step-3 .step-number {
-            background: var(--success-green);
-        }
-
-        .step-title {
-            font-weight: 700;
-            color: var(--slate-900);
-            margin-bottom: 0.25rem;
-        }
-
-        .step-description {
-            font-size: 0.875rem;
-            color: var(--slate-700);
-        }
-
-        .email-notice {
-            background: linear-gradient(to right, #eef2ff, #ede9fe);
-            border: 2px solid #c7d2fe;
-            border-radius: 1rem;
-            padding: 1.25rem;
-            margin-bottom: 2rem;
-        }
-
-        .email-notice-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-        }
-
-        .email-notice-icon svg {
-            width: 24px;
-            height: 24px;
-            color: #6366f1;
-        }
-
-        .email-notice-title {
-            font-weight: 700;
-            color: #3730a3;
-            margin-bottom: 0.25rem;
-        }
-
-        .email-notice-text {
-            font-size: 0.875rem;
-            color: #4338ca;
-        }
-
-        .contact-section {
-            border-top: 2px solid var(--slate-200);
-            padding-top: 2rem;
-        }
-
-        .contact-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--slate-900);
+        
+        .upload-status {
+            font-size: 12px;
+            color: var(--secondary);
+            margin-top: 5px;
             text-align: center;
-            margin-bottom: 1.5rem;
+            display: none;
         }
-
-        .contact-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            max-width: 600px;
-            margin: 0 auto 1.5rem;
+        
+        .upload-status.active {
+            display: block;
         }
-
-        .contact-btn {
+        
+        /* Photo Counter Badge */
+        .photo-counter {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        /* Trust Badges */
+        .trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px;
+            background: var(--background);
+            font-size: 12px;
+            color: var(--text);
+            text-align: center;
+        }
+        
+        .trust-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 1.25rem;
-            border-radius: 1rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: 2px solid;
+            gap: 5px;
         }
-
-        .contact-btn.phone {
-            background: #eff6ff;
-            border-color: #bfdbfe;
-            color: var(--primary-blue);
-        }
-
-        .contact-btn.phone:hover {
-            background: #dbeafe;
-            transform: scale(1.05);
-        }
-
-        .contact-btn.email {
-            background: #faf5ff;
-            border-color: #e9d5ff;
-            color: #7c3aed;
-        }
-
-        .contact-btn.email:hover {
-            background: #f3e8ff;
-            transform: scale(1.05);
-        }
-
-        .contact-btn svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .contact-btn-text {
-            text-align: left;
-        }
-
-        .contact-btn-label {
-            display: block;
-            font-size: 0.875rem;
-            opacity: 0.8;
-        }
-
-        .contact-btn-value {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .return-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            margin: 0 auto;
-            max-width: 200px;
-        }
-
+        
         /* Footer */
         .footer {
-            background: var(--slate-900);
-            color: white;
-            padding: 2rem 1.5rem;
-            margin-top: 3rem;
             text-align: center;
+            padding: 20px;
+            background: var(--background);
+            color: var(--text);
+            font-size: 12px;
+            line-height: 1.6;
         }
-
-        .footer-logo {
-            height: 40px;
-            width: auto;
-            margin: 0 auto 1rem;
-            filter: brightness(0) invert(1);
-            opacity: 0.9;
+        
+        .footer img {
+            max-width: 120px;
+            margin: 0 auto 10px;
         }
-
-        .footer-title {
-            font-size: 1.125rem;
+        
+        /* Success Message */
+        .success-banner {
+            display: none;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid var(--success);
+            color: #166534;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
             font-weight: 600;
-            margin-bottom: 0.5rem;
         }
-
-        .footer-address {
-            font-size: 0.875rem;
-            color: var(--slate-400);
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-contacts {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-contact {
-            color: white;
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.2s;
-        }
-
-        .footer-contact:hover {
-            color: #60a5fa;
-        }
-
-        .footer-website {
-            color: #60a5fa;
-            text-decoration: none;
-            font-size: 0.875rem;
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
             display: inline-block;
-            margin-bottom: 1rem;
-            transition: color 0.2s;
+            cursor: help;
+            color: var(--primary);
+            font-size: 14px;
+            margin-left: 5px;
         }
-
-        .footer-website:hover {
-            color: #93c5fd;
+        
+        .tooltip-content {
+            visibility: hidden;
+            width: 250px;
+            background: var(--text);
+            color: white;
+            text-align: left;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            line-height: 1.4;
         }
-
-        .footer-security {
-            font-size: 0.75rem;
-            color: var(--slate-500);
-            padding-top: 1rem;
-            border-top: 1px solid var(--slate-700);
-            margin-top: 1rem;
+        
+        .tooltip:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
         }
-
-        /* Loading State */
-        .loading {
-            display: inline-flex;
+        
+        /* Network status indicator */
+        .network-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: none;
             align-items: center;
-            gap: 0.5rem;
+            gap: 5px;
+            z-index: 1000;
         }
-
+        
+        .network-status.online {
+            background: var(--success);
+            color: white;
+        }
+        
+        .network-status.offline {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .network-status.slow {
+            background: var(--warning);
+            color: white;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Loading state */
         .spinner {
+            display: none;
             width: 20px;
             height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid rgba(255,255,255,0.3);
             border-top-color: white;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
-
+        
         @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg); }
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-text {
-                display: none;
-            }
-
-            .logo {
-                height: 40px;
-            }
-
-            .header-contact span:not(.mobile-only) {
-                display: none;
-            }
-
-            .mobile-only {
-                display: inline !important;
-            }
-
-            .hero {
-                padding: 2rem 1.5rem;
-            }
-
-            .hero-title {
-                font-size: 1.875rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-
-            .welcome-content {
-                padding: 1.5rem;
-            }
-
-            .benefits {
-                grid-template-columns: 1fr;
-            }
-
-            .greeting-title {
-                font-size: 1.5rem;
-            }
-
-            .photo-content {
-                flex-direction: column;
-            }
-
-            .photo-preview {
-                width: 100%;
-                height: 160px;
-            }
-
-            .photo-actions {
-                flex-direction: column;
-            }
-
-            .btn-photo {
-                width: 100%;
-                min-width: 0;
-            }
-
-            .submit-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .submit-info {
-                width: 100%;
-            }
-
-            .submit-btn {
-                width: 100%;
-            }
-
-            .confirmation-title {
-                font-size: 2rem;
-            }
-
-            .confirmation-name {
-                font-size: 1.25rem;
-            }
-
-            .contact-buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-contacts {
-                align-items: center;
-            }
-        }
-
-        @media (min-width: 640px) {
-            .mobile-only {
-                display: none !important;
-            }
-        }
-
-        /* Hidden File Inputs */
+        
+        /* File input hidden */
         .file-input {
             display: none;
         }
-
-        /* Utility Classes */
-        .hidden {
-            display: none !important;
+        
+        /* Photo tips card */
+        .photo-tips {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border-left: 3px solid var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
         }
-
-        .text-center {
-            text-align: center;
+        
+        .photo-tips h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0 0 10px 0;
         }
-
-        .mt-1 {
-            margin-top: 0.5rem;
+        
+        .photo-tips ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.8;
         }
-
-        /* Privacy Note */
-        .privacy-note {
-            font-size: 0.75rem;
-            color: var(--slate-600);
-            text-align: center;
-            margin-top: 1rem;
+        
+        .photo-tips .tip {
+            margin-top: 12px;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        /* Confirmation options */
+        .confirmation-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .confirm-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .email-btn {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .sms-btn {
+            background: var(--success);
+            color: white;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="header-left">
-                <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Agency" class="logo">
-                <div class="header-text">
-                    <div class="header-title">Photo Upload Portal</div>
-                    <div class="header-subtitle">🔒 Secure Document Submission</div>
-                </div>
-            </div>
-            <a href="tel:336-835-1993" class="header-contact">
-                <svg fill="currentColor" viewBox="0 0 20 20" style="width: 20px; height: 20px;">
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                </svg>
-                <span>336-835-1993</span>
-                <span class="mobile-only">Call</span>
-            </a>
-        </div>
-    </header>
-
-    <!-- Main Container -->
+    <!-- Network Status Indicator -->
+    <div class="network-status" id="networkStatus">
+        <span id="networkIcon">📶</span>
+        <span id="networkText">Online</span>
+    </div>
+    
     <div class="container">
-        <!-- Welcome Screen -->
-        <div id="welcomeScreen" class="screen active">
-            <div class="hero">
-                <div class="hero-icon">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </div>
-                <h1 class="hero-title">Welcome to Our Photo Upload Portal</h1>
-                <p class="hero-subtitle">We need a few photos to process your insurance request. This secure portal makes it easy to submit everything we need.</p>
-            </div>
-
-            <div class="welcome-content">
-                <div class="benefits">
-                    <div class="benefit-card quick">
-                        <div class="benefit-icon">✓</div>
-                        <div class="benefit-title">Quick & Easy</div>
-                        <div class="benefit-text">Takes less than 5 minutes</div>
-                    </div>
-                    <div class="benefit-card secure">
-                        <div class="benefit-icon">🔒</div>
-                        <div class="benefit-title">100% Secure</div>
-                        <div class="benefit-text">Your data is protected</div>
-                    </div>
-                    <div class="benefit-card mobile">
-                        <div class="benefit-icon">📱</div>
-                        <div class="benefit-title">Mobile Friendly</div>
-                        <div class="benefit-text">Use your phone camera</div>
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <div class="info-box-header">
-                        <svg class="info-box-icon" style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <div>
-                            <h3 class="info-box-title">What You'll Need:</h3>
-                            <ul class="info-box-list">
-                                <li>• Access to your phone camera or photo gallery</li>
-                                <li>• Your policy or application number</li>
-                                <li>• About 5 minutes of your time</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <form id="welcomeForm" onsubmit="startUpload(event)">
-                    <div class="form-group">
-                        <label for="customerName" class="form-label">
-                            Your Full Name <span class="required">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="customerName"
-                            class="form-input"
-                            placeholder="Enter your full name"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="policyNumber" class="form-label">
-                            Policy or Application Number <span class="required">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="policyNumber"
-                            class="form-input"
-                            placeholder="APP-123456 or Policy #"
-                            required
-                        >
-                        <div class="form-hint">💡 This can be found on your application or policy documents</div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-full">
-                        <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span>Start Uploading Photos</span>
-                        <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-
-                    <div class="privacy-note">
-                        By continuing, you agree to securely share photos for insurance processing
-                    </div>
-                </form>
-            </div>
+        <!-- Header -->
+        <div class="header">
+            <div class="header-logo">🏠🚗</div>
+            <h1>MyInsurancePhoto.com</h1>
+            <p>Quick & Secure Photo Upload</p>
         </div>
-
-        <!-- Upload Screen -->
-        <div id="uploadScreen" class="screen">
-            <div class="greeting-card">
-                <div class="greeting-header">
-                    <div class="greeting-icon">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="greeting-title">Welcome, <span id="displayName"></span>! 👋</h2>
-                        <p class="greeting-text">Please provide photos of the items below. You can take new photos or upload existing ones from your device.</p>
-                    </div>
-                </div>
-
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <div>
-                            <div class="progress-title">Your Progress</div>
-                            <div class="progress-message" id="progressMessage">Let's get started!</div>
-                        </div>
-                        <div class="progress-count">
-                            <span class="progress-count-number" id="progressCount">0/6</span>
-                            <span class="progress-count-label">Photos</span>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%;">
-                            <span class="progress-percentage" id="progressPercent" style="display: none;"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tips-box">
-                <div class="tips-header">
-                    <div class="tips-icon">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="tips-title">📸 Photo Tips for Best Results:</h3>
-                        <ul class="tips-list">
-                            <li><span>•</span><span>Make sure photos are clear and well-lit</span></li>
-                            <li><span>•</span><span>Include the entire item in the frame (don't crop too close)</span></li>
-                            <li><span>•</span><span>Tap on example photos to see what we're looking for</span></li>
-                            <li><span>•</span><span>Make sure nothing is blocking the view</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="checklist">
-                <div class="checklist-header">
-                    <div class="checklist-header-title">
-                        <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                        </svg>
-                        Photo Checklist
-                    </div>
-                    <div class="checklist-header-subtitle">Please upload all required photos below</div>
-                </div>
-
-                <div class="checklist-items" id="photoItems">
-                    <!-- Photo items will be inserted here by JavaScript -->
-                </div>
-            </div>
-
-            <div class="submit-section">
-                <div class="submit-content">
-                    <div class="submit-info">
-                        <div class="submit-status" id="submitStatus">
-                            Upload 6 photos to continue
-                        </div>
-                        <div class="submit-hint">Your photos will be securely submitted to our team</div>
-                    </div>
-                    <button id="submitBtn" class="btn btn-success submit-btn" onclick="submitPhotos()" disabled>
-                        <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>Submit All Photos</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Confirmation Screen -->
-        <div id="confirmationScreen" class="screen">
-            <div class="confirmation-hero">
-                <div class="confirmation-icon">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <h2 class="confirmation-title">All Done! 🎉</h2>
-                <div class="confirmation-name">Thank you, <span id="confirmName"></span>!</div>
-                <div class="confirmation-message">Your photos have been successfully submitted to Bill Layne Insurance</div>
-            </div>
-
-            <div class="confirmation-content">
-                <div class="next-steps-header">
-                    <div class="next-steps-icon">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="next-steps-title">What Happens Next?</h3>
-                </div>
-
-                <div class="steps">
-                    <div class="step-card step-1">
-                        <div class="step-number">1</div>
-                        <div>
-                            <div class="step-title">Review Process</div>
-                            <div class="step-description">Our team will review your photos within 1-2 business days</div>
-                        </div>
-                    </div>
-
-                    <div class="step-card step-2">
-                        <div class="step-number">2</div>
-                        <div>
-                            <div class="step-title">We'll Contact You</div>
-                            <div class="step-description">If we need any additional information, we'll reach out via phone or email</div>
-                        </div>
-                    </div>
-
-                    <div class="step-card step-3">
-                        <div class="step-number">3</div>
-                        <div>
-                            <div class="step-title">Processing Continues</div>
-                            <div class="step-description">We'll move forward with processing your insurance request</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="email-notice">
-                    <div class="email-notice-header">
-                        <div class="email-notice-icon">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="email-notice-title">📧 Confirmation Email Sent</div>
-                            <div class="email-notice-text">You'll receive a confirmation email shortly with a reference number. Please keep it for your records.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contact-section">
-                    <h3 class="contact-title">Questions or Need Help?</h3>
-                    <div class="contact-buttons">
-                        <a href="tel:336-835-1993" class="contact-btn phone">
-                            <svg fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                            </svg>
-                            <div class="contact-btn-text">
-                                <span class="contact-btn-label">Call Us</span>
-                                <span class="contact-btn-value">336-835-1993</span>
-                            </div>
-                        </a>
-
-                        <a href="mailto:Save@BillLayneInsurance.com" class="contact-btn email">
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            <div class="contact-btn-text">
-                                <span class="contact-btn-label">Email Us</span>
-                                <span class="contact-btn-value">Save@BillLayneInsurance.com</span>
-                            </div>
-                        </a>
-                    </div>
-
-                    <button onclick="returnToStart()" class="btn btn-secondary return-btn">
-                        <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                        </svg>
-                        <span>Return to Home</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Agency" class="footer-logo">
-        <h3 class="footer-title">Bill Layne Insurance Agency</h3>
-        <div class="footer-address">1283 N Bridge St, Elkin NC 28621</div>
-        <div class="footer-contacts">
-            <a href="tel:336-835-1993" class="footer-contact">📞 336-835-1993</a>
-            <a href="mailto:Save@BillLayneInsurance.com" class="footer-contact">✉️ Save@BillLayneInsurance.com</a>
-        </div>
-        <a href="https://www.BillLayneInsurance.com" target="_blank" rel="noopener noreferrer" class="footer-website">
-            www.BillLayneInsurance.com
-        </a>
-        <div class="footer-security">🔒 Your photos are securely transmitted and stored</div>
-    </footer>
-
-    <!-- Example Photo Modal -->
-    <div id="exampleModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <h3 class="modal-title" id="modalTitle"></h3>
-            <p class="modal-description" id="modalDescription"></p>
-            <div class="modal-image-container">
-                <img id="modalImage" class="modal-image" alt="Example photo">
-            </div>
-            <p class="modal-hint">☝️ This is an example of what we're looking for</p>
-        </div>
-    </div>
-
-    <script>
-        // Photo requirements data
-        const PHOTO_REQUIREMENTS = [
-            {
-                id: 'front-exterior',
-                title: 'Front Exterior of Home',
-                description: 'A clear view of the entire front of the house, including the roof and any landscaping.',
-                exampleUrl: 'https://placehold.co/600x400/a3bffa/ffffff?text=Front+of+House'
-            },
-            {
-                id: 'rear-exterior',
-                title: 'Rear Exterior of Home',
-                description: 'A clear view of the entire back of the house, including any decks or patios.',
-                exampleUrl: 'https://placehold.co/600x400/a3bffa/ffffff?text=Rear+of+House'
-            },
-            {
-                id: 'kitchen',
-                title: 'Kitchen',
-                description: 'A wide-angle shot showing all major appliances (stove, refrigerator, etc.).',
-                exampleUrl: 'https://placehold.co/600x400/a3bffa/ffffff?text=Kitchen'
-            },
-            {
-                id: 'electrical-panel',
-                title: 'Electrical Panel (Door Open)',
-                description: 'A clear, well-lit photo of the electrical panel with the cover door open.',
-                exampleUrl: 'https://placehold.co/600x400/a3bffa/ffffff?text=Electrical+Panel'
-            },
-            {
-                id: 'water-heater',
-                title: 'Water Heater',
-                description: 'Show the entire unit, including pipes and connections. Ensure the label is visible if possible.',
-                exampleUrl: 'https://placehold.co/600x400/a3bffa/ffffff?text=Water+Heater'
-            },
-            {
-                id: 'hvac-system',
-                title: 'HVAC System',
-                description: 'A photo of your primary heating and cooling unit.',
-                exampleUrl: 'https://placehold.co/600x400/a3bffa/ffffff?text=HVAC+System'
-            }
-        ];
-
-        // Application state
-        let state = {
-            customerName: '',
-            policyNumber: '',
-            photos: {},
-            completedCount: 0
-        };
-
-        // Initialize the application
-        function init() {
-            renderPhotoItems();
-            updateProgress();
-            
-            // Read URL parameters and pre-fill form
-            prefillFromURL();
-        }
         
-        // Pre-fill form from URL parameters (for link generator)
-        function prefillFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // Map of URL parameter names to form field IDs
-            const fieldMapping = {
-                'name': 'customerName',
-                'customer_name': 'customerName',
-                'customerName': 'customerName',
-                'policy': 'policyNumber',
-                'policy_number': 'policyNumber',
-                'policyNumber': 'policyNumber',
-                'application': 'policyNumber',
-                'app': 'policyNumber',
-                'phone': 'phone', // in case you add phone field later
-                'email': 'email', // in case you add email field later
-                'address': 'address', // in case you add address field later
-                'zip': 'zip', // in case you add zip field later
-            };
-            
-            // Fill in each field if parameter exists
-            Object.keys(fieldMapping).forEach(paramName => {
-                const value = urlParams.get(paramName);
-                const fieldId = fieldMapping[paramName];
-                const field = document.getElementById(fieldId);
+        <!-- Quick Selection Bar -->
+        <div class="quick-action-bar">
+            <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; text-align: center;">
+                Select what you're uploading:
+            </div>
+            <div class="action-buttons">
+                <button type="button" class="action-btn active" data-selection="home">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </button>
+                <button type="button" class="action-btn" data-selection="vehicle">
+                    <span>🚗</span>
+                    <span>Vehicle</span>
+                </button>
+                <button type="button" class="action-btn" data-selection="forms">
+                    <span>📄</span>
+                    <span>Forms</span>
+                </button>
+                <button type="button" class="action-btn" data-selection="claim">
+                    <span>🚨</span>
+                    <span>Claim</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Form -->
+        <form id="imageForm">
+            <div class="main-content">
+                <!-- Success Banner -->
+                <div class="success-banner" id="successBanner">
+                    ✓ Photos uploaded successfully!
+                </div>
                 
-                if (value && field) {
-                    field.value = decodeURIComponent(value);
-                    // Trigger change event in case there are listeners
-                    field.dispatchEvent(new Event('change'));
+                <!-- Priority Upload Section -->
+                <div class="priority-section">
+                    <div class="priority-title">
+                        <span>📸</span>
+                        <span>Upload Your Photos</span>
+                        <span class="photo-counter" id="photoCounter">0</span>
+                        <span class="tooltip">ℹ️
+                            <div class="tooltip-content" id="photoTooltip">
+                                • High quality photos help us serve you better<br>
+                                • All files are encrypted and secure<br>
+                                • Maximum file size: 20MB
+                            </div>
+                        </span>
+                    </div>
+                    
+                    <!-- Category Selection -->
+                    <div class="photo-categories" id="photoCategories">
+                        <h5 style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Tag your photos (optional):</h5>
+                        <div class="category-grid">
+                            <button type="button" class="category-tag" data-category="front">
+                                Front View
+                            </button>
+                            <button type="button" class="category-tag" data-category="side">
+                                Side View
+                            </button>
+                            <button type="button" class="category-tag" data-category="damage">
+                                Damage Area
+                            </button>
+                            <button type="button" class="category-tag" data-category="document">
+                                Document
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Photo Tips (Dynamic based on selection) -->
+                    <div class="photo-tips" id="photoTips">
+                        <h4>🏠 How to Photograph Your Property:</h4>
+                        <ul>
+                            <li><strong>Front of house</strong> - Stand back to capture entire front</li>
+                            <li><strong>Back of house</strong> - Include deck/patio if present</li>
+                            <li><strong>All sides</strong> - Show full side from corner to corner</li>
+                            <li><strong>Roof angle</strong> - Best visible angle showing condition</li>
+                            <li><strong>Special features</strong> - Pool, solar panels, detached structures</li>
+                        </ul>
+                        <p class="tip">💡 Tip: Take photos during daylight for best results</p>
+                    </div>
+                    
+                    <!-- Upload Area -->
+                    <div class="upload-box" id="uploadArea">
+                        <div class="upload-icon">📷</div>
+                        <div style="font-size: 16px; font-weight: 600; color: var(--text);">
+                            Tap to Add Photos
+                        </div>
+                        <div style="font-size: 13px; color: var(--secondary); margin-top: 5px;">
+                            or drag and drop files here
+                        </div>
+                        
+                        <!-- Updated file inputs with better mobile camera capture -->
+                        <input type="file" id="fileInput" class="file-input" accept="image/*,application/pdf" multiple>
+                        <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="environment">
+                        
+                        <div class="upload-buttons">
+                            <button type="button" class="upload-btn" id="cameraBtn">
+                                <span style="font-size: 24px;">📷</span>
+                                <span>Camera</span>
+                            </button>
+                            <button type="button" class="upload-btn" id="galleryBtn">
+                                <span style="font-size: 24px;">🖼️</span>
+                                <span>Gallery</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Image Preview -->
+                    <div class="image-preview" id="imagePreview"></div>
+                    
+                    <!-- Upload Progress -->
+                    <div class="upload-progress" id="uploadProgress">
+                        <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                    </div>
+                    <div class="upload-status" id="uploadStatusText">Preparing upload...</div>
+                </div>
+                
+                <!-- Contact Info Section (Collapsible) -->
+                <div class="section expanded" id="contactSection">
+                    <div class="section-header">
+                        <div>
+                            <span class="section-icon">👤</span>
+                            <span>Contact Information</span>
+                            <span style="color: var(--danger); font-size: 18px; margin-left: 5px;">*</span>
+                        </div>
+                        <span class="section-arrow">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label>
+                                Full Name <span class="required">*</span>
+                            </label>
+                            <input type="text" name="customerName" id="customerName" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Phone <span class="required">*</span>
+                            </label>
+                            <input type="tel" name="phone" id="phone" required placeholder="(336) 555-1234" autocomplete="tel">
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Email <span class="optional-tag">(optional)</span>
+                            </label>
+                            <input type="email" name="email" id="email" autocomplete="email">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Property/Vehicle Details Section -->
+                <div class="section" id="detailsSection">
+                    <div class="section-header">
+                        <div>
+                            <span class="section-icon">📍</span>
+                            <span id="detailsTitle">Property Details</span>
+                            <span class="optional-tag">(optional)</span>
+                        </div>
+                        <span class="section-arrow">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <!-- Property Fields -->
+                        <div id="propertyFields">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" name="address" id="address" autocomplete="street-address">
+                            </div>
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" name="city" id="city" autocomplete="address-level2">
+                            </div>
+                            <div class="form-group">
+                                <label>ZIP</label>
+                                <input type="text" name="zip" id="zip" maxlength="5" autocomplete="postal-code">
+                            </div>
+                        </div>
+                        
+                        <!-- Vehicle Fields (hidden by default) -->
+                        <div id="vehicleFields" style="display: none;">
+                            <div class="form-group">
+                                <label>Vehicle Info</label>
+                                <input type="text" name="vehicleInfo" id="vehicleInfo" 
+                                       placeholder="Year Make Model or VIN">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Notes <span class="optional-tag">(optional)</span></label>
+                            <textarea name="notes" id="notes" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trust Row -->
+                <div class="trust-row">
+                    <div class="trust-item">
+                        <span>🔒</span>
+                        <span>Encrypted</span>
+                    </div>
+                    <div class="trust-item">
+                        <span>⚡</span>
+                        <span>Fast Upload</span>
+                    </div>
+                    <div class="trust-item">
+                        <span>✓</span>
+                        <span>Direct to Agent</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sticky Submit Button -->
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span id="btnText">Submit Photos to Agency</span>
+                    <div class="spinner" id="spinner"></div>
+                </button>
+            </div>
+        </form>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Logo" loading="lazy">
+            <div style="margin-top: 10px;">
+                <strong>Bill Layne Insurance Agency</strong><br>
+                1283 N Bridge St, Elkin NC 28621<br>
+                336-835-1993 • Save@BillLayneInsurance.com<br>
+                <a href="https://www.BillLayneInsurance.com" style="color: var(--primary); text-decoration: none;">www.BillLayneInsurance.com</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enhanced Upload Progress Modal -->
+    <div class="modal-overlay" id="uploadProgressModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
+        <div class="modal-content" style="background: white; border-radius: 20px; padding: 35px 25px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
+            <div style="width: 64px; height: 64px; margin: 0 auto 20px;">
+                <div class="spinner" style="display: block; width: 64px; height: 64px; border: 4px solid rgba(26,95,122,0.2); border-top-color: var(--primary);"></div>
+            </div>
+            <h2 style="font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">
+                Uploading Your Photos
+            </h2>
+            <p style="font-size: 14px; color: var(--text); margin-bottom: 20px;">
+                Please wait while we securely upload your images...
+            </p>
+            <div style="background: var(--background); border-radius: 20px; height: 8px; overflow: hidden;">
+                <div id="modalProgressBar" style="height: 100%; background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%); 
+                     border-radius: 20px; width: 0%; transition: width 0.5s ease;"></div>
+            </div>
+            <p style="margin-top: 15px; font-size: 13px; color: var(--secondary);">
+                <span id="modalUploadStatus">Preparing upload...</span>
+            </p>
+            <div id="retryInfo" style="display: none; margin-top: 15px; padding: 10px; background: var(--warning); color: white; border-radius: 8px; font-size: 12px;">
+                Network issue detected. Retrying...
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enhanced Success Modal -->
+    <div class="modal-overlay" id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
+        <div class="modal-content" style="background: white; border-radius: 20px; padding: 35px 25px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
+            <div class="success-icon" style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, var(--success) 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 40px; color: white;">✓</span>
+            </div>
+            <h2 style="font-size: 24px; font-weight: 700; color: #166534; margin-bottom: 12px;">Success! Submission Received</h2>
+            <p style="font-size: 15px; color: var(--text); line-height: 1.5; margin-bottom: 25px;">
+                Thank you! We've received your photos and information. Our team will review them promptly.
+            </p>
+            <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+                <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Your Reference Number</div>
+                <div id="confirmNumber" style="font-size: 24px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;">BLI-240101-0000</div>
+                <div style="font-size: 12px; opacity: 0.85;">Please save this for your records</div>
+            </div>
+            
+            <!-- Confirmation Options -->
+            <div class="confirmation-options">
+                <button class="confirm-btn email-btn" onclick="sendEmailConfirmation()">
+                    📧 Email Receipt
+                </button>
+                <button class="confirm-btn sms-btn" onclick="sendSMSConfirmation()">
+                    📱 Text Receipt
+                </button>
+            </div>
+            
+            <button onclick="closeSuccessModal()" style="width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px;">Done</button>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgRcVZgCDznG5bBTLpAxun6enA4OP4k6HQhYHYeyq4nkFNKxBkFg3QVQr5n9p9olAlag/exec';
+        const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+        const MAX_RETRIES = 3;
+        const COMPRESSION_QUALITY = 0.85;
+        const MAX_IMAGE_WIDTH = 1600;
+        
+        // Allowed file types
+        const ALLOWED_TYPES = {
+            'image/jpeg': ['.jpg', '.jpeg'],
+            'image/png': ['.png'],
+            'image/webp': ['.webp'],
+            'application/pdf': ['.pdf']
+        };
+        
+        // State
+        let selectedOption = 'home';
+        let uploadedImages = [];
+        let selectedCategory = null;
+        let networkStatus = 'online';
+        let uploadAttempt = 0;
+        
+        // Photo requirements by type
+        const photoTips = {
+            'home': {
+                icon: '🏠',
+                title: 'How to Photograph Your Property:',
+                tips: [
+                    '<strong>Front of house</strong> - Stand back to capture entire front',
+                    '<strong>Back of house</strong> - Include deck/patio if present',
+                    '<strong>All sides</strong> - Show full side from corner to corner',
+                    '<strong>Roof angle</strong> - Best visible angle showing condition',
+                    '<strong>Special features</strong> - Pool, solar panels, detached structures'
+                ],
+                hint: 'Take photos during daylight for best results'
+            },
+            'vehicle': {
+                icon: '🚗',
+                title: 'How to Photograph Your Vehicle:',
+                tips: [
+                    '<strong>Front view</strong> - Stand directly in front, include license plate',
+                    '<strong>Back view</strong> - Stand directly behind, include license plate',
+                    '<strong>Both sides</strong> - Full side view from front to back',
+                    '<strong>VIN number</strong> - Dashboard or driver door frame',
+                    '<strong>Odometer</strong> - Current mileage reading'
+                ],
+                hint: 'Park in open area with good lighting'
+            },
+            'forms': {
+                icon: '📄',
+                title: 'Document Photo Tips:',
+                tips: [
+                    'Place document on flat surface',
+                    'Ensure good lighting (no shadows)',
+                    'Capture entire document in frame',
+                    'Make sure text is readable',
+                    'Take photos straight down (not angled)'
+                ],
+                hint: 'Use your phone\'s scanner mode if available'
+            },
+            'claim': {
+                icon: '🚨',
+                title: 'How to Document Damage/Claims:',
+                tips: [
+                    '<strong>Overall damage view</strong> - Wide shots showing full extent',
+                    '<strong>Each damaged area</strong> - Individual close-up photos',
+                    '<strong>Multiple angles</strong> - Same damage from different perspectives',
+                    '<strong>Measurement reference</strong> - Include ruler or common object for scale',
+                    '<strong>Exchange forms</strong> - Clear photo of all insurance documents'
+                ],
+                hint: 'Take photos before any cleanup or repairs'
+            }
+        };
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updatePhotoTips();
+            monitorNetworkStatus();
+            setupDragAndDrop();
+        });
+        
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Selection buttons
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedOption = this.dataset.selection;
+                    updateUI();
+                    updatePhotoTips();
+                });
+            });
+            
+            // Category tags
+            document.querySelectorAll('.category-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedCategory = this.dataset.category;
+                });
+            });
+            
+            // Collapsible sections
+            document.querySelectorAll('.section-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const section = this.parentElement;
+                    section.classList.toggle('expanded');
+                    this.classList.toggle('active');
+                });
+            });
+            
+            // Upload area
+            document.getElementById('uploadArea').addEventListener('click', function(e) {
+                if (!e.target.closest('.upload-btn')) {
+                    document.getElementById('fileInput').click();
                 }
             });
             
-            // If both name and policy are filled, consider auto-advancing to upload screen
-            // (Optional - uncomment if you want this behavior)
-            // const nameField = document.getElementById('customerName');
-            // const policyField = document.getElementById('policyNumber');
-            // if (nameField.value && policyField.value) {
-            //     // Auto-advance after a short delay so user sees the pre-filled form
-            //     setTimeout(() => {
-            //         document.getElementById('welcomeForm').dispatchEvent(new Event('submit', { cancelable: true }));
-            //     }, 1000);
-            // }
+            // Camera/Gallery buttons
+            document.getElementById('cameraBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('cameraInput').click();
+            });
+            
+            document.getElementById('galleryBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.getElementById('fileInput').click();
+            });
+            
+            // File inputs
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+            document.getElementById('cameraInput').addEventListener('change', handleFileSelect);
+            
+            // Form submission
+            document.getElementById('imageForm').addEventListener('submit', handleSubmit);
+            
+            // Phone formatting
+            document.getElementById('phone').addEventListener('input', formatPhone);
+            
+            // ZIP formatting
+            document.getElementById('zip').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
+            });
         }
-
-        // Navigate to upload screen
-        function startUpload(event) {
-            event.preventDefault();
-            state.customerName = document.getElementById('customerName').value;
-            state.policyNumber = document.getElementById('policyNumber').value;
+        
+        // Setup drag and drop
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('uploadArea');
             
-            document.getElementById('displayName').textContent = state.customerName.split(' ')[0];
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.background = 'var(--accent)';
+            });
             
-            showScreen('uploadScreen');
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.background = 'white';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.background = 'white';
+                handleFiles(Array.from(e.dataTransfer.files));
+            });
         }
-
-        // Render photo items
-        function renderPhotoItems() {
-            const container = document.getElementById('photoItems');
-            container.innerHTML = PHOTO_REQUIREMENTS.map(photo => `
-                <div class="photo-item" id="item-${photo.id}" data-photo-id="${photo.id}">
-                    <div class="photo-content">
-                        <div class="photo-preview" id="preview-${photo.id}">
-                            ${photo.exampleUrl ? `
-                                <div class="photo-preview-example" onclick="showExample('${photo.id}')">
-                                    <img src="${photo.exampleUrl}" alt="${photo.title} example">
-                                    <div class="example-badge">EXAMPLE</div>
-                                </div>
-                            ` : `
-                                <div class="photo-preview-placeholder">
-                                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                </div>
-                            `}
-                        </div>
-                        <div class="photo-details">
-                            <div class="photo-title" id="title-${photo.id}">
-                                ${photo.title}
-                            </div>
-                            <div class="photo-description">${photo.description}</div>
-                            <div class="photo-actions">
-                                <input type="file" id="camera-${photo.id}" class="file-input" accept="image/*" capture="environment" onchange="handleFileSelect('${photo.id}', this.files[0])">
-                                <input type="file" id="upload-${photo.id}" class="file-input" accept="image/*" onchange="handleFileSelect('${photo.id}', this.files[0])">
-                                
-                                <button class="btn btn-take btn-photo" onclick="document.getElementById('camera-${photo.id}').click()">
-                                    <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    Take Photo
-                                </button>
-                                
-                                <button class="btn btn-upload btn-photo" onclick="document.getElementById('upload-${photo.id}').click()">
-                                    <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                                    </svg>
-                                    Upload File
-                                </button>
-                                
-                                ${photo.exampleUrl ? `
-                                    <button class="btn btn-example btn-photo" onclick="showExample('${photo.id}')">
-                                        <svg style="width: 20px; height: 20px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                        </svg>
-                                        View Example
-                                    </button>
-                                ` : ''}
-                            </div>
-                            <div id="success-${photo.id}" class="photo-success hidden">
-                                <svg fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                </svg>
-                                Photo uploaded successfully! Tap the image to replace it if needed.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Handle file selection
-        function handleFileSelect(photoId, file) {
-            if (!file) return;
+        
+        // Monitor network status
+        function monitorNetworkStatus() {
+            const statusEl = document.getElementById('networkStatus');
+            const iconEl = document.getElementById('networkIcon');
+            const textEl = document.getElementById('networkText');
             
-            // Store the file
-            state.photos[photoId] = file;
-            
-            // Create preview URL
-            const previewUrl = URL.createObjectURL(file);
-            
-            // Update UI
-            const previewEl = document.getElementById(`preview-${photoId}`);
-            previewEl.innerHTML = `
-                <img src="${previewUrl}" alt="Uploaded photo">
-                <div class="photo-badge">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-                <div class="photo-delete" onclick="deletePhoto('${photoId}')">
-                    <button class="photo-delete-btn">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                </div>
-            `;
-            
-            // Add checkmark to title
-            const titleEl = document.getElementById(`title-${photoId}`);
-            if (!titleEl.querySelector('.photo-check-icon')) {
-                titleEl.innerHTML = `
-                    <div class="photo-check-icon">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    ${titleEl.textContent}
-                `;
+            function updateStatus(status) {
+                networkStatus = status;
+                statusEl.className = 'network-status ' + status;
+                
+                if (status === 'online') {
+                    iconEl.textContent = '📶';
+                    textEl.textContent = 'Online';
+                    statusEl.style.display = 'none';
+                } else if (status === 'offline') {
+                    iconEl.textContent = '📵';
+                    textEl.textContent = 'Offline';
+                    statusEl.style.display = 'flex';
+                } else if (status === 'slow') {
+                    iconEl.textContent = '⚠️';
+                    textEl.textContent = 'Slow Connection';
+                    statusEl.style.display = 'flex';
+                }
             }
             
-            // Show success message
-            document.getElementById(`success-${photoId}`).classList.remove('hidden');
+            window.addEventListener('online', () => updateStatus('online'));
+            window.addEventListener('offline', () => updateStatus('offline'));
             
-            // Update item styling
-            document.getElementById(`item-${photoId}`).classList.add('uploaded');
-            
-            // Update progress
-            updateProgress();
-        }
-
-        // Delete photo
-        function deletePhoto(photoId) {
-            event.stopPropagation();
-            
-            // Remove from state
-            if (state.photos[photoId]) {
-                URL.revokeObjectURL(URL.createObjectURL(state.photos[photoId]));
-                delete state.photos[photoId];
+            // Check connection speed
+            if ('connection' in navigator) {
+                const connection = navigator.connection;
+                connection.addEventListener('change', () => {
+                    if (connection.effectiveType === '2g' || connection.effectiveType === 'slow-2g') {
+                        updateStatus('slow');
+                    } else {
+                        updateStatus('online');
+                    }
+                });
             }
+        }
+        
+        // Update UI based on selection
+        function updateUI() {
+            const propFields = document.getElementById('propertyFields');
+            const vehFields = document.getElementById('vehicleFields');
+            const detailsTitle = document.getElementById('detailsTitle');
             
-            // Find original photo data
-            const photoData = PHOTO_REQUIREMENTS.find(p => p.id === photoId);
-            
-            // Reset preview
-            const previewEl = document.getElementById(`preview-${photoId}`);
-            if (photoData.exampleUrl) {
-                previewEl.innerHTML = `
-                    <div class="photo-preview-example" onclick="showExample('${photoId}')">
-                        <img src="${photoData.exampleUrl}" alt="${photoData.title} example">
-                        <div class="example-badge">EXAMPLE</div>
-                    </div>
-                `;
+            if (selectedOption === 'home' || selectedOption === 'forms') {
+                propFields.style.display = 'block';
+                vehFields.style.display = 'none';
+                detailsTitle.textContent = 'Property Details';
             } else {
-                previewEl.innerHTML = `
-                    <div class="photo-preview-placeholder">
-                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </div>
+                propFields.style.display = 'none';
+                vehFields.style.display = 'block';
+                detailsTitle.textContent = 'Vehicle Details';
+            }
+        }
+        
+        // Update photo tips based on selection
+        function updatePhotoTips() {
+            const tipsEl = document.getElementById('photoTips');
+            const tips = photoTips[selectedOption];
+            
+            if (tips) {
+                tipsEl.innerHTML = `
+                    <h4>${tips.icon} ${tips.title}</h4>
+                    <ul>
+                        ${tips.tips.map(tip => `<li>${tip}</li>`).join('')}
+                    </ul>
+                    <p class="tip">💡 Tip: ${tips.hint}</p>
                 `;
             }
-            
-            // Remove checkmark from title
-            const titleEl = document.getElementById(`title-${photoId}`);
-            titleEl.innerHTML = photoData.title;
-            
-            // Hide success message
-            document.getElementById(`success-${photoId}`).classList.add('hidden');
-            
-            // Update item styling
-            document.getElementById(`item-${photoId}`).classList.remove('uploaded');
-            
-            // Update progress
-            updateProgress();
         }
-
-        // Update progress
-        function updateProgress() {
-            const completed = Object.keys(state.photos).length;
-            const total = PHOTO_REQUIREMENTS.length;
-            const percentage = Math.round((completed / total) * 100);
+        
+        // Format phone number
+        function formatPhone() {
+            const input = document.getElementById('phone');
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = `(${value}`;
+                } else if (value.length <= 6) {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                } else {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                }
+            }
+            
+            input.value = value;
+        }
+        
+        // Validate file
+        function validateFile(file) {
+            // Check MIME type
+            if (!ALLOWED_TYPES[file.type]) {
+                return { valid: false, error: `File type ${file.type} not allowed` };
+            }
+            
+            // Check extension
+            const extension = '.' + file.name.split('.').pop().toLowerCase();
+            if (!ALLOWED_TYPES[file.type].includes(extension)) {
+                return { valid: false, error: 'File extension mismatch' };
+            }
+            
+            // Check for double extensions or suspicious patterns
+            const fileName = file.name.toLowerCase();
+            if (fileName.includes('..') || fileName.match(/\.(exe|scr|bat|cmd|com|pif|msi|jar|app)/)) {
+                return { valid: false, error: 'Suspicious filename detected' };
+            }
+            
+            // Size check
+            if (file.size > MAX_FILE_SIZE) {
+                return { valid: false, error: `File exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit` };
+            }
+            
+            return { valid: true };
+        }
+        
+        // Compress image
+        async function compressImage(file) {
+            // Skip compression for PDFs
+            if (file.type === 'application/pdf') {
+                return file;
+            }
+            
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                
+                reader.onload = (e) => {
+                    const img = new Image();
+                    
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        // Calculate new dimensions
+                        if (width > MAX_IMAGE_WIDTH) {
+                            height = (MAX_IMAGE_WIDTH / width) * height;
+                            width = MAX_IMAGE_WIDTH;
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Handle EXIF orientation
+                        // This is simplified - in production you'd use a library like EXIF.js
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        canvas.toBlob(
+                            (blob) => {
+                                const compressedFile = new File([blob], file.name, {
+                                    type: 'image/jpeg',
+                                    lastModified: Date.now()
+                                });
+                                resolve(compressedFile);
+                            },
+                            'image/jpeg',
+                            COMPRESSION_QUALITY
+                        );
+                    };
+                    
+                    img.onerror = reject;
+                    img.src = e.target.result;
+                };
+                
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Handle file selection
+        async function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            await handleFiles(files);
+            e.target.value = ''; // Reset input
+        }
+        
+        // Process files
+        async function handleFiles(files) {
+            const progressBar = document.getElementById('uploadProgress');
+            const progressBarEl = document.getElementById('uploadProgressBar');
+            const statusText = document.getElementById('uploadStatusText');
+            
+            progressBar.classList.add('active');
+            statusText.classList.add('active');
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                // Update progress
+                const progress = ((i + 1) / files.length) * 100;
+                progressBarEl.style.width = `${progress}%`;
+                statusText.textContent = `Processing file ${i + 1} of ${files.length}...`;
+                
+                // Validate file
+                const validation = validateFile(file);
+                if (!validation.valid) {
+                    alert(validation.error);
+                    continue;
+                }
+                
+                try {
+                    // Compress if it's an image
+                    const processedFile = file.type.startsWith('image/') 
+                        ? await compressImage(file) 
+                        : file;
+                    
+                    // Convert to base64
+                    const base64 = await fileToBase64(processedFile);
+                    
+                    uploadedImages.push({
+                        data: base64,
+                        type: processedFile.type,
+                        name: processedFile.name,
+                        size: processedFile.size,
+                        category: selectedCategory,
+                        originalSize: file.size,
+                        compressed: file.size !== processedFile.size
+                    });
+                    
+                } catch (error) {
+                    console.error('Error processing file:', error);
+                    alert(`Failed to process ${file.name}`);
+                }
+            }
+            
+            displayImages();
+            
+            // Hide progress after a short delay
+            setTimeout(() => {
+                progressBar.classList.remove('active');
+                statusText.classList.remove('active');
+                progressBarEl.style.width = '0%';
+            }, 500);
+        }
+        
+        // Convert file to base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Display uploaded images
+        function displayImages() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            uploadedImages.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'preview-item';
+                
+                if (img.type === 'application/pdf') {
+                    item.innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: var(--background); padding: 5px;">
+                            <span style="font-size: 24px;">📄</span>
+                            <span style="font-size: 9px; word-break: break-all;">${img.name}</span>
+                        </div>
+                        ${img.category ? `<div class="category-label">${img.category}</div>` : ''}
+                        <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
+                    `;
+                } else {
+                    item.innerHTML = `
+                        <img src="${img.data}" alt="Photo ${index + 1}">
+                        ${img.category ? `<div class="category-label">${img.category}</div>` : ''}
+                        <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
+                    `;
+                }
+                preview.appendChild(item);
+            });
             
             // Update counter
-            document.getElementById('progressCount').textContent = `${completed}/${total}`;
+            document.getElementById('photoCounter').textContent = uploadedImages.length;
             
-            // Update progress bar
-            const progressFill = document.getElementById('progressFill');
-            progressFill.style.width = `${percentage}%`;
+            // Show compression savings if applicable
+            const totalOriginal = uploadedImages.reduce((sum, img) => sum + (img.originalSize || img.size), 0);
+            const totalCompressed = uploadedImages.reduce((sum, img) => sum + img.size, 0);
+            const savings = totalOriginal - totalCompressed;
             
-            // Update percentage text
-            const percentEl = document.getElementById('progressPercent');
-            if (percentage > 15) {
-                percentEl.textContent = `${percentage}%`;
-                percentEl.style.display = 'inline';
-            } else {
-                percentEl.style.display = 'none';
+            if (savings > 0) {
+                const savingsPercent = Math.round((savings / totalOriginal) * 100);
+                console.log(`Compression saved ${(savings / 1024 / 1024).toFixed(2)}MB (${savingsPercent}%)`);
+            }
+        }
+        
+        // Remove image
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            displayImages();
+        }
+        
+        // Submit form with retry logic
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (uploadedImages.length === 0) {
+                alert('Please upload at least one photo');
+                return;
             }
             
-            // Update message
-            const messageEl = document.getElementById('progressMessage');
-            if (completed === 0) {
-                messageEl.textContent = "Let's get started!";
-            } else if (completed < total) {
-                messageEl.textContent = `Keep going! You're ${percentage}% done`;
-            } else {
-                messageEl.textContent = "Perfect! All photos uploaded ✓";
+            // Check network status
+            if (networkStatus === 'offline') {
+                alert('You appear to be offline. Please check your connection and try again.');
+                return;
             }
             
-            // Update submit button
             const submitBtn = document.getElementById('submitBtn');
-            const submitStatus = document.getElementById('submitStatus');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
             
-            if (completed === total) {
-                submitBtn.disabled = false;
-                submitStatus.innerHTML = `
-                    <svg style="width: 20px; height: 20px;" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                    All photos ready to submit!
-                `;
-                submitStatus.classList.add('complete');
-            } else {
-                submitBtn.disabled = true;
-                const remaining = total - completed;
-                submitStatus.innerHTML = `Upload ${remaining} more ${remaining === 1 ? 'photo' : 'photos'} to continue`;
-                submitStatus.classList.remove('complete');
-            }
-        }
-
-        // Show example modal
-        function showExample(photoId) {
-            const photo = PHOTO_REQUIREMENTS.find(p => p.id === photoId);
-            if (!photo || !photo.exampleUrl) return;
-            
-            document.getElementById('modalTitle').textContent = photo.title;
-            document.getElementById('modalDescription').textContent = photo.description;
-            document.getElementById('modalImage').src = photo.exampleUrl;
-            document.getElementById('exampleModal').classList.add('active');
-        }
-
-        // Close modal
-        function closeModal() {
-            document.getElementById('exampleModal').classList.remove('active');
-        }
-
-        // Close modal on background click
-        document.getElementById('exampleModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        // Submit photos
-        async function submitPhotos() {
-            const submitBtn = document.getElementById('submitBtn');
-            const originalContent = submitBtn.innerHTML;
-            
-            // Show loading state
+            // Disable button and show spinner
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <span>Submitting...</span>
-                </div>
-            `;
+            btnText.style.display = 'none';
+            spinner.style.display = 'block';
+            
+            // Show upload progress modal
+            const uploadModal = document.getElementById('uploadProgressModal');
+            uploadModal.style.display = 'flex';
+            
+            // Generate reference number
+            const referenceNumber = generateReferenceNumber();
+            
+            // Prepare data
+            const formData = new FormData(e.target);
+            const data = {
+                type: getSelectedType(),
+                purpose: getSelectedPurpose(),
+                selection: selectedOption,
+                customerName: formData.get('customerName'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                address: formData.get('address'),
+                city: formData.get('city'),
+                zip: formData.get('zip'),
+                vehicleInfo: formData.get('vehicleInfo'),
+                notes: formData.get('notes'),
+                images: uploadedImages,
+                referenceNumber: referenceNumber,
+                submittedAt: new Date().toISOString(),
+                deviceInfo: {
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    screenResolution: `${window.screen.width}x${window.screen.height}`
+                }
+            };
+            
+            // Try to upload with retry logic
+            const result = await uploadWithRetry(data);
+            
+            if (result.success) {
+                // Update confirmation number
+                document.getElementById('confirmNumber').textContent = referenceNumber;
+                
+                // Store data for confirmations
+                window.submissionData = data;
+                
+                // Hide upload modal and show success
+                uploadModal.style.display = 'none';
+                document.getElementById('successModal').style.display = 'flex';
+                
+            } else {
+                // Show error
+                uploadModal.style.display = 'none';
+                alert('Upload failed after multiple attempts. Please try again or call 336-835-1993');
+            }
+            
+            // Reset button state
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline';
+            spinner.style.display = 'none';
+        }
+        
+        // Upload with retry logic
+        async function uploadWithRetry(data, retryCount = 0) {
+            const maxRetries = networkStatus === 'slow' ? 5 : MAX_RETRIES;
             
             try {
-                // TODO: Replace with your actual Google Apps Script URL
-                // const formData = new FormData();
-                // formData.append('name', state.customerName);
-                // formData.append('policyNumber', state.policyNumber);
-                // 
-                // Object.entries(state.photos).forEach(([id, file]) => {
-                //     formData.append(id, file);
-                // });
-                // 
-                // const response = await fetch('YOUR_GOOGLE_SCRIPT_URL', {
-                //     method: 'POST',
-                //     body: formData
-                // });
+                // Update status
+                updateUploadStatus(`Uploading... ${retryCount > 0 ? `(Retry ${retryCount}/${maxRetries})` : ''}`);
                 
-                // Simulate upload delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Calculate and show progress
+                const totalSize = uploadedImages.reduce((sum, img) => sum + img.size, 0);
+                await showUploadProgress(totalSize);
                 
-                // Show confirmation screen
-                document.getElementById('confirmName').textContent = state.customerName.split(' ')[0];
-                showScreen('confirmationScreen');
-                
-                console.log('Photos submitted:', {
-                    name: state.customerName,
-                    policyNumber: state.policyNumber,
-                    photos: Object.keys(state.photos)
+                // Actual upload
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
                 });
+                
+                // Success
+                updateUploadStatus('Upload complete!');
+                document.getElementById('modalProgressBar').style.width = '100%';
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                return { success: true };
                 
             } catch (error) {
                 console.error('Upload error:', error);
-                alert('There was an error submitting your photos. Please try again.');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalContent;
+                
+                if (retryCount < maxRetries) {
+                    // Show retry info
+                    document.getElementById('retryInfo').style.display = 'block';
+                    updateUploadStatus(`Network issue detected. Retrying in 3 seconds...`);
+                    
+                    // Wait before retry
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    
+                    // Retry
+                    return uploadWithRetry(data, retryCount + 1);
+                }
+                
+                return { success: false, error };
             }
         }
-
-        // Show specific screen
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        // Return to start
-        function returnToStart() {
-            // Reset state
-            state = {
-                customerName: '',
-                policyNumber: '',
-                photos: {},
-                completedCount: 0
-            };
+        
+        // Show upload progress
+        async function showUploadProgress(totalSize) {
+            const progressBar = document.getElementById('modalProgressBar');
+            const steps = 10;
+            const stepSize = totalSize / steps;
             
+            for (let i = 1; i <= steps; i++) {
+                const progress = Math.min(90, (i / steps) * 80);
+                progressBar.style.width = `${progress}%`;
+                
+                if (i <= uploadedImages.length) {
+                    updateUploadStatus(`Uploading photo ${i} of ${uploadedImages.length}...`);
+                } else {
+                    updateUploadStatus('Finalizing upload...');
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+        }
+        
+        // Update upload status text
+        function updateUploadStatus(text) {
+            document.getElementById('modalUploadStatus').textContent = text;
+        }
+        
+        // Generate reference number
+        function generateReferenceNumber() {
+            const date = new Date();
+            const year = date.getFullYear().toString().slice(-2);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `BLI-${year}${month}${day}-${random}`;
+        }
+        
+        // Get selected type
+        function getSelectedType() {
+            return (selectedOption === 'home' || selectedOption === 'forms') ? 'HOME' : 'VEHICLE';
+        }
+        
+        // Get selected purpose
+        function getSelectedPurpose() {
+            return (selectedOption === 'forms' || selectedOption === 'claim') ? selectedOption : 'property';
+        }
+        
+        // Send email confirmation
+        async function sendEmailConfirmation() {
+            if (!window.submissionData || !window.submissionData.email) {
+                alert('Please provide an email address in the form to receive email confirmation.');
+                return;
+            }
+            
+            // In a real implementation, this would call your backend
+            alert(`Confirmation email will be sent to ${window.submissionData.email}`);
+        }
+        
+        // Send SMS confirmation
+        async function sendSMSConfirmation() {
+            if (!window.submissionData || !window.submissionData.phone) {
+                alert('Phone number is required for SMS confirmation.');
+                return;
+            }
+            
+            // In a real implementation, this would call your backend
+            alert(`Confirmation SMS will be sent to ${window.submissionData.phone}`);
+        }
+        
+        // Close success modal
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
             // Reset form
-            document.getElementById('welcomeForm').reset();
-            
-            // Re-render photos
-            renderPhotoItems();
-            updateProgress();
-            
-            // Show welcome screen
-            showScreen('welcomeScreen');
+            document.getElementById('imageForm').reset();
+            uploadedImages = [];
+            displayImages();
+            selectedCategory = null;
+            document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
         }
-
-        // Initialize on page load
-        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
+
