@@ -963,6 +963,46 @@
             display: none;
         }
 
+        /* Prefill Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .custom-instructions-box {
+            position: relative;
+        }
+        
+        .custom-instructions-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #60a5fa, #3b82f6, #2563eb);
+            border-radius: 14px;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-text {
@@ -1354,6 +1394,7 @@
             setupEventListeners();
             updatePhotoTips();
             setupDragAndDrop();
+            prefillFromURL();  // NEW: Enable prefill from URL parameters
         });
 
         function setupEventListeners() {
@@ -1813,6 +1854,184 @@
             selectedCategory = null;
             document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
         }
+
+        // ===== URL PARAMETER PREFILL SYSTEM =====
+        
+        // Parse URL parameters and prefill form
+        function prefillFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // If no parameters, exit early
+            if (urlParams.toString() === '') return;
+            
+            // Customer information
+            if (urlParams.has('customerName')) {
+                document.getElementById('customerName').value = decodeURIComponent(urlParams.get('customerName'));
+            }
+            if (urlParams.has('phone')) {
+                document.getElementById('phone').value = decodeURIComponent(urlParams.get('phone'));
+            }
+            if (urlParams.has('email')) {
+                document.getElementById('email').value = decodeURIComponent(urlParams.get('email'));
+            }
+            
+            // Property information
+            if (urlParams.has('address')) {
+                document.getElementById('address').value = decodeURIComponent(urlParams.get('address'));
+            }
+            if (urlParams.has('city')) {
+                document.getElementById('city').value = decodeURIComponent(urlParams.get('city'));
+            }
+            if (urlParams.has('zip')) {
+                document.getElementById('zip').value = decodeURIComponent(urlParams.get('zip'));
+            }
+            
+            // Vehicle information
+            if (urlParams.has('vehicleInfo')) {
+                document.getElementById('vehicleInfo').value = decodeURIComponent(urlParams.get('vehicleInfo'));
+            }
+            
+            // Current carrier - add to notes
+            if (urlParams.has('currentCarrier')) {
+                const notesField = document.getElementById('notes');
+                const carrier = decodeURIComponent(urlParams.get('currentCarrier'));
+                notesField.value = `Current Carrier: ${carrier}\n\n` + notesField.value;
+            }
+            
+            // Upload type (home, vehicle, forms, claim)
+            if (urlParams.has('uploadType')) {
+                const uploadType = urlParams.get('uploadType').toLowerCase();
+                const typeButton = document.querySelector(`.action-btn[data-selection="${uploadType}"]`);
+                if (typeButton) {
+                    document.querySelectorAll('.action-btn').forEach(btn => btn.classList.remove('active'));
+                    typeButton.classList.add('active');
+                    selectedOption = uploadType;
+                    updateUI();
+                    updatePhotoTips();
+                }
+            }
+            
+            // Photo instructions
+            if (urlParams.has('photoInstructions')) {
+                const instructions = decodeURIComponent(urlParams.get('photoInstructions'));
+                displayPhotoInstructions(instructions);
+            }
+            
+            // If any parameters were present, show a welcome message
+            if (urlParams.has('customerName')) {
+                const firstName = urlParams.get('customerName').split(' ')[0];
+                showWelcomeBanner(firstName);
+            }
+        }
+
+        // Display custom photo instructions to the user
+        function displayPhotoInstructions(instructionsString) {
+            // Split by ||| delimiter
+            const instructions = instructionsString.split('|||').filter(i => i.trim());
+            
+            if (instructions.length === 0) return;
+            
+            // Separate standard and custom instructions
+            const standardInstructions = instructions.filter(i => !i.startsWith('CUSTOM:'));
+            const customInstructions = instructions.filter(i => i.startsWith('CUSTOM:'));
+            
+            // Find or create the custom instructions box
+            let instructionsBox = document.getElementById('customInstructionsBox');
+            if (!instructionsBox) {
+                instructionsBox = document.createElement('div');
+                instructionsBox.id = 'customInstructionsBox';
+                instructionsBox.className = 'custom-instructions-box';
+                instructionsBox.style.cssText = `
+                    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+                    border: 3px solid #2563eb;
+                    border-radius: 12px;
+                    padding: 18px;
+                    margin: 18px 0;
+                    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+                    animation: slideIn 0.5s ease-out;
+                `;
+                
+                // Insert after the upload header
+                const uploadHeader = document.querySelector('.upload-header');
+                if (uploadHeader && uploadHeader.parentNode) {
+                    uploadHeader.parentNode.insertBefore(instructionsBox, uploadHeader.nextSibling);
+                }
+            }
+            
+            let html = '<div style="display: flex; align-items: flex-start; gap: 14px;">';
+            html += '<div style="font-size: 36px; flex-shrink: 0; line-height: 1;">📋</div>';
+            html += '<div style="flex: 1;">';
+            html += '<div style="font-size: 17px; font-weight: 700; color: #1e40af; margin-bottom: 12px;">Your Agent Needs These Photos:</div>';
+            
+            // Display standard instructions
+            if (standardInstructions.length > 0) {
+                html += '<ul style="margin: 0 0 8px 0; padding-left: 22px; color: #1e3a8a; font-size: 15px; line-height: 1.9;">';
+                standardInstructions.forEach(instruction => {
+                    html += `<li><strong>${instruction}</strong></li>`;
+                });
+                html += '</ul>';
+            }
+            
+            // Display custom instructions
+            if (customInstructions.length > 0) {
+                const customText = customInstructions[0].replace('CUSTOM: ', '');
+                html += '<div style="margin-top: 14px; padding: 14px; background: white; border-radius: 10px; border-left: 4px solid #f59e0b; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">';
+                html += '<div style="font-size: 14px; font-weight: 700; color: #92400e; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">';
+                html += '<span>⚠️</span><span>Special Instructions:</span>';
+                html += '</div>';
+                html += `<div style="font-size: 14px; color: #78350f; line-height: 1.7; white-space: pre-wrap;">${customText}</div>`;
+                html += '</div>';
+            }
+            
+            html += '</div></div>';
+            instructionsBox.innerHTML = html;
+        }
+
+        // Show welcome banner for prefilled customers
+        function showWelcomeBanner(firstName) {
+            const welcomeBanner = document.createElement('div');
+            welcomeBanner.className = 'welcome-banner';
+            welcomeBanner.style.cssText = `
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 18px 22px;
+                border-radius: 14px;
+                margin: 0 0 20px 0;
+                text-align: center;
+                box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+                animation: slideDown 0.6s ease-out;
+            `;
+            
+            welcomeBanner.innerHTML = `
+                <div style="font-size: 20px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <span>👋</span>
+                    <span>Welcome, ${firstName}!</span>
+                </div>
+                <div style="font-size: 15px; opacity: 0.96; line-height: 1.5;">
+                    Your information is pre-filled below. Just add your photos and submit!
+                </div>
+            `;
+            
+            // Insert at the top of main content
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent && mainContent.firstChild) {
+                mainContent.insertBefore(welcomeBanner, mainContent.firstChild);
+            }
+            
+            // Auto-fade after 10 seconds
+            setTimeout(() => {
+                welcomeBanner.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                welcomeBanner.style.opacity = '0';
+                welcomeBanner.style.transform = 'translateY(-30px)';
+                setTimeout(() => {
+                    if (welcomeBanner.parentNode) {
+                        welcomeBanner.remove();
+                    }
+                }, 600);
+            }, 10000);
+        }
+
+        // ===== END OF PREFILL SYSTEM CODE =====
     </script>
 </body>
 </html>
