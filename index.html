@@ -2,948 +2,1276 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Secure photo upload portal for Bill Layne Insurance Agency customers">
+    <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#1a5f7a">
-    <title>MyInsurancePhoto.com - Bill Layne Insurance</title>
+    <title>Photo Upload Portal | Bill Layne Insurance Agency</title>
     
-    <!-- Modern Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --primary: #1a5f7a;
-            --secondary: #457b9d;
-            --accent: #a8dadc;
-            --background: #f8f9fa;
-            --text: #2c3e50;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --radius: 12px;
-            --radius-lg: 16px;
-        }
-        
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1e40af;
+            --success-green: #10b981;
+            --success-green-dark: #059669;
+            --bg-gradient: linear-gradient(to bottom right, #eff6ff, #ffffff, #eff6ff);
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, var(--background) 0%, #e1f5f9 100%);
-            min-height: 100vh;
-            padding: 10px;
-            color: var(--text);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--slate-800);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
-        
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: var(--radius-lg);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 10px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        /* Header - Enhanced with brand colors */
+
+        /* Header */
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-bottom: 4px solid var(--primary-blue);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .header-text {
+            border-left: 2px solid var(--slate-300);
+            padding-left: 1rem;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .header-subtitle {
+            font-size: 0.875rem;
+            color: var(--slate-600);
+        }
+
+        .header-contact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .header-contact:hover {
+            color: var(--primary-blue-dark);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            min-height: calc(100vh - 350px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, var(--primary-blue), #1e40af);
             color: white;
-            padding: 20px;
+            padding: 3rem 2.5rem;
+            border-radius: 1.5rem 1.5rem 0 0;
             text-align: center;
         }
-        
-        .header-logo {
-            font-size: 32px;
-            margin-bottom: 10px;
+
+        .hero-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            backdrop-filter: blur(10px);
+            font-size: 48px;
         }
-        
-        .header h1 {
-            font-size: 22px;
-            margin-bottom: 5px;
+
+        .hero-title {
+            font-size: 2.5rem;
             font-weight: 700;
+            margin-bottom: 1rem;
         }
-        
-        .header p {
-            font-size: 13px;
-            opacity: 0.9;
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
         }
-        
-        /* Quick Action Bar */
-        .quick-action-bar {
-            background: linear-gradient(135deg, #f0f9ff 0%, var(--accent) 10%);
-            padding: 15px;
-            border-bottom: 1px solid rgba(69, 123, 157, 0.1);
+
+        .main-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 0 0 1.5rem 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
-        
+
+        /* Action Buttons */
         .action-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
-        
+
         .action-btn {
-            padding: 12px;
-            border: 2px solid var(--accent);
+            padding: 1.5rem 1rem;
+            border: 2px solid var(--slate-300);
             background: white;
-            border-radius: var(--radius);
-            font-size: 13px;
+            border-radius: 1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            color: var(--text);
+            gap: 0.75rem;
+            color: var(--slate-700);
+            min-height: 100px;
+            justify-content: center;
         }
-        
+
+        .action-btn-icon {
+            font-size: 36px;
+        }
+
         .action-btn.active {
-            border-color: var(--primary);
-            background: var(--primary);
+            border-color: var(--primary-blue);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
         }
-        
+
         .action-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
-        
-        /* Main Content Area */
-        .main-content {
-            padding: 20px;
+
+        /* Upload Section */
+        .upload-section {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
-        
-        /* Priority Section - Photo Upload */
-        .priority-section {
-            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-            border: 2px solid var(--warning);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .priority-title {
+
+        .upload-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 18px;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-title {
+            font-size: 1.5rem;
             font-weight: 700;
             color: #92400e;
-            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        
-        /* Category Selection */
-        .photo-categories {
+
+        .photo-counter {
+            background: var(--primary-blue);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* Category Tags */
+        .category-section {
             background: white;
-            padding: 15px;
-            border-radius: var(--radius);
-            margin-bottom: 15px;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        
+
+        .category-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--slate-700);
+        }
+
         .category-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            gap: 0.75rem;
         }
-        
+
         .category-tag {
-            padding: 10px;
-            background: var(--background);
+            padding: 0.875rem;
+            background: var(--slate-50);
             border: 2px solid transparent;
-            border-radius: 8px;
-            font-size: 12px;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: var(--text);
+            color: var(--slate-700);
+            text-align: center;
         }
-        
+
         .category-tag.active {
-            background: var(--primary);
+            background: var(--primary-blue);
             color: white;
-            border-color: var(--primary);
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
         }
-        
+
         /* Upload Box */
         .upload-box {
             background: white;
-            border: 3px dashed var(--primary);
-            border-radius: var(--radius);
-            padding: 25px;
+            border: 3px dashed var(--primary-blue);
+            border-radius: 1rem;
+            padding: 2.5rem 2rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
+            margin-bottom: 1.5rem;
         }
-        
+
         .upload-box:hover {
-            background: linear-gradient(135deg, #f0f9ff 0%, rgba(168, 218, 220, 0.1) 100%);
-            border-color: var(--secondary);
+            background: #eff6ff;
+            border-color: var(--primary-blue-dark);
+            transform: translateY(-2px);
         }
-        
+
         .upload-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
+            font-size: 64px;
+            margin-bottom: 1rem;
         }
-        
+
+        .upload-box-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--slate-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-box-subtitle {
+            font-size: 0.875rem;
+            color: var(--slate-600);
+        }
+
         .upload-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
-        
+
         .upload-btn {
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
             border: none;
-            border-radius: var(--radius);
-            font-size: 14px;
+            border-radius: 0.75rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
-            transition: transform 0.2s ease;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
-        
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+        }
+
         .upload-btn:active {
-            transform: scale(0.96);
+            transform: scale(0.97);
         }
-        
-        /* Image Preview with Categories */
+
+        .upload-btn-icon {
+            font-size: 32px;
+        }
+
+        /* Image Preview */
         .image-preview {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
-        
+
         .preview-item {
             position: relative;
             aspect-ratio: 1;
-            border-radius: 8px;
+            border-radius: 1rem;
             overflow: hidden;
-            background: var(--background);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--slate-100);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.4s ease-out;
         }
-        
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .preview-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .preview-item .category-label {
             position: absolute;
-            bottom: 2px;
-            left: 2px;
-            right: 2px;
-            background: rgba(26, 95, 122, 0.9);
+            bottom: 6px;
+            left: 6px;
+            right: 6px;
+            background: rgba(37, 99, 235, 0.95);
             color: white;
-            font-size: 10px;
-            padding: 2px 4px;
-            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.375rem 0.5rem;
+            border-radius: 0.5rem;
             text-align: center;
+            backdrop-filter: blur(4px);
         }
-        
+
         .preview-item .remove-btn {
             position: absolute;
-            top: 2px;
-            right: 2px;
-            background: rgba(239,68,68,0.9);
+            top: 6px;
+            right: 6px;
+            background: rgba(239, 68, 68, 0.95);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            font-size: 14px;
+            width: 32px;
+            height: 32px;
+            font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
-        
-        /* Section Styling */
-        .section {
-            margin-bottom: 15px;
-            border: 1px solid rgba(69, 123, 157, 0.2);
-            border-radius: var(--radius);
-            overflow: hidden;
+
+        .preview-item .remove-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        /* Form Elements */
+        .form-section {
             background: white;
+            border: 2px solid var(--slate-200);
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        
-        .section-header {
-            background: linear-gradient(135deg, var(--background) 0%, rgba(168, 218, 220, 0.2) 100%);
-            padding: 15px;
+
+        .form-header {
+            background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-100) 100%);
+            padding: 1.25rem 1.5rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .form-header:hover {
+            background: var(--slate-100);
+        }
+
+        .form-header.active {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: var(--primary-blue);
+        }
+
+        .form-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             font-weight: 600;
-            color: var(--text);
-            transition: background 0.2s ease;
+            font-size: 1rem;
         }
-        
-        .section-header:hover {
-            background: linear-gradient(135deg, rgba(168, 218, 220, 0.2) 0%, rgba(168, 218, 220, 0.3) 100%);
+
+        .form-icon {
+            font-size: 24px;
         }
-        
-        .section-header.active {
-            background: linear-gradient(135deg, rgba(26, 95, 122, 0.1) 0%, rgba(69, 123, 157, 0.1) 100%);
-            color: var(--primary);
-        }
-        
-        .section-icon {
-            font-size: 20px;
-            margin-right: 10px;
-        }
-        
-        .section-arrow {
+
+        .form-arrow {
             transition: transform 0.3s ease;
-            font-size: 12px;
-            color: var(--secondary);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--slate-600);
         }
-        
-        .section.expanded .section-arrow {
+
+        .form-section.expanded .form-arrow {
             transform: rotate(180deg);
         }
-        
-        .section-content {
+
+        .form-content {
             padding: 0;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
+            transition: max-height 0.4s ease, padding 0.4s ease;
         }
-        
-        .section.expanded .section-content {
-            padding: 15px;
-            max-height: 800px;
+
+        .form-section.expanded .form-content {
+            padding: 1.5rem;
+            max-height: 1000px;
         }
-        
-        /* Form Fields */
+
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1.25rem;
         }
-        
-        .form-group label {
+
+        .form-label {
             display: block;
-            font-size: 13px;
             font-weight: 600;
-            color: var(--text);
-            margin-bottom: 6px;
+            color: var(--slate-700);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
         }
-        
+
         .required {
-            color: var(--danger);
+            color: #dc2626;
         }
-        
+
         .optional-tag {
-            font-size: 11px;
-            color: var(--secondary);
+            font-size: 0.75rem;
+            color: var(--slate-500);
             font-weight: 400;
-            margin-left: 5px;
+            margin-left: 0.5rem;
         }
-        
-        input, select, textarea {
+
+        .form-input {
             width: 100%;
-            padding: 12px;
-            border: 1.5px solid rgba(69, 123, 157, 0.2);
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--slate-300);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.2s;
             font-family: inherit;
-            transition: all 0.2s ease;
-            background: white;
+            color: var(--slate-900);
         }
-        
-        input:focus, select:focus, textarea:focus {
+
+        .form-input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 95, 122, 0.08);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-        
-        /* Submit Button */
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Tips Box */
+        .tips-box {
+            background: linear-gradient(to right, #f0fdf4, #dcfce7);
+            border-left: 4px solid var(--success-green);
+            padding: 1.25rem;
+            border-radius: 0 0.75rem 0.75rem 0;
+            margin: 1.5rem 0;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .tips-icon {
+            font-size: 24px;
+            color: var(--success-green);
+        }
+
+        .tips-title {
+            font-weight: 700;
+            color: #166534;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .tips-list {
+            color: #15803d;
+            font-size: 0.875rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tips-list li {
+            margin: 0.5rem 0;
+        }
+
+        /* Trust Row */
+        .trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: var(--slate-50);
+            border-radius: 1rem;
+            margin-top: 2rem;
+        }
+
+        .trust-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .trust-icon {
+            font-size: 28px;
+        }
+
+        .trust-text {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--slate-700);
+        }
+
+        /* Submit Section */
         .submit-section {
             position: sticky;
             bottom: 0;
             background: white;
-            padding: 15px 20px;
-            border-top: 2px solid rgba(69, 123, 157, 0.1);
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+            padding: 1.5rem 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--primary-blue);
+            margin-top: 2rem;
+            z-index: 100;
         }
-        
+
         .submit-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 1.125rem 2rem;
+            background: linear-gradient(to right, var(--success-green), var(--success-green-dark));
             color: white;
             border: none;
-            border-radius: var(--radius);
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            font-size: 1.125rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
         }
-        
+
         .submit-btn:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(26, 95, 122, 0.3);
+            transform: scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.3);
         }
-        
+
         .submit-btn:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
         }
-        
-        /* Upload Progress Bar */
+
+        /* Progress Bar */
         .upload-progress {
-            margin-top: 10px;
-            background: var(--background);
-            border-radius: 20px;
-            height: 8px;
+            margin-top: 1rem;
+            background: var(--slate-100);
+            border-radius: 2rem;
+            height: 12px;
             overflow: hidden;
             display: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
         .upload-progress.active {
             display: block;
         }
-        
+
         .upload-progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 20px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-blue-dark) 50%, var(--success-green) 100%);
+            border-radius: 2rem;
             width: 0%;
             transition: width 0.5s ease;
+            background-size: 200% 100%;
+            animation: shimmer 2s linear infinite;
         }
-        
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
         .upload-status {
-            font-size: 12px;
-            color: var(--secondary);
-            margin-top: 5px;
+            font-size: 0.875rem;
+            color: var(--slate-600);
+            margin-top: 0.75rem;
             text-align: center;
             display: none;
+            font-weight: 500;
         }
-        
+
         .upload-status.active {
             display: block;
         }
-        
-        /* Photo Counter Badge */
-        .photo-counter {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        
-        /* Trust Badges */
-        .trust-row {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 10px;
-            background: var(--background);
-            font-size: 12px;
-            color: var(--text);
-            text-align: center;
-        }
-        
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background: var(--background);
-            color: var(--text);
-            font-size: 12px;
-            line-height: 1.6;
-        }
-        
-        .footer img {
-            max-width: 120px;
-            margin: 0 auto 10px;
-        }
-        
-        /* Success Message */
-        .success-banner {
+
+        /* Modal */
+        .modal-overlay {
             display: none;
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border: 1px solid var(--success);
-            color: #166534;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            cursor: help;
-            color: var(--primary);
-            font-size: 14px;
-            margin-left: 5px;
-        }
-        
-        .tooltip-content {
-            visibility: hidden;
-            width: 250px;
-            background: var(--text);
-            color: white;
-            text-align: left;
-            border-radius: 8px;
-            padding: 10px;
-            position: absolute;
-            z-index: 100;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -125px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-        
-        .tooltip:hover .tooltip-content {
-            visibility: visible;
-            opacity: 1;
-        }
-        
-        /* Network status indicator */
-        .network-status {
             position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.75);
+            z-index: 10000;
+            justify-content: center;
             align-items: center;
-            gap: 5px;
-            z-index: 1000;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease-out;
         }
-        
-        .network-status.online {
-            background: var(--success);
-            color: white;
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        
-        .network-status.offline {
-            background: var(--danger);
-            color: white;
+
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            max-width: 440px;
+            width: 92%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            animation: slideUp 0.4s ease-out;
         }
-        
-        .network-status.slow {
-            background: var(--warning);
-            color: white;
-        }
-        
-        /* Mobile Optimizations */
-        @media (max-width: 480px) {
-            .action-buttons {
-                grid-template-columns: 1fr;
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            
-            .upload-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .image-preview {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .category-grid {
-                grid-template-columns: 1fr;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-        
-        /* Loading state */
+
+        .modal-spinner {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.5rem;
+        }
+
         .spinner {
             display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: white;
+            width: 72px;
+            height: 72px;
+            border: 5px solid rgba(37,99,235,0.2);
+            border-top-color: var(--primary-blue);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+            animation: spin 0.8s linear infinite;
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
-        /* File input hidden */
-        .file-input {
+
+        .modal-content h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            font-size: 1rem;
+            color: var(--slate-700);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-progress {
+            background: var(--slate-100);
+            border-radius: 2rem;
+            height: 12px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .modal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            border-radius: 2rem;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .modal-status {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: var(--slate-600);
+            font-weight: 500;
+        }
+
+        .retry-info {
             display: none;
-        }
-        
-        /* Photo tips card */
-        .photo-tips {
-            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
-            border-left: 3px solid var(--primary);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-        
-        .photo-tips h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--primary);
-            margin: 0 0 10px 0;
-        }
-        
-        .photo-tips ul {
-            margin: 0;
-            padding-left: 20px;
-            font-size: 13px;
-            color: var(--text);
-            line-height: 1.8;
-        }
-        
-        .photo-tips .tip {
-            margin-top: 12px;
-            color: var(--primary);
-            font-size: 13px;
+            margin-top: 1rem;
+            padding: 0.875rem;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 600;
         }
-        
-        /* Confirmation options */
+
+        /* Success Modal */
+        .success-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--success-green) 0%, var(--success-green-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .success-icon-check {
+            font-size: 48px;
+            color: white;
+        }
+
+        .ref-number-box {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .ref-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .ref-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .ref-hint {
+            font-size: 0.75rem;
+            opacity: 0.85;
+        }
+
         .confirmation-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
-        
+
         .confirm-btn {
-            padding: 12px;
+            padding: 0.875rem 1rem;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
         .email-btn {
-            background: var(--primary);
+            background: var(--primary-blue);
             color: white;
         }
-        
+
         .sms-btn {
-            background: var(--success);
+            background: var(--success-green);
             color: white;
+        }
+
+        .done-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .done-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--slate-900);
+            color: white;
+            padding: 2rem 1.5rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            height: 45px;
+            width: auto;
+            margin: 0 auto 1rem;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+
+        .footer-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-address {
+            font-size: 0.875rem;
+            color: var(--slate-400);
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-contact {
+            color: white;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+            margin: 0 0.5rem;
+        }
+
+        .footer-contact:hover {
+            color: #60a5fa;
+        }
+
+        .footer-website {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .footer-security {
+            font-size: 0.75rem;
+            color: var(--slate-500);
+            padding-top: 1rem;
+            border-top: 1px solid var(--slate-700);
+            margin-top: 1rem;
+        }
+
+        /* Hidden */
+        .file-input {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-text {
+                display: none;
+            }
+
+            .logo {
+                height: 40px;
+            }
+
+            .hero {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 1.875rem;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .image-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .confirmation-options {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Network Status Indicator -->
-    <div class="network-status" id="networkStatus">
-        <span id="networkIcon">📶</span>
-        <span id="networkText">Online</span>
-    </div>
-    
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-logo">🏠🚗</div>
-            <h1>MyInsurancePhoto.com</h1>
-            <p>Quick & Secure Photo Upload</p>
-        </div>
-        
-        <!-- Quick Selection Bar -->
-        <div class="quick-action-bar">
-            <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 10px; text-align: center;">
-                Select what you're uploading:
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Agency" class="logo">
+                <div class="header-text">
+                    <div class="header-title">Photo Upload Portal</div>
+                    <div class="header-subtitle">🔒 Secure Document Submission</div>
+                </div>
             </div>
+            <a href="tel:336-835-1993" class="header-contact">
+                <span>📞</span>
+                <span>336-835-1993</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-icon">📸</div>
+            <h1 class="hero-title">MyInsurancePhoto.com</h1>
+            <p class="hero-subtitle">Quick & Secure Photo Upload for Bill Layne Insurance</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Selection Buttons -->
             <div class="action-buttons">
                 <button type="button" class="action-btn active" data-selection="home">
-                    <span>🏠</span>
+                    <span class="action-btn-icon">🏠</span>
                     <span>Home</span>
                 </button>
                 <button type="button" class="action-btn" data-selection="vehicle">
-                    <span>🚗</span>
+                    <span class="action-btn-icon">🚗</span>
                     <span>Vehicle</span>
                 </button>
                 <button type="button" class="action-btn" data-selection="forms">
-                    <span>📄</span>
+                    <span class="action-btn-icon">📄</span>
                     <span>Forms</span>
                 </button>
                 <button type="button" class="action-btn" data-selection="claim">
-                    <span>🚨</span>
+                    <span class="action-btn-icon">🚨</span>
                     <span>Claim</span>
                 </button>
             </div>
-        </div>
-        
-        <!-- Main Form -->
-        <form id="imageForm">
-            <div class="main-content">
-                <!-- Success Banner -->
-                <div class="success-banner" id="successBanner">
-                    ✓ Photos uploaded successfully!
-                </div>
-                
-                <!-- Priority Upload Section -->
-                <div class="priority-section">
-                    <div class="priority-title">
+
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="upload-header">
+                    <div class="upload-title">
                         <span>📸</span>
-                        <span>Upload Your Photos</span>
-                        <span class="photo-counter" id="photoCounter">0</span>
-                        <span class="tooltip">ℹ️
-                            <div class="tooltip-content" id="photoTooltip">
-                                • High quality photos help us serve you better<br>
-                                • All files are encrypted and secure<br>
-                                • Maximum file size: 20MB
-                            </div>
-                        </span>
+                        <span>Upload Photos</span>
                     </div>
-                    
-                    <!-- Category Selection -->
-                    <div class="photo-categories" id="photoCategories">
-                        <h5 style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Tag your photos (optional):</h5>
-                        <div class="category-grid">
-                            <button type="button" class="category-tag" data-category="front">
-                                Front View
-                            </button>
-                            <button type="button" class="category-tag" data-category="side">
-                                Side View
-                            </button>
-                            <button type="button" class="category-tag" data-category="damage">
-                                Damage Area
-                            </button>
-                            <button type="button" class="category-tag" data-category="document">
-                                Document
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Photo Tips (Dynamic based on selection) -->
-                    <div class="photo-tips" id="photoTips">
-                        <h4>🏠 How to Photograph Your Property:</h4>
-                        <ul>
-                            <li><strong>Front of house</strong> - Stand back to capture entire front</li>
-                            <li><strong>Back of house</strong> - Include deck/patio if present</li>
-                            <li><strong>All sides</strong> - Show full side from corner to corner</li>
-                            <li><strong>Roof angle</strong> - Best visible angle showing condition</li>
-                            <li><strong>Special features</strong> - Pool, solar panels, detached structures</li>
-                        </ul>
-                        <p class="tip">💡 Tip: Take photos during daylight for best results</p>
-                    </div>
-                    
-                    <!-- Upload Area -->
-                    <div class="upload-box" id="uploadArea">
-                        <div class="upload-icon">📷</div>
-                        <div style="font-size: 16px; font-weight: 600; color: var(--text);">
-                            Tap to Add Photos
-                        </div>
-                        <div style="font-size: 13px; color: var(--secondary); margin-top: 5px;">
-                            or drag and drop files here
-                        </div>
-                        
-                        <!-- Updated file inputs with better mobile camera capture -->
-                        <input type="file" id="fileInput" class="file-input" accept="image/*,application/pdf" multiple>
-                        <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="environment">
-                        
-                        <div class="upload-buttons">
-                            <button type="button" class="upload-btn" id="cameraBtn">
-                                <span style="font-size: 24px;">📷</span>
-                                <span>Camera</span>
-                            </button>
-                            <button type="button" class="upload-btn" id="galleryBtn">
-                                <span style="font-size: 24px;">🖼️</span>
-                                <span>Gallery</span>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Image Preview -->
-                    <div class="image-preview" id="imagePreview"></div>
-                    
-                    <!-- Upload Progress -->
-                    <div class="upload-progress" id="uploadProgress">
-                        <div class="upload-progress-bar" id="uploadProgressBar"></div>
-                    </div>
-                    <div class="upload-status" id="uploadStatusText">Preparing upload...</div>
+                    <span class="photo-counter" id="photoCounter">0</span>
                 </div>
-                
-                <!-- Contact Info Section (Collapsible) -->
-                <div class="section expanded" id="contactSection">
-                    <div class="section-header">
-                        <div>
-                            <span class="section-icon">👤</span>
-                            <span>Contact Information</span>
-                            <span style="color: var(--danger); font-size: 18px; margin-left: 5px;">*</span>
-                        </div>
-                        <span class="section-arrow">▼</span>
+
+                <!-- Category Tags -->
+                <div class="category-section">
+                    <div class="category-title">Tag your photos (optional):</div>
+                    <div class="category-grid">
+                        <button type="button" class="category-tag" data-category="front">Front View</button>
+                        <button type="button" class="category-tag" data-category="side">Side View</button>
+                        <button type="button" class="category-tag" data-category="damage">Damage Area</button>
+                        <button type="button" class="category-tag" data-category="document">Document</button>
                     </div>
-                    <div class="section-content">
+                </div>
+
+                <!-- Photo Tips -->
+                <div class="tips-box" id="photoTips">
+                    <div class="tips-header">
+                        <span class="tips-icon">💡</span>
+                        <div>
+                            <div class="tips-title">🏠 How to Photograph Your Property:</div>
+                            <ul class="tips-list">
+                                <li><strong>Front of house</strong> - Stand back to capture entire front</li>
+                                <li><strong>Back of house</strong> - Include deck/patio if present</li>
+                                <li><strong>All sides</strong> - Show full side from corner to corner</li>
+                                <li><strong>Roof angle</strong> - Best visible angle showing condition</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Box -->
+                <div class="upload-box" id="uploadArea">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-box-title">Tap to Add Photos</div>
+                    <div class="upload-box-subtitle">or drag and drop files here</div>
+
+                    <input type="file" id="fileInput" class="file-input" accept="image/*,application/pdf" multiple>
+                    <input type="file" id="cameraInput" class="file-input" accept="image/*" capture="environment">
+
+                    <div class="upload-buttons">
+                        <button type="button" class="upload-btn" id="cameraBtn">
+                            <span class="upload-btn-icon">📷</span>
+                            <span>Camera</span>
+                        </button>
+                        <button type="button" class="upload-btn" id="galleryBtn">
+                            <span class="upload-btn-icon">🖼️</span>
+                            <span>Gallery</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Image Preview -->
+                <div class="image-preview" id="imagePreview"></div>
+
+                <!-- Upload Progress -->
+                <div class="upload-progress" id="uploadProgress">
+                    <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                </div>
+                <div class="upload-status" id="uploadStatusText">Preparing upload...</div>
+            </div>
+
+            <!-- Form Sections -->
+            <form id="imageForm">
+                <!-- Contact Info -->
+                <div class="form-section expanded">
+                    <div class="form-header">
+                        <div class="form-header-left">
+                            <span class="form-icon">👤</span>
+                            <span>Contact Information</span>
+                            <span class="required">*</span>
+                        </div>
+                        <span class="form-arrow">▼</span>
+                    </div>
+                    <div class="form-content">
                         <div class="form-group">
-                            <label>
+                            <label class="form-label">
                                 Full Name <span class="required">*</span>
                             </label>
-                            <input type="text" name="customerName" id="customerName" required autocomplete="name">
+                            <input type="text" name="customerName" id="customerName" class="form-input" required placeholder="John Smith">
                         </div>
                         <div class="form-group">
-                            <label>
+                            <label class="form-label">
                                 Phone <span class="required">*</span>
                             </label>
-                            <input type="tel" name="phone" id="phone" required placeholder="(336) 555-1234" autocomplete="tel">
+                            <input type="tel" name="phone" id="phone" class="form-input" required placeholder="(336) 555-1234">
                         </div>
                         <div class="form-group">
-                            <label>
+                            <label class="form-label">
                                 Email <span class="optional-tag">(optional)</span>
                             </label>
-                            <input type="email" name="email" id="email" autocomplete="email">
+                            <input type="email" name="email" id="email" class="form-input" placeholder="your@email.com">
                         </div>
                     </div>
                 </div>
-                
-                <!-- Property/Vehicle Details Section -->
-                <div class="section" id="detailsSection">
-                    <div class="section-header">
-                        <div>
-                            <span class="section-icon">📍</span>
+
+                <!-- Property/Vehicle Details -->
+                <div class="form-section">
+                    <div class="form-header">
+                        <div class="form-header-left">
+                            <span class="form-icon">📍</span>
                             <span id="detailsTitle">Property Details</span>
                             <span class="optional-tag">(optional)</span>
                         </div>
-                        <span class="section-arrow">▼</span>
+                        <span class="form-arrow">▼</span>
                     </div>
-                    <div class="section-content">
-                        <!-- Property Fields -->
+                    <div class="form-content">
                         <div id="propertyFields">
                             <div class="form-group">
-                                <label>Address</label>
-                                <input type="text" name="address" id="address" autocomplete="street-address">
+                                <label class="form-label">Address</label>
+                                <input type="text" name="address" id="address" class="form-input" placeholder="123 Main Street">
                             </div>
                             <div class="form-group">
-                                <label>City</label>
-                                <input type="text" name="city" id="city" autocomplete="address-level2">
+                                <label class="form-label">City</label>
+                                <input type="text" name="city" id="city" class="form-input" placeholder="Mooresville">
                             </div>
                             <div class="form-group">
-                                <label>ZIP</label>
-                                <input type="text" name="zip" id="zip" maxlength="5" autocomplete="postal-code">
+                                <label class="form-label">ZIP</label>
+                                <input type="text" name="zip" id="zip" class="form-input" maxlength="5" placeholder="28117">
                             </div>
                         </div>
-                        
-                        <!-- Vehicle Fields (hidden by default) -->
                         <div id="vehicleFields" style="display: none;">
                             <div class="form-group">
-                                <label>Vehicle Info</label>
-                                <input type="text" name="vehicleInfo" id="vehicleInfo" 
-                                       placeholder="Year Make Model or VIN">
+                                <label class="form-label">Vehicle Info</label>
+                                <input type="text" name="vehicleInfo" id="vehicleInfo" class="form-input" placeholder="2023 Toyota Camry or VIN">
                             </div>
                         </div>
-                        
                         <div class="form-group">
-                            <label>Notes <span class="optional-tag">(optional)</span></label>
-                            <textarea name="notes" id="notes" rows="3"></textarea>
+                            <label class="form-label">Notes <span class="optional-tag">(optional)</span></label>
+                            <textarea name="notes" id="notes" class="form-input" placeholder="Any additional information..."></textarea>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Trust Row -->
                 <div class="trust-row">
                     <div class="trust-item">
-                        <span>🔒</span>
-                        <span>Encrypted</span>
+                        <span class="trust-icon">🔒</span>
+                        <span class="trust-text">Encrypted</span>
                     </div>
                     <div class="trust-item">
-                        <span>⚡</span>
-                        <span>Fast Upload</span>
+                        <span class="trust-icon">⚡</span>
+                        <span class="trust-text">Fast Upload</span>
                     </div>
                     <div class="trust-item">
-                        <span>✓</span>
-                        <span>Direct to Agent</span>
+                        <span class="trust-icon">✓</span>
+                        <span class="trust-text">Direct to Agent</span>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Sticky Submit Button -->
-            <div class="submit-section">
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span id="btnText">Submit Photos to Agency</span>
-                    <div class="spinner" id="spinner"></div>
-                </button>
-            </div>
-        </form>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Logo" loading="lazy">
-            <div style="margin-top: 10px;">
-                <strong>Bill Layne Insurance Agency</strong><br>
-                1283 N Bridge St, Elkin NC 28621<br>
-                336-835-1993 • Save@BillLayneInsurance.com<br>
-                <a href="https://www.BillLayneInsurance.com" style="color: var(--primary); text-decoration: none;">www.BillLayneInsurance.com</a>
-            </div>
+
+                <!-- Submit Section -->
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span id="btnText">Submit Photos to Agency</span>
+                        <div class="spinner" id="spinner"></div>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-    
-    <!-- Enhanced Upload Progress Modal -->
-    <div class="modal-overlay" id="uploadProgressModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
-        <div class="modal-content" style="background: white; border-radius: 20px; padding: 35px 25px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
-            <div style="width: 64px; height: 64px; margin: 0 auto 20px;">
-                <div class="spinner" style="display: block; width: 64px; height: 64px; border: 4px solid rgba(26,95,122,0.2); border-top-color: var(--primary);"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance Agency" class="footer-logo">
+        <div class="footer-title">Bill Layne Insurance Agency</div>
+        <div class="footer-address">1283 N Bridge St, Elkin NC 28621</div>
+        <a href="tel:336-835-1993" class="footer-contact">📞 336-835-1993</a>
+        <a href="mailto:Save@BillLayneInsurance.com" class="footer-contact">✉️ Save@BillLayneInsurance.com</a>
+        <a href="https://www.BillLayneInsurance.com" class="footer-website">www.BillLayneInsurance.com</a>
+        <div class="footer-security">🔒 Your photos are securely transmitted and stored</div>
+    </footer>
+
+    <!-- Upload Progress Modal -->
+    <div class="modal-overlay" id="uploadProgressModal">
+        <div class="modal-content">
+            <div class="modal-spinner">
+                <div class="spinner"></div>
             </div>
-            <h2 style="font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 12px;">
-                Uploading Your Photos
-            </h2>
-            <p style="font-size: 14px; color: var(--text); margin-bottom: 20px;">
-                Please wait while we securely upload your images...
-            </p>
-            <div style="background: var(--background); border-radius: 20px; height: 8px; overflow: hidden;">
-                <div id="modalProgressBar" style="height: 100%; background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%); 
-                     border-radius: 20px; width: 0%; transition: width 0.5s ease;"></div>
+            <h2>Uploading Your Photos</h2>
+            <p>Please wait while we securely upload your images...</p>
+            <div class="modal-progress">
+                <div class="modal-progress-fill" id="modalProgressBar"></div>
             </div>
-            <p style="margin-top: 15px; font-size: 13px; color: var(--secondary);">
+            <p class="modal-status">
                 <span id="modalUploadStatus">Preparing upload...</span>
             </p>
-            <div id="retryInfo" style="display: none; margin-top: 15px; padding: 10px; background: var(--warning); color: white; border-radius: 8px; font-size: 12px;">
+            <div class="retry-info" id="retryInfo">
                 Network issue detected. Retrying...
             </div>
         </div>
     </div>
-    
-    <!-- Enhanced Success Modal -->
-    <div class="modal-overlay" id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
-        <div class="modal-content" style="background: white; border-radius: 20px; padding: 35px 25px; max-width: 420px; width: 90%; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.2);">
-            <div class="success-icon" style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, var(--success) 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                <span style="font-size: 40px; color: white;">✓</span>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <div class="success-icon">
+                <span class="success-icon-check">✓</span>
             </div>
-            <h2 style="font-size: 24px; font-weight: 700; color: #166534; margin-bottom: 12px;">Success! Submission Received</h2>
-            <p style="font-size: 15px; color: var(--text); line-height: 1.5; margin-bottom: 25px;">
-                Thank you! We've received your photos and information. Our team will review them promptly.
-            </p>
-            <div style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 20px; border-radius: 12px; margin-bottom: 25px;">
-                <div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Your Reference Number</div>
-                <div id="confirmNumber" style="font-size: 24px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;">BLI-240101-0000</div>
-                <div style="font-size: 12px; opacity: 0.85;">Please save this for your records</div>
+            <h2 style="color: #166534;">Success! Submission Received</h2>
+            <p>Thank you! We've received your photos and information. Our team will review them promptly.</p>
+            <div class="ref-number-box">
+                <div class="ref-label">Your Reference Number</div>
+                <div class="ref-number" id="confirmNumber">BLI-240101-0000</div>
+                <div class="ref-hint">Please save this for your records</div>
             </div>
-            
-            <!-- Confirmation Options -->
             <div class="confirmation-options">
                 <button class="confirm-btn email-btn" onclick="sendEmailConfirmation()">
                     📧 Email Receipt
@@ -952,35 +1280,32 @@
                     📱 Text Receipt
                 </button>
             </div>
-            
-            <button onclick="closeSuccessModal()" style="width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px;">Done</button>
+            <button class="done-btn" onclick="closeSuccessModal()">Done</button>
         </div>
     </div>
-    
+
     <script>
-        // Configuration
+        // Configuration - YOUR ACTUAL SCRIPT URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgRcVZgCDznG5bBTLpAxun6enA4OP4k6HQhYHYeyq4nkFNKxBkFg3QVQr5n9p9olAlag/exec';
-        const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+        const MAX_FILE_SIZE = 20 * 1024 * 1024;
         const MAX_RETRIES = 3;
         const COMPRESSION_QUALITY = 0.85;
         const MAX_IMAGE_WIDTH = 1600;
-        
-        // Allowed file types
+
         const ALLOWED_TYPES = {
             'image/jpeg': ['.jpg', '.jpeg'],
             'image/png': ['.png'],
             'image/webp': ['.webp'],
             'application/pdf': ['.pdf']
         };
-        
+
         // State
         let selectedOption = 'home';
         let uploadedImages = [];
         let selectedCategory = null;
         let networkStatus = 'online';
-        let uploadAttempt = 0;
-        
-        // Photo requirements by type
+
+        // Photo tips
         const photoTips = {
             'home': {
                 icon: '🏠',
@@ -989,10 +1314,8 @@
                     '<strong>Front of house</strong> - Stand back to capture entire front',
                     '<strong>Back of house</strong> - Include deck/patio if present',
                     '<strong>All sides</strong> - Show full side from corner to corner',
-                    '<strong>Roof angle</strong> - Best visible angle showing condition',
-                    '<strong>Special features</strong> - Pool, solar panels, detached structures'
-                ],
-                hint: 'Take photos during daylight for best results'
+                    '<strong>Roof angle</strong> - Best visible angle showing condition'
+                ]
             },
             'vehicle': {
                 icon: '🚗',
@@ -1001,10 +1324,8 @@
                     '<strong>Front view</strong> - Stand directly in front, include license plate',
                     '<strong>Back view</strong> - Stand directly behind, include license plate',
                     '<strong>Both sides</strong> - Full side view from front to back',
-                    '<strong>VIN number</strong> - Dashboard or driver door frame',
-                    '<strong>Odometer</strong> - Current mileage reading'
-                ],
-                hint: 'Park in open area with good lighting'
+                    '<strong>VIN number</strong> - Dashboard or driver door frame'
+                ]
             },
             'forms': {
                 icon: '📄',
@@ -1013,10 +1334,8 @@
                     'Place document on flat surface',
                     'Ensure good lighting (no shadows)',
                     'Capture entire document in frame',
-                    'Make sure text is readable',
-                    'Take photos straight down (not angled)'
-                ],
-                hint: 'Use your phone\'s scanner mode if available'
+                    'Make sure text is readable'
+                ]
             },
             'claim': {
                 icon: '🚨',
@@ -1025,24 +1344,19 @@
                     '<strong>Overall damage view</strong> - Wide shots showing full extent',
                     '<strong>Each damaged area</strong> - Individual close-up photos',
                     '<strong>Multiple angles</strong> - Same damage from different perspectives',
-                    '<strong>Measurement reference</strong> - Include ruler or common object for scale',
                     '<strong>Exchange forms</strong> - Clear photo of all insurance documents'
-                ],
-                hint: 'Take photos before any cleanup or repairs'
+                ]
             }
         };
-        
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
             updatePhotoTips();
-            monitorNetworkStatus();
             setupDragAndDrop();
         });
-        
-        // Setup all event listeners
+
         function setupEventListeners() {
-            // Selection buttons
             document.querySelectorAll('.action-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
@@ -1052,8 +1366,7 @@
                     updatePhotoTips();
                 });
             });
-            
-            // Category tags
+
             document.querySelectorAll('.category-tag').forEach(tag => {
                 tag.addEventListener('click', function() {
                     document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
@@ -1061,117 +1374,61 @@
                     selectedCategory = this.dataset.category;
                 });
             });
-            
-            // Collapsible sections
-            document.querySelectorAll('.section-header').forEach(header => {
+
+            document.querySelectorAll('.form-header').forEach(header => {
                 header.addEventListener('click', function() {
                     const section = this.parentElement;
                     section.classList.toggle('expanded');
                     this.classList.toggle('active');
                 });
             });
-            
-            // Upload area
+
             document.getElementById('uploadArea').addEventListener('click', function(e) {
                 if (!e.target.closest('.upload-btn')) {
                     document.getElementById('fileInput').click();
                 }
             });
-            
-            // Camera/Gallery buttons
+
             document.getElementById('cameraBtn').addEventListener('click', function(e) {
                 e.stopPropagation();
                 document.getElementById('cameraInput').click();
             });
-            
+
             document.getElementById('galleryBtn').addEventListener('click', function(e) {
                 e.stopPropagation();
                 document.getElementById('fileInput').click();
             });
-            
-            // File inputs
+
             document.getElementById('fileInput').addEventListener('change', handleFileSelect);
             document.getElementById('cameraInput').addEventListener('change', handleFileSelect);
-            
-            // Form submission
             document.getElementById('imageForm').addEventListener('submit', handleSubmit);
-            
-            // Phone formatting
             document.getElementById('phone').addEventListener('input', formatPhone);
-            
-            // ZIP formatting
             document.getElementById('zip').addEventListener('input', function(e) {
                 e.target.value = e.target.value.replace(/\D/g, '').slice(0, 5);
             });
         }
-        
-        // Setup drag and drop
+
         function setupDragAndDrop() {
             const uploadArea = document.getElementById('uploadArea');
-            
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                uploadArea.style.background = 'var(--accent)';
+                uploadArea.style.background = '#dbeafe';
             });
-            
             uploadArea.addEventListener('dragleave', () => {
                 uploadArea.style.background = 'white';
             });
-            
             uploadArea.addEventListener('drop', (e) => {
                 e.preventDefault();
                 uploadArea.style.background = 'white';
                 handleFiles(Array.from(e.dataTransfer.files));
             });
         }
-        
-        // Monitor network status
-        function monitorNetworkStatus() {
-            const statusEl = document.getElementById('networkStatus');
-            const iconEl = document.getElementById('networkIcon');
-            const textEl = document.getElementById('networkText');
-            
-            function updateStatus(status) {
-                networkStatus = status;
-                statusEl.className = 'network-status ' + status;
-                
-                if (status === 'online') {
-                    iconEl.textContent = '📶';
-                    textEl.textContent = 'Online';
-                    statusEl.style.display = 'none';
-                } else if (status === 'offline') {
-                    iconEl.textContent = '📵';
-                    textEl.textContent = 'Offline';
-                    statusEl.style.display = 'flex';
-                } else if (status === 'slow') {
-                    iconEl.textContent = '⚠️';
-                    textEl.textContent = 'Slow Connection';
-                    statusEl.style.display = 'flex';
-                }
-            }
-            
-            window.addEventListener('online', () => updateStatus('online'));
-            window.addEventListener('offline', () => updateStatus('offline'));
-            
-            // Check connection speed
-            if ('connection' in navigator) {
-                const connection = navigator.connection;
-                connection.addEventListener('change', () => {
-                    if (connection.effectiveType === '2g' || connection.effectiveType === 'slow-2g') {
-                        updateStatus('slow');
-                    } else {
-                        updateStatus('online');
-                    }
-                });
-            }
-        }
-        
-        // Update UI based on selection
+
         function updateUI() {
             const propFields = document.getElementById('propertyFields');
             const vehFields = document.getElementById('vehicleFields');
             const detailsTitle = document.getElementById('detailsTitle');
-            
+
             if (selectedOption === 'home' || selectedOption === 'forms') {
                 propFields.style.display = 'block';
                 vehFields.style.display = 'none';
@@ -1182,28 +1439,30 @@
                 detailsTitle.textContent = 'Vehicle Details';
             }
         }
-        
-        // Update photo tips based on selection
+
         function updatePhotoTips() {
             const tipsEl = document.getElementById('photoTips');
             const tips = photoTips[selectedOption];
-            
+
             if (tips) {
                 tipsEl.innerHTML = `
-                    <h4>${tips.icon} ${tips.title}</h4>
-                    <ul>
-                        ${tips.tips.map(tip => `<li>${tip}</li>`).join('')}
-                    </ul>
-                    <p class="tip">💡 Tip: ${tips.hint}</p>
+                    <div class="tips-header">
+                        <span class="tips-icon">💡</span>
+                        <div>
+                            <div class="tips-title">${tips.icon} ${tips.title}</div>
+                            <ul class="tips-list">
+                                ${tips.tips.map(tip => `<li>${tip}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
                 `;
             }
         }
-        
-        // Format phone number
+
         function formatPhone() {
             const input = document.getElementById('phone');
             let value = input.value.replace(/\D/g, '');
-            
+
             if (value.length > 0) {
                 if (value.length <= 3) {
                     value = `(${value}`;
@@ -1213,70 +1472,59 @@
                     value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
                 }
             }
-            
+
             input.value = value;
         }
-        
-        // Validate file
+
         function validateFile(file) {
-            // Check MIME type
             if (!ALLOWED_TYPES[file.type]) {
                 return { valid: false, error: `File type ${file.type} not allowed` };
             }
-            
-            // Check extension
+
             const extension = '.' + file.name.split('.').pop().toLowerCase();
             if (!ALLOWED_TYPES[file.type].includes(extension)) {
                 return { valid: false, error: 'File extension mismatch' };
             }
-            
-            // Check for double extensions or suspicious patterns
+
             const fileName = file.name.toLowerCase();
             if (fileName.includes('..') || fileName.match(/\.(exe|scr|bat|cmd|com|pif|msi|jar|app)/)) {
                 return { valid: false, error: 'Suspicious filename detected' };
             }
-            
-            // Size check
+
             if (file.size > MAX_FILE_SIZE) {
                 return { valid: false, error: `File exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit` };
             }
-            
+
             return { valid: true };
         }
-        
-        // Compress image
+
         async function compressImage(file) {
-            // Skip compression for PDFs
             if (file.type === 'application/pdf') {
                 return file;
             }
-            
+
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                
+
                 reader.onload = (e) => {
                     const img = new Image();
-                    
+
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        
-                        // Calculate new dimensions
+
                         if (width > MAX_IMAGE_WIDTH) {
                             height = (MAX_IMAGE_WIDTH / width) * height;
                             width = MAX_IMAGE_WIDTH;
                         }
-                        
+
                         canvas.width = width;
                         canvas.height = height;
-                        
+
                         const ctx = canvas.getContext('2d');
-                        
-                        // Handle EXIF orientation
-                        // This is simplified - in production you'd use a library like EXIF.js
                         ctx.drawImage(img, 0, 0, width, height);
-                        
+
                         canvas.toBlob(
                             (blob) => {
                                 const compressedFile = new File([blob], file.name, {
@@ -1289,56 +1537,50 @@
                             COMPRESSION_QUALITY
                         );
                     };
-                    
+
                     img.onerror = reject;
                     img.src = e.target.result;
                 };
-                
+
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
         }
-        
-        // Handle file selection
+
         async function handleFileSelect(e) {
             const files = Array.from(e.target.files);
             await handleFiles(files);
-            e.target.value = ''; // Reset input
+            e.target.value = '';
         }
-        
-        // Process files
+
         async function handleFiles(files) {
             const progressBar = document.getElementById('uploadProgress');
             const progressBarEl = document.getElementById('uploadProgressBar');
             const statusText = document.getElementById('uploadStatusText');
-            
+
             progressBar.classList.add('active');
             statusText.classList.add('active');
-            
+
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                
-                // Update progress
+
                 const progress = ((i + 1) / files.length) * 100;
                 progressBarEl.style.width = `${progress}%`;
                 statusText.textContent = `Processing file ${i + 1} of ${files.length}...`;
-                
-                // Validate file
+
                 const validation = validateFile(file);
                 if (!validation.valid) {
                     alert(validation.error);
                     continue;
                 }
-                
+
                 try {
-                    // Compress if it's an image
-                    const processedFile = file.type.startsWith('image/') 
-                        ? await compressImage(file) 
+                    const processedFile = file.type.startsWith('image/')
+                        ? await compressImage(file)
                         : file;
-                    
-                    // Convert to base64
+
                     const base64 = await fileToBase64(processedFile);
-                    
+
                     uploadedImages.push({
                         data: base64,
                         type: processedFile.type,
@@ -1348,24 +1590,22 @@
                         originalSize: file.size,
                         compressed: file.size !== processedFile.size
                     });
-                    
+
                 } catch (error) {
                     console.error('Error processing file:', error);
                     alert(`Failed to process ${file.name}`);
                 }
             }
-            
+
             displayImages();
-            
-            // Hide progress after a short delay
+
             setTimeout(() => {
                 progressBar.classList.remove('active');
                 statusText.classList.remove('active');
                 progressBarEl.style.width = '0%';
             }, 500);
         }
-        
-        // Convert file to base64
+
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1374,21 +1614,20 @@
                 reader.readAsDataURL(file);
             });
         }
-        
-        // Display uploaded images
+
         function displayImages() {
             const preview = document.getElementById('imagePreview');
             preview.innerHTML = '';
-            
+
             uploadedImages.forEach((img, index) => {
                 const item = document.createElement('div');
                 item.className = 'preview-item';
-                
+
                 if (img.type === 'application/pdf') {
                     item.innerHTML = `
-                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: var(--background); padding: 5px;">
-                            <span style="font-size: 24px;">📄</span>
-                            <span style="font-size: 9px; word-break: break-all;">${img.name}</span>
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: var(--slate-100); padding: 8px;">
+                            <span style="font-size: 32px;">📄</span>
+                            <span style="font-size: 10px; word-break: break-all; margin-top: 6px; text-align: center;">${img.name}</span>
                         </div>
                         ${img.category ? `<div class="category-label">${img.category}</div>` : ''}
                         <button type="button" class="remove-btn" onclick="removeImage(${index})">×</button>
@@ -1402,59 +1641,36 @@
                 }
                 preview.appendChild(item);
             });
-            
-            // Update counter
+
             document.getElementById('photoCounter').textContent = uploadedImages.length;
-            
-            // Show compression savings if applicable
-            const totalOriginal = uploadedImages.reduce((sum, img) => sum + (img.originalSize || img.size), 0);
-            const totalCompressed = uploadedImages.reduce((sum, img) => sum + img.size, 0);
-            const savings = totalOriginal - totalCompressed;
-            
-            if (savings > 0) {
-                const savingsPercent = Math.round((savings / totalOriginal) * 100);
-                console.log(`Compression saved ${(savings / 1024 / 1024).toFixed(2)}MB (${savingsPercent}%)`);
-            }
         }
-        
-        // Remove image
+
         function removeImage(index) {
             uploadedImages.splice(index, 1);
             displayImages();
         }
-        
-        // Submit form with retry logic
+
         async function handleSubmit(e) {
             e.preventDefault();
-            
+
             if (uploadedImages.length === 0) {
                 alert('Please upload at least one photo');
                 return;
             }
-            
-            // Check network status
-            if (networkStatus === 'offline') {
-                alert('You appear to be offline. Please check your connection and try again.');
-                return;
-            }
-            
+
             const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const spinner = document.getElementById('spinner');
-            
-            // Disable button and show spinner
+
             submitBtn.disabled = true;
             btnText.style.display = 'none';
             spinner.style.display = 'block';
-            
-            // Show upload progress modal
+
             const uploadModal = document.getElementById('uploadProgressModal');
             uploadModal.style.display = 'flex';
-            
-            // Generate reference number
+
             const referenceNumber = generateReferenceNumber();
-            
-            // Prepare data
+
             const formData = new FormData(e.target);
             const data = {
                 type: getSelectedType(),
@@ -1477,46 +1693,33 @@
                     screenResolution: `${window.screen.width}x${window.screen.height}`
                 }
             };
-            
-            // Try to upload with retry logic
+
             const result = await uploadWithRetry(data);
-            
+
             if (result.success) {
-                // Update confirmation number
                 document.getElementById('confirmNumber').textContent = referenceNumber;
-                
-                // Store data for confirmations
                 window.submissionData = data;
-                
-                // Hide upload modal and show success
                 uploadModal.style.display = 'none';
                 document.getElementById('successModal').style.display = 'flex';
-                
             } else {
-                // Show error
                 uploadModal.style.display = 'none';
                 alert('Upload failed after multiple attempts. Please try again or call 336-835-1993');
             }
-            
-            // Reset button state
+
             submitBtn.disabled = false;
             btnText.style.display = 'inline';
             spinner.style.display = 'none';
         }
-        
-        // Upload with retry logic
+
         async function uploadWithRetry(data, retryCount = 0) {
-            const maxRetries = networkStatus === 'slow' ? 5 : MAX_RETRIES;
-            
+            const maxRetries = MAX_RETRIES;
+
             try {
-                // Update status
                 updateUploadStatus(`Uploading... ${retryCount > 0 ? `(Retry ${retryCount}/${maxRetries})` : ''}`);
-                
-                // Calculate and show progress
+
                 const totalSize = uploadedImages.reduce((sum, img) => sum + img.size, 0);
                 await showUploadProgress(totalSize);
-                
-                // Actual upload
+
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -1525,59 +1728,50 @@
                     },
                     body: JSON.stringify(data)
                 });
-                
-                // Success
+
                 updateUploadStatus('Upload complete!');
                 document.getElementById('modalProgressBar').style.width = '100%';
-                
+
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 return { success: true };
-                
+
             } catch (error) {
                 console.error('Upload error:', error);
-                
+
                 if (retryCount < maxRetries) {
-                    // Show retry info
                     document.getElementById('retryInfo').style.display = 'block';
                     updateUploadStatus(`Network issue detected. Retrying in 3 seconds...`);
-                    
-                    // Wait before retry
+
                     await new Promise(resolve => setTimeout(resolve, 3000));
-                    
-                    // Retry
                     return uploadWithRetry(data, retryCount + 1);
                 }
-                
+
                 return { success: false, error };
             }
         }
-        
-        // Show upload progress
+
         async function showUploadProgress(totalSize) {
             const progressBar = document.getElementById('modalProgressBar');
             const steps = 10;
-            const stepSize = totalSize / steps;
-            
+
             for (let i = 1; i <= steps; i++) {
                 const progress = Math.min(90, (i / steps) * 80);
                 progressBar.style.width = `${progress}%`;
-                
+
                 if (i <= uploadedImages.length) {
                     updateUploadStatus(`Uploading photo ${i} of ${uploadedImages.length}...`);
                 } else {
                     updateUploadStatus('Finalizing upload...');
                 }
-                
+
                 await new Promise(resolve => setTimeout(resolve, 300));
             }
         }
-        
-        // Update upload status text
+
         function updateUploadStatus(text) {
             document.getElementById('modalUploadStatus').textContent = text;
         }
-        
-        // Generate reference number
+
         function generateReferenceNumber() {
             const date = new Date();
             const year = date.getFullYear().toString().slice(-2);
@@ -1586,43 +1780,33 @@
             const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
             return `BLI-${year}${month}${day}-${random}`;
         }
-        
-        // Get selected type
+
         function getSelectedType() {
             return (selectedOption === 'home' || selectedOption === 'forms') ? 'HOME' : 'VEHICLE';
         }
-        
-        // Get selected purpose
+
         function getSelectedPurpose() {
             return (selectedOption === 'forms' || selectedOption === 'claim') ? selectedOption : 'property';
         }
-        
-        // Send email confirmation
+
         async function sendEmailConfirmation() {
             if (!window.submissionData || !window.submissionData.email) {
                 alert('Please provide an email address in the form to receive email confirmation.');
                 return;
             }
-            
-            // In a real implementation, this would call your backend
             alert(`Confirmation email will be sent to ${window.submissionData.email}`);
         }
-        
-        // Send SMS confirmation
+
         async function sendSMSConfirmation() {
             if (!window.submissionData || !window.submissionData.phone) {
                 alert('Phone number is required for SMS confirmation.');
                 return;
             }
-            
-            // In a real implementation, this would call your backend
             alert(`Confirmation SMS will be sent to ${window.submissionData.phone}`);
         }
-        
-        // Close success modal
+
         function closeSuccessModal() {
             document.getElementById('successModal').style.display = 'none';
-            // Reset form
             document.getElementById('imageForm').reset();
             uploadedImages = [];
             displayImages();
@@ -1632,4 +1816,3 @@
     </script>
 </body>
 </html>
-
