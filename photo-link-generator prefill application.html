@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#1a5f7a">
+    <meta name="theme-color" content="#2563eb">
     <title>Photo Upload Link Generator - Bill Layne Insurance</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,11 +14,12 @@
     
     <style>
         :root {
-            --primary: #1a5f7a;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
             --secondary: #457b9d;
-            --accent: #a8dadc;
-            --background: #f8f9fa;
-            --text: #2c3e50;
+            --accent: #60a5fa;
+            --background: #f8fafc;
+            --text: #1e293b;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
@@ -35,61 +36,74 @@
         
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--background) 0%, #e1f5f9 100%);
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
             min-height: 100vh;
             padding: 10px;
             color: var(--text);
         }
         
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
             background: white;
             border-radius: var(--radius-lg);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.07), 0 10px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         
         /* Header */
         .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 20px;
+            padding: 24px 20px;
             text-align: center;
         }
         
+        .header-logo {
+            height: 45px;
+            margin-bottom: 12px;
+            filter: brightness(0) invert(1);
+        }
+        
         .header h1 {
-            font-size: 22px;
-            margin-bottom: 5px;
+            font-size: 24px;
+            margin-bottom: 6px;
             font-weight: 700;
         }
         
         .header p {
-            font-size: 13px;
-            opacity: 0.9;
+            font-size: 14px;
+            opacity: 0.95;
         }
         
         /* Instructions */
         .instructions {
             background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
             border-left: 4px solid var(--warning);
-            padding: 15px;
+            padding: 16px;
             margin: 20px;
             border-radius: var(--radius);
         }
         
         .instructions h3 {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             color: #92400e;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .instructions ol {
             margin-left: 20px;
             font-size: 13px;
             color: #78350f;
-            line-height: 1.6;
+            line-height: 1.7;
+        }
+        
+        .instructions ol li {
+            margin: 6px 0;
         }
         
         /* Form Container */
@@ -99,43 +113,56 @@
         
         /* Section Headers */
         .section-header {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--text);
-            margin: 20px 0 12px 0;
+            margin: 24px 0 14px 0;
             display: flex;
             align-items: center;
             gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
         }
         
         /* Type Selection */
         .type-selector {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
         }
         
         .type-btn {
-            padding: 15px;
-            border: 2px solid var(--accent);
+            padding: 18px 12px;
+            border: 3px solid #e5e7eb;
             background: white;
             border-radius: var(--radius);
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .type-btn:hover {
+            border-color: var(--accent);
+            background: #eff6ff;
         }
         
         .type-btn.active {
             border-color: var(--primary);
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
         
         .type-btn-icon {
-            font-size: 28px;
+            font-size: 32px;
             display: block;
-            margin-bottom: 5px;
         }
         
         .type-btn-label {
@@ -147,39 +174,49 @@
         .purpose-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 20px;
         }
         
         .purpose-btn {
-            padding: 12px;
+            padding: 14px 12px;
             border: 2px solid #e5e7eb;
             background: white;
-            border-radius: 8px;
-            font-size: 13px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: center;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .purpose-btn:hover {
+            border-color: var(--accent);
+            background: #eff6ff;
         }
         
         .purpose-btn.active {
             border-color: var(--primary);
-            background: #eff6ff;
+            background: #dbeafe;
             color: var(--primary);
+            font-weight: 700;
         }
         
         /* Form Fields */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
         
         .form-label {
             display: block;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--text);
-            margin-bottom: 6px;
+            margin-bottom: 7px;
         }
         
         .required {
@@ -188,18 +225,29 @@
         
         .form-input {
             width: 100%;
-            padding: 12px;
+            padding: 13px 14px;
             border: 2px solid #e5e7eb;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             font-family: inherit;
             transition: all 0.2s ease;
+            color: var(--text);
         }
         
         .form-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(26, 95, 122, 0.1);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #94a3b8;
+        }
+        
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.6;
         }
         
         .form-grid {
@@ -213,55 +261,99 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         
         .checkbox-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px;
+            gap: 10px;
+            padding: 12px;
             background: var(--background);
-            border-radius: 8px;
+            border: 2px solid transparent;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 14px;
-            min-height: 44px;
+            min-height: 48px;
         }
         
         .checkbox-item:hover {
-            background: #e0f2fe;
+            background: #dbeafe;
+            border-color: var(--accent);
+        }
+        
+        .checkbox-item.checked {
+            background: #dbeafe;
+            border-color: var(--primary);
         }
         
         .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
             margin: 0;
+            accent-color: var(--primary);
         }
         
         .checkbox-item span {
             flex: 1;
-            line-height: 1.3;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        
+        /* Custom Description Box */
+        .custom-photos-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-top: 16px;
+        }
+        
+        .custom-photos-header {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .custom-photos-hint {
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 10px;
+            font-style: italic;
         }
         
         /* Buttons */
         .btn {
             width: 100%;
-            padding: 16px;
+            padding: 16px 20px;
             border: none;
             border-radius: var(--radius);
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
             color: white;
-            box-shadow: 0 4px 6px rgba(26, 95, 122, 0.2);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
         }
         
         .btn-primary:active {
@@ -272,14 +364,19 @@
             background: #6b7280;
             color: white;
             margin-top: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
         }
         
         /* Output Section */
         .output-section {
             display: none;
             padding: 20px;
-            background: var(--background);
-            border-top: 2px solid #e5e7eb;
+            background: linear-gradient(135deg, var(--background) 0%, #f1f5f9 100%);
+            border-top: 3px solid var(--primary);
         }
         
         .output-section.show {
@@ -290,8 +387,8 @@
             background: white;
             border: 2px solid #e5e7eb;
             border-radius: var(--radius);
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 16px;
+            margin-bottom: 16px;
             position: relative;
         }
         
@@ -299,32 +396,44 @@
             font-size: 12px;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 8px;
-            display: block;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
         .output-content {
             font-size: 13px;
-            line-height: 1.6;
+            line-height: 1.7;
             color: var(--text);
             word-break: break-word;
             white-space: pre-wrap;
-            padding-right: 60px;
+            padding-right: 70px;
+            font-family: 'Courier New', monospace;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
         }
         
         .copy-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 8px 16px;
+            top: 14px;
+            right: 14px;
+            padding: 8px 18px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 12px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+        }
+        
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
         }
         
         .copy-btn:active {
@@ -339,43 +448,49 @@
         .action-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 12px;
             margin-top: 20px;
         }
         
         .action-btn {
-            padding: 14px;
+            padding: 16px;
             border: none;
             border-radius: var(--radius);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .action-btn.green {
-            background: var(--success);
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
             color: white;
         }
         
         .action-btn.blue {
-            background: #3b82f6;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
         }
         
         .action-btn.yellow {
-            background: var(--warning);
+            background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
             color: white;
         }
         
         .action-btn.gray {
-            background: #6b7280;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
             color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
         
         .action-btn:active {
@@ -388,27 +503,30 @@
             padding: 20px;
             background: white;
             border-radius: var(--radius);
-            margin-top: 15px;
+            margin-top: 16px;
+            border: 2px solid #e5e7eb;
         }
         
         .qr-section img {
-            max-width: 200px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 10px;
+            max-width: 220px;
+            border: 3px solid var(--primary);
+            border-radius: 12px;
+            padding: 12px;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         .qr-label {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--text);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         
         .qr-hint {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 8px;
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 10px;
         }
         
         /* Success Message */
@@ -416,20 +534,33 @@
             display: none;
             background: var(--success);
             color: white;
-            padding: 12px;
+            padding: 14px;
             border-radius: var(--radius);
             text-align: center;
             font-weight: 600;
             font-size: 14px;
-            margin-top: 15px;
+            margin-top: 16px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
         }
         
         .success-message.show {
             display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         /* Mobile Optimizations */
-        @media (max-width: 480px) {
+        @media (max-width: 640px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -442,15 +573,19 @@
                 grid-template-columns: 1fr;
             }
             
+            .type-selector {
+                grid-template-columns: 1fr;
+            }
+            
             .output-content {
-                padding-right: 0;
-                margin-bottom: 40px;
+                padding-right: 12px;
+                margin-bottom: 50px;
             }
             
             .copy-btn {
                 position: static;
                 width: 100%;
-                margin-top: 10px;
+                margin-top: 12px;
             }
         }
         
@@ -464,24 +599,39 @@
         .hidden {
             display: none !important;
         }
+        
+        /* Info Badge */
+        .info-badge {
+            background: #dbeafe;
+            color: var(--primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>Photo Upload Link Generator</h1>
-            <p>Bill Layne Insurance Agency - Agent Tool</p>
+            <img src="https://i.imgur.com/cBAgeX8.png" alt="Bill Layne Insurance" class="header-logo">
+            <h1>📸 Photo Upload Link Generator</h1>
+            <p>Create custom photo upload links for customers</p>
         </div>
         
         <!-- Instructions -->
         <div class="instructions">
-            <h3>How to Use:</h3>
+            <h3>💡 How to Use This Tool:</h3>
             <ol>
-                <li>Select upload type (Home/Vehicle/Forms/Claim)</li>
+                <li>Select the upload type (Home, Vehicle, Forms, or Claim)</li>
                 <li>Choose the purpose (Quote, Add Coverage, etc.)</li>
                 <li>Fill in customer information</li>
-                <li>Click "Generate Link" to create pre-filled upload link</li>
+                <li>Select which photos you need from the checklist</li>
+                <li>Add any custom photo instructions in the description box</li>
+                <li>Click "Generate Link" to create the pre-filled upload link</li>
                 <li>Copy and send via text, email, or Agency Matrix</li>
             </ol>
         </div>
@@ -490,7 +640,7 @@
         <form id="linkGeneratorForm" class="form-content">
             <!-- Type Selection -->
             <div class="section-header">
-                Upload Type
+                📋 Upload Type
             </div>
             <div class="type-selector">
                 <div class="type-btn active" data-type="home">
@@ -513,18 +663,18 @@
             
             <!-- Purpose Selection -->
             <div class="section-header">
-                Purpose
+                🎯 Purpose
             </div>
             <div class="purpose-grid">
-                <div class="purpose-btn active" data-purpose="quote">Quote</div>
+                <div class="purpose-btn active" data-purpose="quote">New Quote</div>
                 <div class="purpose-btn" data-purpose="add">Add Coverage</div>
                 <div class="purpose-btn" data-purpose="review">Policy Review</div>
-                <div class="purpose-btn" data-purpose="claim">Claim Docs</div>
+                <div class="purpose-btn" data-purpose="claim">Claim Documentation</div>
             </div>
             
             <!-- Customer Info -->
             <div class="section-header">
-                Customer Information
+                👤 Customer Information
             </div>
             
             <div class="form-group">
@@ -548,14 +698,14 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">Current Insurance Carrier (Optional)</label>
+                <label class="form-label">Current Carrier (Optional)</label>
                 <input type="text" id="currentCarrier" class="form-input" placeholder="State Farm, Allstate, etc.">
             </div>
             
             <!-- Property Fields -->
             <div id="propertyFields">
                 <div class="section-header">
-                    Property Address (Optional)
+                    📍 Property Details (Optional)
                 </div>
                 
                 <div class="form-group">
@@ -576,7 +726,7 @@
                 
                 <!-- Photo Requirements -->
                 <div class="section-header">
-                    Photos Needed
+                    📸 Photos Needed (Select All That Apply)
                 </div>
                 <div class="checkbox-grid">
                     <label class="checkbox-item">
@@ -588,8 +738,12 @@
                         <span>Back of Home</span>
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" class="photo-checkbox" value="Sides of Home">
-                        <span>Sides of Home</span>
+                        <input type="checkbox" class="photo-checkbox" value="Left Side of Home">
+                        <span>Left Side of Home</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Right Side of Home">
+                        <span>Right Side of Home</span>
                     </label>
                     <label class="checkbox-item">
                         <input type="checkbox" class="photo-checkbox" value="Hot Water Heater">
@@ -600,6 +754,10 @@
                         <span>HVAC Unit</span>
                     </label>
                     <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Electrical Panel">
+                        <span>Electrical Panel</span>
+                    </label>
+                    <label class="checkbox-item">
                         <input type="checkbox" class="photo-checkbox" value="Kitchen">
                         <span>Kitchen</span>
                     </label>
@@ -608,42 +766,125 @@
                         <span>Primary Bathroom</span>
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" class="photo-checkbox" value="Crawlspace from door opening">
-                        <span>Crawlspace (from door)</span>
+                        <input type="checkbox" class="photo-checkbox" value="All Bathrooms">
+                        <span>All Bathrooms</span>
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" class="photo-checkbox" value="Underneath kitchen and bathrooms">
-                        <span>Under kitchen/bathrooms</span>
+                        <input type="checkbox" class="photo-checkbox" value="Roof (from ground)">
+                        <span>Roof (from ground)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Crawlspace (from opening)">
+                        <span>Crawlspace</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Under kitchen/bathrooms">
+                        <span>Under Kitchen/Baths</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Detached Structures">
+                        <span>Detached Structures</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Pool/Hot Tub">
+                        <span>Pool/Hot Tub</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="photo-checkbox" value="Deck/Patio">
+                        <span>Deck/Patio</span>
                     </label>
                 </div>
                 
-                <div class="form-group" style="margin-top: 12px;">
-                    <label class="checkbox-item">
-                        <input type="checkbox" id="otherPhotosCheck" value="Other">
-                        <span style="font-weight: 600;">Other (specify):</span>
-                    </label>
-                    <input type="text" id="otherPhotos" class="form-input" placeholder="e.g., Roof from attic, Electrical panel, Pool area" style="margin-top: 8px;">
+                <!-- Custom Photo Description -->
+                <div class="custom-photos-box">
+                    <div class="custom-photos-header">
+                        ✏️ Custom Photo Instructions
+                    </div>
+                    <div class="custom-photos-hint">
+                        Type any specific photo requests or special instructions for the customer
+                    </div>
+                    <textarea id="customPhotos" class="form-input" placeholder="Example: Please include close-up photos of any roof damage, photos of the electrical panel showing the amp rating, and pictures of all water shut-off valves"></textarea>
                 </div>
             </div>
             
             <!-- Vehicle Fields -->
             <div id="vehicleFields" class="hidden">
                 <div class="section-header">
-                    Vehicle Information (Optional)
+                    🚗 Vehicle Details (Optional)
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Vehicle Details</label>
+                    <label class="form-label">Vehicle Information</label>
                     <input type="text" id="vehicleInfo" class="form-input" placeholder="2024 Toyota Camry or VIN">
+                </div>
+                
+                <!-- Vehicle Photo Requirements -->
+                <div class="section-header">
+                    📸 Photos Needed (Select All That Apply)
+                </div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Front View" checked>
+                        <span>Front View</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Rear View" checked>
+                        <span>Rear View</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Driver Side" checked>
+                        <span>Driver Side</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Passenger Side" checked>
+                        <span>Passenger Side</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="VIN Number">
+                        <span>VIN Number</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Odometer">
+                        <span>Odometer</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="License Plate">
+                        <span>License Plate</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Interior Front">
+                        <span>Interior Front</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Interior Rear">
+                        <span>Interior Rear</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" class="vehicle-photo-checkbox" value="Any Damage">
+                        <span>Any Damage</span>
+                    </label>
+                </div>
+                
+                <!-- Custom Vehicle Photo Description -->
+                <div class="custom-photos-box">
+                    <div class="custom-photos-header">
+                        ✏️ Custom Photo Instructions
+                    </div>
+                    <div class="custom-photos-hint">
+                        Type any specific photo requests or special instructions for the customer
+                    </div>
+                    <textarea id="customVehiclePhotos" class="form-input" placeholder="Example: Please include photos of any aftermarket modifications, the truck bed liner, and close-ups of any scratches or dents"></textarea>
                 </div>
             </div>
             
             <!-- Submit Buttons -->
             <button type="submit" class="btn btn-primary">
-                Generate Link
+                <span>✨</span>
+                <span>Generate Link</span>
             </button>
             <button type="button" class="btn btn-secondary" onclick="clearForm()">
-                Clear Form
+                <span>🔄</span>
+                <span>Clear Form</span>
             </button>
         </form>
         
@@ -651,21 +892,21 @@
         <div id="outputSection" class="output-section">
             <!-- Direct Link -->
             <div class="output-box">
-                <span class="output-label">DIRECT UPLOAD LINK</span>
+                <span class="output-label">🔗 DIRECT UPLOAD LINK</span>
                 <div class="output-content" id="generatedLink"></div>
                 <button class="copy-btn" onclick="copyToClipboard('generatedLink', this)">Copy</button>
             </div>
             
             <!-- Text Message Template -->
             <div class="output-box">
-                <span class="output-label">TEXT MESSAGE TEMPLATE</span>
+                <span class="output-label">💬 TEXT MESSAGE TEMPLATE</span>
                 <div class="output-content" id="textTemplate"></div>
                 <button class="copy-btn" onclick="copyToClipboard('textTemplate', this)">Copy</button>
             </div>
             
             <!-- Email Template -->
             <div class="output-box">
-                <span class="output-label">EMAIL TEMPLATE</span>
+                <span class="output-label">📧 EMAIL TEMPLATE</span>
                 <div class="output-content" id="emailTemplate"></div>
                 <button class="copy-btn" onclick="copyToClipboard('emailTemplate', this)">Copy</button>
             </div>
@@ -673,24 +914,28 @@
             <!-- Action Buttons -->
             <div class="action-grid">
                 <button class="action-btn green" onclick="copyAndOpenMatrix()">
-                    Copy Text & Open Matrix
+                    <span>📋</span>
+                    <span>Copy Text & Open Matrix</span>
                 </button>
                 <button class="action-btn blue" onclick="sendEmail()">
-                    Send Email (Gmail)
+                    <span>📧</span>
+                    <span>Send Email (Gmail)</span>
                 </button>
                 <button class="action-btn yellow" onclick="openMatrix()">
-                    Open Agency Matrix
+                    <span>🔍</span>
+                    <span>Open Agency Matrix</span>
                 </button>
                 <button class="action-btn gray" onclick="testLink()">
-                    Test Link
+                    <span>🧪</span>
+                    <span>Test Link</span>
                 </button>
             </div>
             
             <!-- QR Code -->
             <div class="qr-section">
-                <div class="qr-label">QR Code (for in-person)</div>
+                <div class="qr-label">📱 QR Code (for in-person)</div>
                 <img id="qrCode" src="" alt="QR Code">
-                <div class="qr-hint">Customer can scan to open upload form</div>
+                <div class="qr-hint">Customer can scan with phone camera to open upload form</div>
             </div>
             
             <!-- Success Message -->
@@ -699,18 +944,24 @@
     </div>
     
     <script>
-        // Configuration - UPDATE THIS URL TO YOUR ACTUAL UPLOAD PAGE
-        // Example: 'https://yourdomain.com/index.html' or your deployed GitHub Pages URL
+        // ===== CONFIGURATION =====
+        // UPDATE THIS URL TO YOUR ACTUAL UPLOAD PAGE
+        // For GitHub Pages: 'https://yourusername.github.io/your-repo/index.html'
+        // For custom domain: 'https://myinsurancephoto.com/index.html'
         const BASE_URL = 'https://yourdomain.com/index.html';
         
-        // State
+        // Google Apps Script URL (your backend)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgRcVZgCDznG5bBTLpAxun6enA4OP4k6HQhYHYeyq4nkFNKxBkFg3QVQr5n9p9olAlag/exec';
+        
+        // ===== STATE =====
         let selectedType = 'home';
         let selectedPurpose = 'quote';
         let generatedData = {};
         
-        // Initialize
+        // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
+            updateCheckboxStyles();
         });
         
         function setupEventListeners() {
@@ -733,6 +984,17 @@
                 });
             });
             
+            // Checkbox styling
+            document.querySelectorAll('.checkbox-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (e.target.tagName !== 'INPUT') {
+                        const checkbox = this.querySelector('input[type="checkbox"]');
+                        checkbox.checked = !checkbox.checked;
+                    }
+                    updateCheckboxStyles();
+                });
+            });
+            
             // Phone formatting
             document.getElementById('phone').addEventListener('input', formatPhone);
             
@@ -745,6 +1007,17 @@
             document.getElementById('linkGeneratorForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 generateLink();
+            });
+        }
+        
+        function updateCheckboxStyles() {
+            document.querySelectorAll('.checkbox-item').forEach(item => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                if (checkbox.checked) {
+                    item.classList.add('checked');
+                } else {
+                    item.classList.remove('checked');
+                }
             });
         }
         
@@ -789,31 +1062,32 @@
             const zip = document.getElementById('zip').value;
             const vehicleInfo = document.getElementById('vehicleInfo').value;
 
-            // Get photo requirements (for home)
+            // Get photo requirements based on type
             let photoRequirements = [];
-            if (selectedType === 'home') {
+            let customInstructions = '';
+            
+            if (selectedType === 'home' || selectedType === 'forms') {
+                // Get checked home photos
                 document.querySelectorAll('.photo-checkbox:checked').forEach(checkbox => {
                     photoRequirements.push(checkbox.value);
                 });
-
-                // Add "Other" if checked and has text
-                const otherCheck = document.getElementById('otherPhotosCheck');
-                const otherText = document.getElementById('otherPhotos').value;
-                if (otherCheck.checked && otherText.trim()) {
-                    photoRequirements.push('Other: ' + otherText.trim());
-                } else if (otherText.trim()) {
-                    photoRequirements.push('Other: ' + otherText.trim());
-                }
+                
+                // Get custom instructions
+                customInstructions = document.getElementById('customPhotos').value.trim();
+            } else {
+                // Get checked vehicle photos
+                document.querySelectorAll('.vehicle-photo-checkbox:checked').forEach(checkbox => {
+                    photoRequirements.push(checkbox.value);
+                });
+                
+                // Get custom vehicle instructions
+                customInstructions = document.getElementById('customVehiclePhotos').value.trim();
             }
-
-            // Map type to photo category
-            const categoryMapping = {
-                'home': 'home',
-                'vehicle': 'other',
-                'forms': 'documents',
-                'claim': 'claims'
-            };
-            const photoCategory = categoryMapping[selectedType] || 'other';
+            
+            // Add custom instructions to photo requirements if provided
+            if (customInstructions) {
+                photoRequirements.push('CUSTOM: ' + customInstructions);
+            }
 
             // Build URL parameters
             const params = new URLSearchParams();
@@ -827,15 +1101,12 @@
             if (vehicleInfo) params.append('vehicleInfo', vehicleInfo);
 
             // Add type and purpose
-            params.append('type', selectedType.toUpperCase());
+            params.append('uploadType', selectedType);
             params.append('purpose', selectedPurpose);
 
-            // Add photo category
-            params.append('category', photoCategory);
-
-            // Add photo requirements as comma-separated list (if custom photos specified for home)
-            if (photoRequirements.length > 0 && selectedType === 'home') {
-                params.append('photos', photoRequirements.join(','));
+            // Add photo requirements as comma-separated list
+            if (photoRequirements.length > 0) {
+                params.append('photoInstructions', photoRequirements.join('|||'));
             }
 
             // Generate link
@@ -851,7 +1122,8 @@
                 email: email,
                 type: selectedType,
                 purpose: selectedPurpose,
-                photoRequirements: photoRequirements
+                photoRequirements: photoRequirements,
+                customInstructions: customInstructions
             };
 
             // Display outputs
@@ -864,7 +1136,9 @@
             generateQRCode();
 
             // Scroll to output
-            document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
         
         function displayOutputs() {
@@ -874,26 +1148,26 @@
             // Generate text template
             const itemType = selectedType === 'home' ? 'home' : selectedType === 'vehicle' ? 'vehicle' : selectedType === 'claim' ? 'claim' : 'documents';
             const purposeText = {
-                'quote': 'quote',
+                'quote': 'insurance quote',
                 'add': 'coverage addition',
                 'review': 'policy review',
-                'claim': 'claim'
+                'claim': 'claim documentation'
             }[selectedPurpose];
 
-            // Build photo requirements list for text based on category
+            // Build photo list for text
             let photoListText = '';
-            if (selectedType === 'home') {
-                if (generatedData.photoRequirements.length > 0) {
-                    photoListText = '\n\nPhotos needed:\n' + generatedData.photoRequirements.map(item => '• ' + item).join('\n');
-                } else {
-                    photoListText = '\n\nWe\'ll show you which photos to take (front, back, water heater, HVAC, etc.)';
+            if (generatedData.photoRequirements.length > 0) {
+                const standardPhotos = generatedData.photoRequirements.filter(p => !p.startsWith('CUSTOM:'));
+                const customPhotos = generatedData.photoRequirements.filter(p => p.startsWith('CUSTOM:'));
+                
+                if (standardPhotos.length > 0) {
+                    photoListText = '\n\nPhotos needed:\n' + standardPhotos.map(item => '• ' + item).join('\n');
                 }
-            } else if (selectedType === 'claim') {
-                photoListText = '\n\nWe\'ll guide you through taking damage photos from multiple angles';
-            } else if (selectedType === 'forms') {
-                photoListText = '\n\nWe\'ll show you which documents to upload (ID, insurance cards, etc.)';
-            } else if (selectedType === 'vehicle') {
-                photoListText = '\n\nJust upload photos as needed for your vehicle';
+                
+                if (customPhotos.length > 0) {
+                    const customText = customPhotos[0].replace('CUSTOM: ', '');
+                    photoListText += '\n\nSpecial Instructions:\n' + customText;
+                }
             }
 
             const textTemplate = `Hi ${generatedData.firstName},
@@ -902,85 +1176,69 @@ Please upload photos of your ${itemType} for your ${purposeText}:
 
 ${generatedData.link}
 
-Your info is pre-filled. Just add photos & submit!${photoListText}
+Your information is already filled in - just add photos and submit!${photoListText}
 
-Takes 2 minutes. Questions? Call 336-835-1993
+Takes 2-3 minutes. Questions? Call us at 336-835-1993
 
-Bill Layne Insurance`;
+Thanks!
+Bill Layne Insurance Agency`;
 
             document.getElementById('textTemplate').textContent = textTemplate;
             
             // Generate email template
-            const emailSubject = `Upload ${itemType.charAt(0).toUpperCase() + itemType.slice(1)} Photos - Bill Layne Insurance`;
+            const emailSubject = `Photo Upload Request - ${itemType.charAt(0).toUpperCase() + itemType.slice(1)} ${purposeText.charAt(0).toUpperCase() + purposeText.slice(1)}`;
 
-            // Build photo requirements list for email based on category
+            // Build photo list for email
             let photoListEmail = '';
-            if (selectedType === 'home' && generatedData.photoRequirements.length > 0) {
-                photoListEmail = `Photos needed:\n${generatedData.photoRequirements.map(item => '• ' + item).join('\n')}`;
-            } else if (selectedType === 'home') {
-                photoListEmail = `What photos to include:
-• Front exterior (including roof)
-• Rear exterior
-• Left and right sides
-• Water heater (with label visible)
-• HVAC system
-• Electrical panel
-• Kitchen overview`;
-            } else if (selectedType === 'claim') {
-                photoListEmail = `What photos to include:
-• Overall damage view (wide shot)
-• Close-up of specific damage
-• Multiple angles of damage
-• Surrounding area for context
-• Any affected items or property
-• Additional angles as needed`;
-            } else if (selectedType === 'forms') {
-                photoListEmail = `What documents to include:
-• Driver's license (front)
-• Current insurance card
-• Vehicle registration
-• Property title/deed (if applicable)
-• Mortgage statement (if applicable)
-• Any other requested documents`;
-            } else if (selectedType === 'vehicle') {
-                photoListEmail = `What photos to include:
-• All 4 sides of vehicle
-• VIN number (clearly visible)
-• Odometer reading
-• Any existing damage
-• License plate`;
-            } else {
-                photoListEmail = `Tips:
-• Ensure documents are clear and readable
-• Good lighting is essential
-• Capture entire document in frame`;
+            if (generatedData.photoRequirements.length > 0) {
+                const standardPhotos = generatedData.photoRequirements.filter(p => !p.startsWith('CUSTOM:'));
+                const customPhotos = generatedData.photoRequirements.filter(p => p.startsWith('CUSTOM:'));
+                
+                if (standardPhotos.length > 0) {
+                    photoListEmail = 'PHOTOS NEEDED:\n\n' + standardPhotos.map(item => '✓ ' + item).join('\n');
+                }
+                
+                if (customPhotos.length > 0) {
+                    const customText = customPhotos[0].replace('CUSTOM: ', '');
+                    photoListEmail += '\n\nSPECIAL INSTRUCTIONS:\n\n' + customText;
+                }
             }
             
             const emailBody = `Dear ${generatedData.name},
 
 Thank you for choosing Bill Layne Insurance Agency for your ${purposeText}.
 
-Please click the link below to upload photos of your ${itemType}:
+To expedite your request, please click the link below to upload photos of your ${itemType}:
 
 ${generatedData.link}
 
-Your information has been pre-filled for convenience. Simply:
-1. Review your information
-2. Upload your photos (4-8 recommended)
+YOUR INFORMATION IS PRE-FILLED - Simply:
+1. Review your information (already entered for you)
+2. Upload your photos using your phone camera or gallery
 3. Click submit
 
-The process takes less than 2 minutes on your phone.
+The entire process takes 2-3 minutes from your phone.
 
 ${photoListEmail}
 
-If you have any questions, please call us at 336-835-1993.
+TIPS FOR BEST RESULTS:
+• Use good lighting (natural daylight is best)
+• Ensure photos are clear and in focus
+• Capture the full item/area in each photo
+• Include all requested views
+
+If you have any questions or need assistance, please don't hesitate to call us at 336-835-1993.
+
+We look forward to serving you!
 
 Best regards,
+
 Bill Layne Insurance Agency
-1283 N Bridge St, Elkin NC 28621
-336-835-1993
-Save@BillLayneInsurance.com
-www.BillLayneInsurance.com`;
+1283 N Bridge St
+Elkin, NC 28621
+Phone: 336-835-1993
+Email: Save@BillLayneInsurance.com
+Web: www.BillLayneInsurance.com`;
             
             document.getElementById('emailTemplate').textContent = emailBody;
             
@@ -995,13 +1253,15 @@ www.BillLayneInsurance.com`;
             navigator.clipboard.writeText(text).then(() => {
                 // Update button
                 const originalText = button.textContent;
-                button.textContent = 'Copied!';
+                button.textContent = '✓ Copied!';
                 button.classList.add('copied');
                 
                 setTimeout(() => {
                     button.textContent = originalText;
                     button.classList.remove('copied');
                 }, 2000);
+                
+                showMessage('Copied to clipboard!', true);
             }).catch(err => {
                 console.error('Failed to copy:', err);
                 showMessage('Failed to copy. Please try again.', false);
@@ -1029,14 +1289,14 @@ www.BillLayneInsurance.com`;
         
         function sendEmail() {
             if (!generatedData.email) {
-                showMessage('Please enter customer email address first', false);
+                showMessage('⚠️ Please enter customer email address first', false);
                 return;
             }
             
             const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(generatedData.email)}&su=${encodeURIComponent(generatedData.emailSubject)}&body=${encodeURIComponent(generatedData.emailBody)}`;
             
             window.open(gmailUrl, '_blank');
-            showMessage('Opening Gmail...', true);
+            showMessage('Opening Gmail composer...', true);
         }
         
         function testLink() {
@@ -1044,7 +1304,7 @@ www.BillLayneInsurance.com`;
         }
         
         function generateQRCode() {
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(generatedData.link)}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(generatedData.link)}`;
             document.getElementById('qrCode').src = qrUrl;
         }
         
@@ -1060,29 +1320,34 @@ www.BillLayneInsurance.com`;
         }
         
         function clearForm() {
-            document.getElementById('linkGeneratorForm').reset();
-            document.getElementById('outputSection').classList.remove('show');
-            generatedData = {};
-            
-            // Reset selections
-            selectedType = 'home';
-            selectedPurpose = 'quote';
-            
-            document.querySelectorAll('.type-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.type === 'home') {
-                    btn.classList.add('active');
-                }
-            });
-            
-            document.querySelectorAll('.purpose-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.purpose === 'quote') {
-                    btn.classList.add('active');
-                }
-            });
-            
-            toggleFields();
+            if (confirm('Are you sure you want to clear all form data?')) {
+                document.getElementById('linkGeneratorForm').reset();
+                document.getElementById('outputSection').classList.remove('show');
+                generatedData = {};
+                
+                // Reset selections
+                selectedType = 'home';
+                selectedPurpose = 'quote';
+                
+                document.querySelectorAll('.type-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.type === 'home') {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                document.querySelectorAll('.purpose-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.purpose === 'quote') {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                toggleFields();
+                updateCheckboxStyles();
+                
+                showMessage('Form cleared!', true);
+            }
         }
     </script>
 </body>
